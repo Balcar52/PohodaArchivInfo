@@ -1,0 +1,556 @@
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+Partial Class MForm
+    Inherits System.Windows.Forms.Form
+
+    'Form overrides dispose to clean up the component list.
+    <System.Diagnostics.DebuggerNonUserCode()>
+    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        Try
+            If disposing AndAlso components IsNot Nothing Then
+                components.Dispose()
+            End If
+        Finally
+            MyBase.Dispose(disposing)
+        End Try
+    End Sub
+
+    'Required by the Windows Form Designer
+    Private components As System.ComponentModel.IContainer
+
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.  
+    'Do not modify it using the code editor.
+    <System.Diagnostics.DebuggerStepThrough()>
+    Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MForm))
+        Me.poConn = New System.Data.OleDb.OleDbConnection()
+        Me.XTabControl1 = New XControls.XTabControl()
+        Me.pgObj = New System.Windows.Forms.TabPage()
+        Me.pnMain = New System.Windows.Forms.Panel()
+        Me.Fg = New XForms.XC1Flexgrid()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.lblArchiveFile = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ActionList0 = New ActionListLib.ActionList(Me.components)
+        Me.m_popup1 = New ActionListLib.Menu(Me.components)
+        Me.m_znovunacist_data = New ActionListLib.Menu(Me.components)
+        Me.m_delimiter1 = New ActionListLib.Menu(Me.components)
+        Me.m_searchtext = New ActionListLib.Menu(Me.components)
+        Me.m_searchtextnext = New ActionListLib.Menu(Me.components)
+        Me.m_delimiter2 = New ActionListLib.Menu(Me.components)
+        Me.m_cols = New ActionListLib.Menu(Me.components)
+        Me.m_colwidths = New ActionListLib.Menu(Me.components)
+        Me.a_znovunacist_data = New ActionListLib.Action(Me.components)
+        Me.a_searchtext = New ActionListLib.Action(Me.components)
+        Me.a_searchtextnext = New ActionListLib.Action(Me.components)
+        Me.a_cols = New ActionListLib.Action(Me.components)
+        Me.a_colwidths = New ActionListLib.Action(Me.components)
+        Me.m_excel = New ActionListLib.Menu(Me.components)
+        Me.a_excel = New ActionListLib.Action(Me.components)
+        Me.m_close = New ActionListLib.Menu(Me.components)
+        Me.a_close = New ActionListLib.Action(Me.components)
+        Me.m_sprava_aplikace = New ActionListLib.Menu(Me.components)
+        Me.a_sprava_aplikace = New ActionListLib.Action(Me.components)
+        Me.m_sbalit_vse = New ActionListLib.Menu(Me.components)
+        Me.a_sbalit_vse = New ActionListLib.Action(Me.components)
+        Me.m_rozbalit_vse = New ActionListLib.Menu(Me.components)
+        Me.a_rozbalit_vse = New ActionListLib.Action(Me.components)
+        Me.m_sbalitrozbalit_polozku_na_radku = New ActionListLib.Menu(Me.components)
+        Me.a_sbalitrozbalit_polozku_na_radku = New ActionListLib.Action(Me.components)
+        Me.m_o_aplikaci = New ActionListLib.Menu(Me.components)
+        Me.a_o_aplikaci = New ActionListLib.Action(Me.components)
+        Me.ActionListConn = New ActionListLib.ActionListConn(Me.components)
+        Me.m_main = New ActionListLib.Menu(Me.components)
+        Me.m_file = New ActionListLib.Menu(Me.components)
+        Me.m_edit = New ActionListLib.Menu(Me.components)
+        Me.m_view = New ActionListLib.Menu(Me.components)
+        Me.m_delimiter3 = New ActionListLib.Menu(Me.components)
+        Me.m_tools = New ActionListLib.Menu(Me.components)
+        Me.m_nastaveni = New ActionListLib.Menu(Me.components)
+        Me.m_window = New ActionListLib.Menu(Me.components)
+        Me.m_help = New ActionListLib.Menu(Me.components)
+        Me.a_nastaveni = New ActionListLib.Action(Me.components)
+        Me.XTabControl1.SuspendLayout()
+        Me.pgObj.SuspendLayout()
+        Me.pnMain.SuspendLayout()
+        CType(Me.Fg, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1.SuspendLayout()
+        Me.StatusStrip1.SuspendLayout()
+        CType(Me.ActionList0, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SuspendLayout()
+        '
+        'poConn
+        '
+        Me.poConn.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Jet OLEDB:Database Password={1}"
+        '
+        'XTabControl1
+        '
+        Me.XTabControl1.Controls.Add(Me.pgObj)
+        Me.XTabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.XTabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed
+        Me.XTabControl1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.XTabControl1.Location = New System.Drawing.Point(0, 0)
+        Me.XTabControl1.Name = "XTabControl1"
+        Me.XTabControl1.SelectedIndex = 0
+        Me.XTabControl1.Size = New System.Drawing.Size(990, 539)
+        Me.XTabControl1.TabIndex = 1
+        '
+        'pgObj
+        '
+        Me.pgObj.Controls.Add(Me.pnMain)
+        Me.pgObj.Location = New System.Drawing.Point(4, 22)
+        Me.pgObj.Name = "pgObj"
+        Me.pgObj.Padding = New System.Windows.Forms.Padding(3)
+        Me.pgObj.Size = New System.Drawing.Size(982, 513)
+        Me.pgObj.TabIndex = 0
+        Me.pgObj.Text = "Archiv objednávek"
+        Me.pgObj.UseVisualStyleBackColor = True
+        '
+        'pnMain
+        '
+        Me.pnMain.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.pnMain.Controls.Add(Me.Fg)
+        Me.pnMain.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnMain.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.pnMain.Location = New System.Drawing.Point(3, 3)
+        Me.pnMain.Name = "pnMain"
+        Me.pnMain.Size = New System.Drawing.Size(976, 507)
+        Me.pnMain.TabIndex = 7
+        '
+        'Fg
+        '
+        Me.Fg.AllowEditing = False
+        Me.Fg.ColumnInfo = "10,1,0,0,0,100,Columns:"
+        Me.Fg.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Fg.DrawMode = C1.Win.C1FlexGrid.DrawModeEnum.OwnerDraw
+        Me.Fg.FillStandardContextMenu = False
+        Me.Fg.FocusRect = C1.Win.C1FlexGrid.FocusRectEnum.Heavy
+        Me.Fg.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.Fg.KeyActionEnter = C1.Win.C1FlexGrid.KeyActionEnum.None
+        Me.Fg.KeyActionTab = C1.Win.C1FlexGrid.KeyActionEnum.MoveAcross
+        Me.Fg.Location = New System.Drawing.Point(0, 0)
+        Me.Fg.MinimumSize = New System.Drawing.Size(250, 4)
+        Me.Fg.Name = "Fg"
+        Me.ActionList0.SetPopupMenu(Me.Fg, Me.m_popup1)
+        Me.Fg.Rows.DefaultSize = 20
+        Me.Fg.ShowCursor = True
+        Me.Fg.Size = New System.Drawing.Size(976, 507)
+        Me.Fg.StyleInfo = resources.GetString("Fg.StyleInfo")
+        Me.Fg.TabIndex = 6
+        Me.Fg.Tree.Column = 1
+        Me.Fg.Tree.LineColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.Fg.UseCompatibleTextRendering = False
+        Me.Fg.XSearchTextMode = XForms.XC1Flexgrid.XSearchTextModes.[Default]
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.XTabControl1)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(990, 539)
+        Me.Panel1.TabIndex = 2
+        '
+        'StatusStrip1
+        '
+        Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 8.5!)
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.lblArchiveFile})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 539)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Size = New System.Drawing.Size(990, 22)
+        Me.StatusStrip1.TabIndex = 3
+        Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'ToolStripStatusLabel1
+        '
+        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(134, 17)
+        Me.ToolStripStatusLabel1.Text = "aktuální soubor archivu:"
+        '
+        'lblArchiveFile
+        '
+        Me.lblArchiveFile.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Bold)
+        Me.lblArchiveFile.Name = "lblArchiveFile"
+        Me.lblArchiveFile.Size = New System.Drawing.Size(19, 17)
+        Me.lblArchiveFile.Text = "    "
+        '
+        'ActionList0
+        '
+        Me.ActionListConn.SetActionListConn(Me.ActionList0, Me)
+        Me.ActionList0.DisplayMenuMismatchSetAction = False
+        Me.ActionList0.ID = "202306182317.99774"
+        Me.ActionList0.MenuStyle = ActionListLib.ActionList.MenuStyles.[Default]
+        Me.ActionList0.Redraw = True
+        Me.ActionList0.ShowDynamicItemsOnDebug = False
+        Me.ActionList0.WindowDynamicMenuMergeNode = 810
+        '
+        'm_popup1
+        '
+        Me.m_popup1.MenuList.Add(Me.m_znovunacist_data)
+        Me.m_popup1.MenuList.Add(Me.m_delimiter1)
+        Me.m_popup1.MenuList.Add(Me.m_searchtext)
+        Me.m_popup1.MenuList.Add(Me.m_searchtextnext)
+        Me.m_popup1.MenuList.Add(Me.m_delimiter2)
+        Me.m_popup1.MenuList.Add(Me.m_cols)
+        Me.m_popup1.MenuList.Add(Me.m_colwidths)
+        Me.m_popup1.MenuType = ActionListLib.Menu.MenuTypes.PopupMenu
+        Me.m_popup1.Name = "m_popup1"
+        Me.m_popup1.Parent = Me.ActionList0
+        Me.m_popup1.Text = "  (popupmenu)"
+        '
+        'm_znovunacist_data
+        '
+        Me.ActionList0.SetAction(Me.m_znovunacist_data, Me.a_znovunacist_data)
+        Me.m_znovunacist_data.Name = "m_znovunacist_data"
+        Me.m_znovunacist_data.Parent = Me.ActionList0
+        Me.m_znovunacist_data.Text = Nothing
+        '
+        'm_delimiter1
+        '
+        Me.m_delimiter1.MenuType = ActionListLib.Menu.MenuTypes.Delimiter
+        Me.m_delimiter1.Name = "m_delimiter1"
+        Me.m_delimiter1.Parent = Me.ActionList0
+        Me.m_delimiter1.Text = "  (delimiter)"
+        '
+        'm_searchtext
+        '
+        Me.ActionList0.SetAction(Me.m_searchtext, Me.a_searchtext)
+        Me.m_searchtext.Name = "m_searchtext"
+        Me.m_searchtext.Parent = Me.ActionList0
+        '
+        'm_searchtextnext
+        '
+        Me.ActionList0.SetAction(Me.m_searchtextnext, Me.a_searchtextnext)
+        Me.m_searchtextnext.Name = "m_searchtextnext"
+        Me.m_searchtextnext.Parent = Me.ActionList0
+        '
+        'm_delimiter2
+        '
+        Me.m_delimiter2.MenuType = ActionListLib.Menu.MenuTypes.Delimiter
+        Me.m_delimiter2.Name = "m_delimiter2"
+        Me.m_delimiter2.Parent = Me.ActionList0
+        Me.m_delimiter2.Text = "  (delimiter)"
+        '
+        'm_cols
+        '
+        Me.ActionList0.SetAction(Me.m_cols, Me.a_cols)
+        Me.m_cols.Name = "m_cols"
+        Me.m_cols.Parent = Me.ActionList0
+        '
+        'm_colwidths
+        '
+        Me.ActionList0.SetAction(Me.m_colwidths, Me.a_colwidths)
+        Me.m_colwidths.Name = "m_colwidths"
+        Me.m_colwidths.Parent = Me.ActionList0
+        '
+        'a_znovunacist_data
+        '
+        Me.a_znovunacist_data.AltText = "Znov. data"
+        Me.a_znovunacist_data.Image = CType(resources.GetObject("a_znovunacist_data.Image"), System.Drawing.Image)
+        Me.a_znovunacist_data.Name = "a_znovunacist_data"
+        Me.a_znovunacist_data.Parent = Me.ActionList0
+        Me.a_znovunacist_data.Text = "Znovunačíst data"
+        '
+        'a_searchtext
+        '
+        Me.a_searchtext.Image = CType(resources.GetObject("a_searchtext.Image"), System.Drawing.Image)
+        Me.a_searchtext.Name = "a_searchtext"
+        Me.a_searchtext.Parent = Me.ActionList0
+        Me.a_searchtext.Shortcut = System.Windows.Forms.Shortcut.CtrlF
+        Me.a_searchtext.Text = "&Hledat text"
+        '
+        'a_searchtextnext
+        '
+        Me.a_searchtextnext.Image = CType(resources.GetObject("a_searchtextnext.Image"), System.Drawing.Image)
+        Me.a_searchtextnext.Name = "a_searchtextnext"
+        Me.a_searchtextnext.Parent = Me.ActionList0
+        Me.a_searchtextnext.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftF
+        Me.a_searchtextnext.Text = "&Znovu hledat text"
+        '
+        'a_cols
+        '
+        Me.a_cols.Name = "a_cols"
+        Me.a_cols.Parent = Me.ActionList0
+        Me.a_cols.Shortcut = System.Windows.Forms.Shortcut.CtrlS
+        Me.a_cols.Text = "Sloupce &tabulky"
+        '
+        'a_colwidths
+        '
+        Me.a_colwidths.Name = "a_colwidths"
+        Me.a_colwidths.Parent = Me.ActionList0
+        Me.a_colwidths.Shortcut = System.Windows.Forms.Shortcut.CtrlW
+        Me.a_colwidths.Text = "Upravit šířky &sloupců"
+        '
+        'm_excel
+        '
+        Me.ActionList0.SetAction(Me.m_excel, Me.a_excel)
+        Me.m_excel.MergeNode = 189
+        Me.m_excel.Name = "m_excel"
+        Me.m_excel.Parent = Me.ActionList0
+        '
+        'a_excel
+        '
+        Me.a_excel.Enabled = False
+        Me.a_excel.Name = "a_excel"
+        Me.a_excel.Parent = Me.ActionList0
+        Me.a_excel.Text = "&Excel"
+        Me.a_excel.Visible = False
+        '
+        'm_close
+        '
+        Me.ActionList0.SetAction(Me.m_close, Me.a_close)
+        Me.m_close.MergeNode = 199
+        Me.m_close.Name = "m_close"
+        Me.m_close.Parent = Me.ActionList0
+        '
+        'a_close
+        '
+        Me.a_close.Image = CType(resources.GetObject("a_close.Image"), System.Drawing.Image)
+        Me.a_close.Name = "a_close"
+        Me.a_close.Parent = Me.ActionList0
+        Me.a_close.Shortcut = System.Windows.Forms.Shortcut.AltF4
+        Me.a_close.Text = "&Zavřít"
+        '
+        'm_sprava_aplikace
+        '
+        Me.ActionList0.SetAction(Me.m_sprava_aplikace, Me.a_sprava_aplikace)
+        Me.m_sprava_aplikace.Name = "m_sprava_aplikace"
+        Me.m_sprava_aplikace.Parent = Me.ActionList0
+        Me.m_sprava_aplikace.Text = Nothing
+        '
+        'a_sprava_aplikace
+        '
+        Me.a_sprava_aplikace.AltText = "Správa aplik."
+        Me.a_sprava_aplikace.Image = CType(resources.GetObject("a_sprava_aplikace.Image"), System.Drawing.Image)
+        Me.a_sprava_aplikace.Name = "a_sprava_aplikace"
+        Me.a_sprava_aplikace.Parent = Me.ActionList0
+        Me.a_sprava_aplikace.Text = "Nastavení aplikace a správa dat"
+        '
+        'm_sbalit_vse
+        '
+        Me.ActionList0.SetAction(Me.m_sbalit_vse, Me.a_sbalit_vse)
+        Me.m_sbalit_vse.Name = "m_sbalit_vse"
+        Me.m_sbalit_vse.Parent = Me.ActionList0
+        Me.m_sbalit_vse.Text = Nothing
+        '
+        'a_sbalit_vse
+        '
+        Me.a_sbalit_vse.AltText = "Sbal. vše"
+        Me.a_sbalit_vse.Name = "a_sbalit_vse"
+        Me.a_sbalit_vse.Parent = Me.ActionList0
+        Me.a_sbalit_vse.Text = "Sbalit vše (Ctrl -)"
+        '
+        'm_rozbalit_vse
+        '
+        Me.ActionList0.SetAction(Me.m_rozbalit_vse, Me.a_rozbalit_vse)
+        Me.m_rozbalit_vse.Name = "m_rozbalit_vse"
+        Me.m_rozbalit_vse.Parent = Me.ActionList0
+        Me.m_rozbalit_vse.Text = Nothing
+        '
+        'a_rozbalit_vse
+        '
+        Me.a_rozbalit_vse.AltText = "Rozb. vše"
+        Me.a_rozbalit_vse.Name = "a_rozbalit_vse"
+        Me.a_rozbalit_vse.Parent = Me.ActionList0
+        Me.a_rozbalit_vse.Text = "Rozbalit vše (Ctrl +)"
+        '
+        'm_sbalitrozbalit_polozku_na_radku
+        '
+        Me.ActionList0.SetAction(Me.m_sbalitrozbalit_polozku_na_radku, Me.a_sbalitrozbalit_polozku_na_radku)
+        Me.m_sbalitrozbalit_polozku_na_radku.Name = "m_sbalitrozbalit_polozku_na_radku"
+        Me.m_sbalitrozbalit_polozku_na_radku.Parent = Me.ActionList0
+        Me.m_sbalitrozbalit_polozku_na_radku.Text = Nothing
+        '
+        'a_sbalitrozbalit_polozku_na_radku
+        '
+        Me.a_sbalitrozbalit_polozku_na_radku.AltText = "Sbal. polož. na řádku"
+        Me.a_sbalitrozbalit_polozku_na_radku.Name = "a_sbalitrozbalit_polozku_na_radku"
+        Me.a_sbalitrozbalit_polozku_na_radku.Parent = Me.ActionList0
+        Me.a_sbalitrozbalit_polozku_na_radku.Text = "Sbalit/rozbalit položku na řádku (Enter)"
+        '
+        'm_o_aplikaci
+        '
+        Me.ActionList0.SetAction(Me.m_o_aplikaci, Me.a_o_aplikaci)
+        Me.m_o_aplikaci.Name = "m_o_aplikaci"
+        Me.m_o_aplikaci.Parent = Me.ActionList0
+        Me.m_o_aplikaci.Text = Nothing
+        '
+        'a_o_aplikaci
+        '
+        Me.a_o_aplikaci.AltText = "O aplik."
+        Me.a_o_aplikaci.Name = "a_o_aplikaci"
+        Me.a_o_aplikaci.Parent = Me.ActionList0
+        Me.a_o_aplikaci.Text = "O aplikaci"
+        '
+        'ActionListConn
+        '
+        Me.ActionListConn.ActionList = Me.ActionList0
+        Me.ActionListConn.ParentControl = Me
+        Me.ActionListConn.ParentForm = Me
+        '
+        'm_main
+        '
+        Me.m_main.MenuList.Add(Me.m_file)
+        Me.m_main.MenuList.Add(Me.m_edit)
+        Me.m_main.MenuList.Add(Me.m_view)
+        Me.m_main.MenuList.Add(Me.m_tools)
+        Me.m_main.MenuList.Add(Me.m_nastaveni)
+        Me.m_main.MenuList.Add(Me.m_window)
+        Me.m_main.MenuList.Add(Me.m_help)
+        Me.m_main.MenuType = ActionListLib.Menu.MenuTypes.MainMenu
+        Me.m_main.Name = "m_main"
+        Me.m_main.Parent = Me.ActionList0
+        Me.m_main.Text = "  (mainmenu)"
+        '
+        'm_file
+        '
+        Me.m_file.MenuList.Add(Me.m_excel)
+        Me.m_file.MenuList.Add(Me.m_close)
+        Me.m_file.MergeNode = 100
+        Me.m_file.Name = "m_file"
+        Me.m_file.Parent = Me.ActionList0
+        Me.m_file.Text = "&Soubor"
+        '
+        'm_edit
+        '
+        Me.m_edit.MenuList.Add(Me.m_searchtext)
+        Me.m_edit.MenuList.Add(Me.m_searchtextnext)
+        Me.m_edit.MergeNode = 200
+        Me.m_edit.Name = "m_edit"
+        Me.m_edit.Parent = Me.ActionList0
+        Me.m_edit.Text = "Úprav&y"
+        '
+        'm_view
+        '
+        Me.m_view.MenuList.Add(Me.m_znovunacist_data)
+        Me.m_view.MenuList.Add(Me.m_delimiter3)
+        Me.m_view.MenuList.Add(Me.m_sbalit_vse)
+        Me.m_view.MenuList.Add(Me.m_rozbalit_vse)
+        Me.m_view.MenuList.Add(Me.m_sbalitrozbalit_polozku_na_radku)
+        Me.m_view.MergeNode = 300
+        Me.m_view.Name = "m_view"
+        Me.m_view.Parent = Me.ActionList0
+        Me.m_view.Text = "&Zobrazení"
+        '
+        'm_delimiter3
+        '
+        Me.m_delimiter3.MenuType = ActionListLib.Menu.MenuTypes.Delimiter
+        Me.m_delimiter3.Name = "m_delimiter3"
+        Me.m_delimiter3.Parent = Me.ActionList0
+        Me.m_delimiter3.Text = "  (delimiter)"
+        '
+        'm_tools
+        '
+        Me.m_tools.MergeNode = 400
+        Me.m_tools.Name = "m_tools"
+        Me.m_tools.Parent = Me.ActionList0
+        Me.m_tools.Text = "&Nástroje"
+        '
+        'm_nastaveni
+        '
+        Me.m_nastaveni.MenuList.Add(Me.m_sprava_aplikace)
+        Me.m_nastaveni.MergeNode = 700
+        Me.m_nastaveni.Name = "m_nastaveni"
+        Me.m_nastaveni.Parent = Me.ActionList0
+        Me.m_nastaveni.Text = "Nas&tavení"
+        '
+        'm_window
+        '
+        Me.m_window.MergeNode = 800
+        Me.m_window.Name = "m_window"
+        Me.m_window.Parent = Me.ActionList0
+        Me.m_window.Text = "&Okno"
+        Me.m_window.Visible = False
+        '
+        'm_help
+        '
+        Me.m_help.MenuList.Add(Me.m_o_aplikaci)
+        Me.m_help.MergeNode = 900
+        Me.m_help.Name = "m_help"
+        Me.m_help.Parent = Me.ActionList0
+        Me.m_help.Text = "&Nápověda"
+        '
+        'a_nastaveni
+        '
+        Me.a_nastaveni.AltText = "Nast."
+        Me.a_nastaveni.Name = "a_nastaveni"
+        Me.a_nastaveni.Parent = Me.ActionList0
+        Me.a_nastaveni.Text = "Nastavení"
+        '
+        'MForm
+        '
+        Me.ActionListConn.SetActionListConn(Me, Me.ActionList0)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.ClientSize = New System.Drawing.Size(990, 561)
+        Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.StatusStrip1)
+        Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MinimumSize = New System.Drawing.Size(800, 600)
+        Me.Name = "MForm"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Prohlížeč vybraných dat archivu účetnictví Pohoda"
+        Me.XTabControl1.ResumeLayout(False)
+        Me.pgObj.ResumeLayout(False)
+        Me.pnMain.ResumeLayout(False)
+        CType(Me.Fg, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
+        Me.StatusStrip1.ResumeLayout(False)
+        Me.StatusStrip1.PerformLayout()
+        CType(Me.ActionList0, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ResumeLayout(False)
+        Me.PerformLayout()
+
+    End Sub
+    Friend WithEvents poConn As OleDb.OleDbConnection
+    Friend WithEvents XTabControl1 As XControls.XTabControl
+    Friend WithEvents pgObj As TabPage
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents StatusStrip1 As StatusStrip
+    Friend WithEvents Fg As XC1Flexgrid
+    Friend WithEvents ActionList0 As ActionListLib.ActionList
+    Friend WithEvents ActionListConn As ActionListLib.ActionListConn
+    Friend WithEvents m_main As ActionListLib.Menu
+    Friend WithEvents m_file As ActionListLib.Menu
+    Friend WithEvents m_excel As ActionListLib.Menu
+    Friend WithEvents a_excel As ActionListLib.Action
+    Friend WithEvents m_close As ActionListLib.Menu
+    Friend WithEvents a_close As ActionListLib.Action
+    Friend WithEvents m_edit As ActionListLib.Menu
+    Friend WithEvents m_view As ActionListLib.Menu
+    Friend WithEvents m_tools As ActionListLib.Menu
+    Friend WithEvents m_window As ActionListLib.Menu
+    Friend WithEvents m_help As ActionListLib.Menu
+    Friend WithEvents m_nastaveni As ActionListLib.Menu
+    Friend WithEvents m_sprava_aplikace As ActionListLib.Menu
+    Friend WithEvents a_sprava_aplikace As ActionListLib.Action
+    Friend WithEvents a_nastaveni As ActionListLib.Action
+    Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
+    Friend WithEvents lblArchiveFile As ToolStripStatusLabel
+    Friend WithEvents m_znovunacist_data As ActionListLib.Menu
+    Friend WithEvents a_znovunacist_data As ActionListLib.Action
+    Friend WithEvents pnMain As Panel
+    Friend WithEvents m_popup1 As ActionListLib.Menu
+    Friend WithEvents m_cols As ActionListLib.Menu
+    Friend WithEvents a_cols As ActionListLib.Action
+    Friend WithEvents m_colwidths As ActionListLib.Menu
+    Friend WithEvents a_colwidths As ActionListLib.Action
+    Friend WithEvents m_delimiter1 As ActionListLib.Menu
+    Friend WithEvents m_searchtext As ActionListLib.Menu
+    Friend WithEvents a_searchtext As ActionListLib.Action
+    Friend WithEvents m_searchtextnext As ActionListLib.Menu
+    Friend WithEvents a_searchtextnext As ActionListLib.Action
+    Friend WithEvents m_delimiter2 As ActionListLib.Menu
+    Friend WithEvents m_delimiter3 As ActionListLib.Menu
+    Friend WithEvents m_sbalit_vse As ActionListLib.Menu
+    Friend WithEvents a_sbalit_vse As ActionListLib.Action
+    Friend WithEvents m_rozbalit_vse As ActionListLib.Menu
+    Friend WithEvents a_rozbalit_vse As ActionListLib.Action
+    Friend WithEvents m_sbalitrozbalit_polozku_na_radku As ActionListLib.Menu
+    Friend WithEvents a_sbalitrozbalit_polozku_na_radku As ActionListLib.Action
+    Friend WithEvents m_o_aplikaci As ActionListLib.Menu
+    Friend WithEvents a_o_aplikaci As ActionListLib.Action
+End Class
