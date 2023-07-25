@@ -1,6 +1,12 @@
 ﻿
+
 <XmlRoot("ArchivInfoData")>
 Partial Public Class AData
+
+    Public Enum TypObj As Integer
+        Prij = 1
+        Vyd = 2
+    End Enum
 
     Public Sub New()
         MyBase.New
@@ -10,9 +16,14 @@ Partial Public Class AData
         Dim oFile As New AFile(sMdbFilename, sPassword, iNewFileID)
         For i As Integer = aoFiles.Count - 1 To 0 Step -1
             If String.Compare(aoFiles(i).PureFileName, oFile.PureFileName, True) = 0 Then
-                For i2 As Integer = aoFirmy.Count - 1 To 0 Step -1
-                    For i3 As Integer = aoFirmy(i2).aoObj.Count - 1 To 0 Step -1
-                        If aoFirmy(i2).aoObj(i3).FileID = aoFiles(i).Id Then aoFirmy(i2).aoObj.RemoveAt(i3)
+                For i2 As Integer = aoFirmyObj.Count - 1 To 0 Step -1
+                    For i3 As Integer = aoFirmyObj(i2).aoObj.Count - 1 To 0 Step -1
+                        If aoFirmyObj(i2).aoObj(i3).FileID = aoFiles(i).Id Then aoFirmyObj(i2).aoObj.RemoveAt(i3)
+                    Next
+                Next
+                For i2 As Integer = aoFirmyNab.Count - 1 To 0 Step -1
+                    For i3 As Integer = aoFirmyNab(i2).aoObj.Count - 1 To 0 Step -1
+                        If aoFirmyNab(i2).aoObj(i3).FileID = aoFiles(i).Id Then aoFirmyNab(i2).aoObj.RemoveAt(i3)
                     Next
                 Next
                 aoFiles.RemoveAt(i)
@@ -24,8 +35,11 @@ Partial Public Class AData
     <XmlElement("fil")>
     Public aoFiles As New List(Of AFile)
 
-    <XmlElement("f")>
-    Public aoFirmy As New List(Of AFirma)
+    <XmlElement("p")>
+    Public aoFirmyObj As New List(Of AFirma)
+
+    <XmlElement("v")>
+    Public aoFirmyNab As New List(Of AFirma)
 
     Public Function GetMaxFileID() As Integer
         Dim iRet As Integer = 0
@@ -36,10 +50,15 @@ Partial Public Class AData
     End Function
 
 
-    Public Function AddFirmaObj(JmenoFirmy As String, ICO As Decimal, Email As String, iFId As Integer) As AFirma
+    Public Function AddFirmaObj(JmenoFirmy As String, ICO As Decimal, Email As String, iFId As Integer, iTypRec As Integer, ByRef aoFirmy As List(Of AFirma)) As AFirma
         Dim oFrm As New AFirma(JmenoFirmy, ICO, Email, iFId)
         Dim iIdx As Integer = -1
         Dim o As AFirma = Nothing
+        If iTypRec = TypObj.Prij Then
+            aoFirmy = aoFirmyObj
+        Else
+            aoFirmy = aoFirmyNab
+        End If
         For i As Integer = 0 To aoFirmy.Count - 1
             o = aoFirmy(i)
             If (o.ICO = oFrm.ICO AndAlso o.ICO > 0) OrElse o.KeyName = oFrm.KeyName Then
@@ -88,7 +107,7 @@ Partial Public Class AData
         Public FileDate As New Date
     End Class
 
-    ''' <summary> Firma v prijatych objednavkach </summary>
+    ''' <summary> Firma v prijatych objednavkach a nabidkach </summary>
     Public Class AFirma
         Public Sub New()
             MyBase.New
@@ -110,17 +129,18 @@ Partial Public Class AData
             End While
             ICO = dcICO
             Email = sEmail
+            'Typ = iTypRec
         End Sub
         <XmlAttribute("k")>
         Public KeyName As String = ""
-        '<XmlElement("n")>
-        'Public Names As New List(Of String)
         <XmlAttribute("i")>
         Public ICO As Decimal = 0
         <XmlAttribute("e")>
         Public Email As String = ""
-        <XmlElement("o")>
+        <XmlElement("d")>
         Public aoObj As New List(Of AObj)
+        '<XmlAttribute("t"), DefaultValue(TypObj.Prij)>
+        'Public Typ As Integer = TypObj.Prij
         <XmlIgnore>
         Public DisplayName As String = KeyName
 
@@ -160,7 +180,7 @@ Partial Public Class AData
         End Class
     End Class
 
-    ''' <summary> Prijata objednavka </summary>
+    ''' <summary> polozka prijate/vydane objednavky </summary>
     Public Class AObj
         Public Sub New()
             MyBase.New
@@ -220,7 +240,7 @@ Partial Public Class AData
             Pozn = sPozn
             Mnoz = dcMnoz
         End Sub
-        <XmlAttribute("i")>
+        <XmlAttribute("x")>
         Public ID As Integer = 0
         <XmlAttribute("t")>
         Public Text As String = ""

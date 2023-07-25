@@ -72,9 +72,9 @@ Partial Class FOptions
         Me.gbImport.Controls.Add(Me.Panel4)
         Me.gbImport.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.gbImport.Enabled = False
-        Me.gbImport.Location = New System.Drawing.Point(0, 288)
+        Me.gbImport.Location = New System.Drawing.Point(0, 298)
         Me.gbImport.Name = "gbImport"
-        Me.gbImport.Size = New System.Drawing.Size(660, 79)
+        Me.gbImport.Size = New System.Drawing.Size(764, 79)
         Me.gbImport.TabIndex = 5
         Me.gbImport.TabStop = False
         Me.gbImport.Text = "Databáze účetnictví Pohoda"
@@ -88,7 +88,7 @@ Partial Class FOptions
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel9.Location = New System.Drawing.Point(3, 46)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(654, 21)
+        Me.Panel9.Size = New System.Drawing.Size(758, 21)
         Me.Panel9.TabIndex = 3
         '
         'brnDefaultMdbPassword
@@ -137,7 +137,7 @@ Partial Class FOptions
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel8.Location = New System.Drawing.Point(3, 38)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(654, 8)
+        Me.Panel8.Size = New System.Drawing.Size(758, 8)
         Me.Panel8.TabIndex = 2
         '
         'Panel4
@@ -151,7 +151,7 @@ Partial Class FOptions
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel4.Location = New System.Drawing.Point(3, 17)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(654, 21)
+        Me.Panel4.Size = New System.Drawing.Size(758, 21)
         Me.Panel4.TabIndex = 1
         '
         'btnProcessImport
@@ -221,7 +221,7 @@ Partial Class FOptions
         Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox1.MinimumSize = New System.Drawing.Size(0, 150)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(660, 282)
+        Me.GroupBox1.Size = New System.Drawing.Size(764, 292)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Data k prohlížení"
@@ -232,7 +232,7 @@ Partial Class FOptions
         Me.Panel10.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel10.Location = New System.Drawing.Point(3, 74)
         Me.Panel10.Name = "Panel10"
-        Me.Panel10.Size = New System.Drawing.Size(654, 205)
+        Me.Panel10.Size = New System.Drawing.Size(758, 215)
         Me.Panel10.TabIndex = 3
         '
         'FgF
@@ -246,7 +246,7 @@ Partial Class FOptions
         Me.FgF.MinimumSize = New System.Drawing.Size(250, 4)
         Me.FgF.Name = "FgF"
         Me.FgF.Rows.DefaultSize = 20
-        Me.FgF.Size = New System.Drawing.Size(654, 205)
+        Me.FgF.Size = New System.Drawing.Size(758, 215)
         Me.FgF.StyleInfo = resources.GetString("FgF.StyleInfo")
         Me.FgF.TabIndex = 7
         Me.FgF.UseCompatibleTextRendering = False
@@ -258,7 +258,7 @@ Partial Class FOptions
         Me.Label3.Location = New System.Drawing.Point(3, 38)
         Me.Label3.Name = "Label3"
         Me.Label3.Padding = New System.Windows.Forms.Padding(5, 15, 5, 5)
-        Me.Label3.Size = New System.Drawing.Size(654, 36)
+        Me.Label3.Size = New System.Drawing.Size(758, 36)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "seznam databází, která archiv aktuálně obsahuje:"
         '
@@ -273,7 +273,7 @@ Partial Class FOptions
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel2.Location = New System.Drawing.Point(3, 17)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(654, 21)
+        Me.Panel2.Size = New System.Drawing.Size(758, 21)
         Me.Panel2.TabIndex = 1
         '
         'btnCreateA
@@ -340,11 +340,11 @@ Partial Class FOptions
         Me.ButtonPanel1.Controls.Add(Me.chkAllowImport)
         Me.ButtonPanel1.Controls.Add(Me.btnClose)
         Me.ButtonPanel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ButtonPanel1.Location = New System.Drawing.Point(0, 367)
+        Me.ButtonPanel1.Location = New System.Drawing.Point(0, 377)
         Me.ButtonPanel1.Name = "ButtonPanel1"
         Me.ButtonPanel1.Padding = New System.Windows.Forms.Padding(9, 8, 9, 13)
         Me.ButtonPanel1.PaddingAutomaticCoef = New System.Drawing.SizeF(0.2!, 0.08!)
-        Me.ButtonPanel1.Size = New System.Drawing.Size(660, 44)
+        Me.ButtonPanel1.Size = New System.Drawing.Size(764, 44)
         Me.ButtonPanel1.TabIndex = 6
         '
         'chkAllowImport
@@ -361,7 +361,7 @@ Partial Class FOptions
         '
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Dock = System.Windows.Forms.DockStyle.Right
-        Me.btnClose.Location = New System.Drawing.Point(552, 8)
+        Me.btnClose.Location = New System.Drawing.Point(656, 8)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(99, 23)
         Me.btnClose.TabIndex = 5
@@ -371,9 +371,9 @@ Partial Class FOptions
         'XSplitter1
         '
         Me.XSplitter1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.XSplitter1.Location = New System.Drawing.Point(0, 282)
+        Me.XSplitter1.Location = New System.Drawing.Point(0, 292)
         Me.XSplitter1.Name = "XSplitter1"
-        Me.XSplitter1.Size = New System.Drawing.Size(660, 6)
+        Me.XSplitter1.Size = New System.Drawing.Size(764, 6)
         Me.XSplitter1.TabIndex = 7
         Me.XSplitter1.TabStop = False
         '
@@ -399,7 +399,7 @@ Partial Class FOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(660, 411)
+        Me.ClientSize = New System.Drawing.Size(764, 421)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.XSplitter1)
         Me.Controls.Add(Me.gbImport)

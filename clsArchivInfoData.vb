@@ -20,8 +20,10 @@ Public Class AData
     Friend Const constXMLNS1 As String = "xsi:"
     Friend Const constXMLNS2 As String = "xsd:"
 
-    Friend Const txSQL1 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email from OBJ where reltpobj=1 order by firma, datum desc"
+    Friend Const txSQL1 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpObj from OBJ order by firma, datum desc"
     Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ where reltpobj=1)"
+    Friend Const ObjPrij As Integer = 1
+    Friend Const Nabidky As Integer = 2
     Friend Const txConnStr As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Jet OLEDB:Database Password = {1}"
     Friend Const txDefaultPassword As String = "168BF465F0FB19"
 
@@ -77,21 +79,22 @@ Public Class AData
             While oRdr.Read
                 Try
                     Dim sName As String = GetStr(0)
-                    Dim oFrm As AFirma = oData.AddFirmaObj(sName, GetDec(1), GetStr(5), iNewID)
+                    Dim aoFirmy As List(Of AFirma) = Nothing
+                    Dim oFirma As AFirma = oData.AddFirmaObj(sName, GetDec(1), GetStr(5), iNewID, GetInt(6), aoFirmy)
                     Dim iRecId As Integer = GetInt(2)
                     Dim iIdx As Integer = -1
-                    For i As Integer = 0 To oData.aoFirmy.Count - 1
-                        If oData.aoFirmy(i).KeyName = oFrm.KeyName Then
+                    For i As Integer = 0 To aoFirmy.Count - 1
+                        If aoFirmy(i).KeyName = oFirma.KeyName Then
                             iIdx = i
                             Exit For
                         End If
                     Next
                     If iIdx < 0 Then
-                        oData.aoFirmy.Add(oFrm)
-                        iIdx = oData.aoFirmy.Count - 1
+                        aoFirmy.Add(oFirma)
+                        iIdx = aoFirmy.Count - 1
                     End If
                     Dim oObj As New AObj(iRecId, iNewID, sName, GetLong(3), GetDate(4))
-                    oData.aoFirmy(iIdx).aoObj.Add(oObj)
+                    aoFirmy(iIdx).aoObj.Add(oObj)
                     maoObjList(iRecId) = oObj
                 Catch ex As Exception
                     Debug.WriteLine(ex.Message)
@@ -186,14 +189,21 @@ Public Class AData
             Dim oReader As New XmlTextReader(oStringReader)
             Dim oRes As AData = DirectCast(oSer.Deserialize(oReader), AData)
             If SetDisplayNames Then
-                For i As Integer = 0 To oRes.aoFirmy.Count - 1
-                    oRes.aoFirmy(i).SetDisplayName()
+                For i As Integer = 0 To oRes.aoFirmyObj.Count - 1
+                    oRes.aoFirmyObj(i).SetDisplayName()
+                Next
+                For i As Integer = 0 To oRes.aoFirmyNab.Count - 1
+                    oRes.aoFirmyNab(i).SetDisplayName()
                 Next
             End If
             If SortData Then
-                oRes.aoFirmy.Sort(New AFirma.Sorter)
-                For i As Integer = 0 To oRes.aoFirmy.Count - 1
-                    oRes.aoFirmy(i).aoObj.Sort(New AObj.Sorter)
+                oRes.aoFirmyObj.Sort(New AFirma.Sorter)
+                oRes.aoFirmyNab.Sort(New AFirma.Sorter)
+                For i As Integer = 0 To oRes.aoFirmyObj.Count - 1
+                    oRes.aoFirmyObj(i).aoObj.Sort(New AObj.Sorter)
+                Next
+                For i As Integer = 0 To oRes.aoFirmyNab.Count - 1
+                    oRes.aoFirmyObj(i).aoObj.Sort(New AObj.Sorter)
                 Next
             End If
             Return oRes

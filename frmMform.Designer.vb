@@ -25,10 +25,13 @@ Partial Class MForm
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MForm))
         Me.poConn = New System.Data.OleDb.OleDbConnection()
-        Me.XTabControl1 = New XControls.XTabControl()
+        Me.tbcMain = New XControls.XTabControl()
+        Me.pgNab = New System.Windows.Forms.TabPage()
+        Me.pnNab = New System.Windows.Forms.Panel()
+        Me.FgN = New XForms.XC1Flexgrid()
         Me.pgObj = New System.Windows.Forms.TabPage()
-        Me.pnMain = New System.Windows.Forms.Panel()
-        Me.Fg = New XForms.XC1Flexgrid()
+        Me.pnObj = New System.Windows.Forms.Panel()
+        Me.FgO = New XForms.XC1Flexgrid()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
@@ -40,6 +43,11 @@ Partial Class MForm
         Me.m_searchtext = New ActionListLib.Menu(Me.components)
         Me.m_searchtextnext = New ActionListLib.Menu(Me.components)
         Me.m_delimiter2 = New ActionListLib.Menu(Me.components)
+        Me.m_rozbalit_vse = New ActionListLib.Menu(Me.components)
+        Me.m_sbalit_vse = New ActionListLib.Menu(Me.components)
+        Me.m_sbalitrozbalit_polozku_na_radku = New ActionListLib.Menu(Me.components)
+        Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_ = New ActionListLib.Menu(Me.components)
+        Me.m_delimiter3 = New ActionListLib.Menu(Me.components)
         Me.m_cols = New ActionListLib.Menu(Me.components)
         Me.m_colwidths = New ActionListLib.Menu(Me.components)
         Me.a_znovunacist_data = New ActionListLib.Action(Me.components)
@@ -53,29 +61,29 @@ Partial Class MForm
         Me.a_close = New ActionListLib.Action(Me.components)
         Me.m_sprava_aplikace = New ActionListLib.Menu(Me.components)
         Me.a_sprava_aplikace = New ActionListLib.Action(Me.components)
-        Me.m_sbalit_vse = New ActionListLib.Menu(Me.components)
         Me.a_sbalit_vse = New ActionListLib.Action(Me.components)
-        Me.m_rozbalit_vse = New ActionListLib.Menu(Me.components)
         Me.a_rozbalit_vse = New ActionListLib.Action(Me.components)
-        Me.m_sbalitrozbalit_polozku_na_radku = New ActionListLib.Menu(Me.components)
         Me.a_sbalitrozbalit_polozku_na_radku = New ActionListLib.Action(Me.components)
         Me.m_o_aplikaci = New ActionListLib.Menu(Me.components)
         Me.a_o_aplikaci = New ActionListLib.Action(Me.components)
+        Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_ = New ActionListLib.Action(Me.components)
         Me.ActionListConn = New ActionListLib.ActionListConn(Me.components)
         Me.m_main = New ActionListLib.Menu(Me.components)
         Me.m_file = New ActionListLib.Menu(Me.components)
         Me.m_edit = New ActionListLib.Menu(Me.components)
         Me.m_view = New ActionListLib.Menu(Me.components)
-        Me.m_delimiter3 = New ActionListLib.Menu(Me.components)
         Me.m_tools = New ActionListLib.Menu(Me.components)
         Me.m_nastaveni = New ActionListLib.Menu(Me.components)
         Me.m_window = New ActionListLib.Menu(Me.components)
         Me.m_help = New ActionListLib.Menu(Me.components)
         Me.a_nastaveni = New ActionListLib.Action(Me.components)
-        Me.XTabControl1.SuspendLayout()
+        Me.tbcMain.SuspendLayout()
+        Me.pgNab.SuspendLayout()
+        Me.pnNab.SuspendLayout()
+        CType(Me.FgN, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pgObj.SuspendLayout()
-        Me.pnMain.SuspendLayout()
-        CType(Me.Fg, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnObj.SuspendLayout()
+        CType(Me.FgO, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         CType(Me.ActionList0, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -85,68 +93,118 @@ Partial Class MForm
         '
         Me.poConn.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Jet OLEDB:Database Password={1}"
         '
-        'XTabControl1
+        'tbcMain
         '
-        Me.XTabControl1.Controls.Add(Me.pgObj)
-        Me.XTabControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.XTabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed
-        Me.XTabControl1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.XTabControl1.Location = New System.Drawing.Point(0, 0)
-        Me.XTabControl1.Name = "XTabControl1"
-        Me.XTabControl1.SelectedIndex = 0
-        Me.XTabControl1.Size = New System.Drawing.Size(990, 539)
-        Me.XTabControl1.TabIndex = 1
+        Me.tbcMain.Controls.Add(Me.pgNab)
+        Me.tbcMain.Controls.Add(Me.pgObj)
+        Me.tbcMain.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tbcMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed
+        Me.tbcMain.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.tbcMain.Location = New System.Drawing.Point(0, 0)
+        Me.tbcMain.Name = "tbcMain"
+        Me.tbcMain.SelectedIndex = 0
+        Me.tbcMain.Size = New System.Drawing.Size(990, 539)
+        Me.tbcMain.TabIndex = 1
+        '
+        'pgNab
+        '
+        Me.pgNab.Controls.Add(Me.pnNab)
+        Me.pgNab.Location = New System.Drawing.Point(4, 22)
+        Me.pgNab.Name = "pgNab"
+        Me.pgNab.Padding = New System.Windows.Forms.Padding(3)
+        Me.pgNab.Size = New System.Drawing.Size(982, 513)
+        Me.pgNab.TabIndex = 1
+        Me.pgNab.Text = "Archiv vydaných nabídek"
+        Me.pgNab.UseVisualStyleBackColor = True
+        '
+        'pnNab
+        '
+        Me.pnNab.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.pnNab.Controls.Add(Me.FgN)
+        Me.pnNab.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnNab.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.pnNab.Location = New System.Drawing.Point(3, 3)
+        Me.pnNab.Name = "pnNab"
+        Me.pnNab.Size = New System.Drawing.Size(976, 507)
+        Me.pnNab.TabIndex = 8
+        '
+        'FgN
+        '
+        Me.FgN.AllowEditing = False
+        Me.FgN.BackColor = System.Drawing.Color.LightBlue
+        Me.FgN.ColumnInfo = "10,1,0,0,0,100,Columns:"
+        Me.FgN.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FgN.DrawMode = C1.Win.C1FlexGrid.DrawModeEnum.OwnerDraw
+        Me.FgN.FillStandardContextMenu = False
+        Me.FgN.FocusRect = C1.Win.C1FlexGrid.FocusRectEnum.Heavy
+        Me.FgN.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.FgN.KeyActionEnter = C1.Win.C1FlexGrid.KeyActionEnum.None
+        Me.FgN.KeyActionTab = C1.Win.C1FlexGrid.KeyActionEnum.MoveAcross
+        Me.FgN.Location = New System.Drawing.Point(0, 0)
+        Me.FgN.MinimumSize = New System.Drawing.Size(250, 4)
+        Me.FgN.Name = "FgN"
+        Me.ActionList0.SetPopupMenu(Me.FgN, Me.m_popup1)
+        Me.FgN.Rows.DefaultSize = 20
+        Me.FgN.ShowCursor = True
+        Me.FgN.Size = New System.Drawing.Size(976, 507)
+        Me.FgN.StyleInfo = resources.GetString("FgN.StyleInfo")
+        Me.FgN.TabIndex = 7
+        Me.FgN.Tree.Column = 1
+        Me.FgN.Tree.LineColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.FgN.UseCompatibleTextRendering = False
+        Me.FgN.XSearchTextMode = XForms.XC1Flexgrid.XSearchTextModes.[Default]
         '
         'pgObj
         '
-        Me.pgObj.Controls.Add(Me.pnMain)
+        Me.pgObj.Controls.Add(Me.pnObj)
         Me.pgObj.Location = New System.Drawing.Point(4, 22)
         Me.pgObj.Name = "pgObj"
         Me.pgObj.Padding = New System.Windows.Forms.Padding(3)
         Me.pgObj.Size = New System.Drawing.Size(982, 513)
         Me.pgObj.TabIndex = 0
-        Me.pgObj.Text = "Archiv objednávek"
+        Me.pgObj.Text = "Archiv přijatých objednávek"
         Me.pgObj.UseVisualStyleBackColor = True
         '
-        'pnMain
+        'pnObj
         '
-        Me.pnMain.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.pnMain.Controls.Add(Me.Fg)
-        Me.pnMain.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pnMain.Font = New System.Drawing.Font("Tahoma", 8.25!)
-        Me.pnMain.Location = New System.Drawing.Point(3, 3)
-        Me.pnMain.Name = "pnMain"
-        Me.pnMain.Size = New System.Drawing.Size(976, 507)
-        Me.pnMain.TabIndex = 7
+        Me.pnObj.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.pnObj.Controls.Add(Me.FgO)
+        Me.pnObj.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnObj.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.pnObj.Location = New System.Drawing.Point(3, 3)
+        Me.pnObj.Name = "pnObj"
+        Me.pnObj.Size = New System.Drawing.Size(976, 507)
+        Me.pnObj.TabIndex = 7
         '
-        'Fg
+        'FgO
         '
-        Me.Fg.AllowEditing = False
-        Me.Fg.ColumnInfo = "10,1,0,0,0,100,Columns:"
-        Me.Fg.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Fg.DrawMode = C1.Win.C1FlexGrid.DrawModeEnum.OwnerDraw
-        Me.Fg.FillStandardContextMenu = False
-        Me.Fg.FocusRect = C1.Win.C1FlexGrid.FocusRectEnum.Heavy
-        Me.Fg.Font = New System.Drawing.Font("Tahoma", 8.25!)
-        Me.Fg.KeyActionEnter = C1.Win.C1FlexGrid.KeyActionEnum.None
-        Me.Fg.KeyActionTab = C1.Win.C1FlexGrid.KeyActionEnum.MoveAcross
-        Me.Fg.Location = New System.Drawing.Point(0, 0)
-        Me.Fg.MinimumSize = New System.Drawing.Size(250, 4)
-        Me.Fg.Name = "Fg"
-        Me.ActionList0.SetPopupMenu(Me.Fg, Me.m_popup1)
-        Me.Fg.Rows.DefaultSize = 20
-        Me.Fg.ShowCursor = True
-        Me.Fg.Size = New System.Drawing.Size(976, 507)
-        Me.Fg.StyleInfo = resources.GetString("Fg.StyleInfo")
-        Me.Fg.TabIndex = 6
-        Me.Fg.Tree.Column = 1
-        Me.Fg.Tree.LineColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Fg.UseCompatibleTextRendering = False
-        Me.Fg.XSearchTextMode = XForms.XC1Flexgrid.XSearchTextModes.[Default]
+        Me.FgO.AllowEditing = False
+        Me.FgO.BackColor = System.Drawing.Color.MediumSpringGreen
+        Me.FgO.ColumnInfo = "10,1,0,0,0,100,Columns:"
+        Me.FgO.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FgO.DrawMode = C1.Win.C1FlexGrid.DrawModeEnum.OwnerDraw
+        Me.FgO.FillStandardContextMenu = False
+        Me.FgO.FocusRect = C1.Win.C1FlexGrid.FocusRectEnum.Heavy
+        Me.FgO.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.FgO.KeyActionEnter = C1.Win.C1FlexGrid.KeyActionEnum.None
+        Me.FgO.KeyActionTab = C1.Win.C1FlexGrid.KeyActionEnum.MoveAcross
+        Me.FgO.Location = New System.Drawing.Point(0, 0)
+        Me.FgO.MinimumSize = New System.Drawing.Size(250, 4)
+        Me.FgO.Name = "FgO"
+        Me.ActionList0.SetPopupMenu(Me.FgO, Me.m_popup1)
+        Me.FgO.Rows.DefaultSize = 20
+        Me.FgO.ShowCursor = True
+        Me.FgO.Size = New System.Drawing.Size(976, 507)
+        Me.FgO.StyleInfo = resources.GetString("FgO.StyleInfo")
+        Me.FgO.TabIndex = 6
+        Me.FgO.Tree.Column = 1
+        Me.FgO.Tree.LineColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.FgO.UseCompatibleTextRendering = False
+        Me.FgO.XSearchTextMode = XForms.XC1Flexgrid.XSearchTextModes.[Default]
         '
         'Panel1
         '
-        Me.Panel1.Controls.Add(Me.XTabControl1)
+        Me.Panel1.Controls.Add(Me.tbcMain)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
@@ -193,6 +251,11 @@ Partial Class MForm
         Me.m_popup1.MenuList.Add(Me.m_searchtext)
         Me.m_popup1.MenuList.Add(Me.m_searchtextnext)
         Me.m_popup1.MenuList.Add(Me.m_delimiter2)
+        Me.m_popup1.MenuList.Add(Me.m_rozbalit_vse)
+        Me.m_popup1.MenuList.Add(Me.m_sbalit_vse)
+        Me.m_popup1.MenuList.Add(Me.m_sbalitrozbalit_polozku_na_radku)
+        Me.m_popup1.MenuList.Add(Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_)
+        Me.m_popup1.MenuList.Add(Me.m_delimiter3)
         Me.m_popup1.MenuList.Add(Me.m_cols)
         Me.m_popup1.MenuList.Add(Me.m_colwidths)
         Me.m_popup1.MenuType = ActionListLib.Menu.MenuTypes.PopupMenu
@@ -232,6 +295,41 @@ Partial Class MForm
         Me.m_delimiter2.Name = "m_delimiter2"
         Me.m_delimiter2.Parent = Me.ActionList0
         Me.m_delimiter2.Text = "  (delimiter)"
+        '
+        'm_rozbalit_vse
+        '
+        Me.ActionList0.SetAction(Me.m_rozbalit_vse, Me.a_rozbalit_vse)
+        Me.m_rozbalit_vse.Name = "m_rozbalit_vse"
+        Me.m_rozbalit_vse.Parent = Me.ActionList0
+        Me.m_rozbalit_vse.Text = Nothing
+        '
+        'm_sbalit_vse
+        '
+        Me.ActionList0.SetAction(Me.m_sbalit_vse, Me.a_sbalit_vse)
+        Me.m_sbalit_vse.Name = "m_sbalit_vse"
+        Me.m_sbalit_vse.Parent = Me.ActionList0
+        Me.m_sbalit_vse.Text = Nothing
+        '
+        'm_sbalitrozbalit_polozku_na_radku
+        '
+        Me.ActionList0.SetAction(Me.m_sbalitrozbalit_polozku_na_radku, Me.a_sbalitrozbalit_polozku_na_radku)
+        Me.m_sbalitrozbalit_polozku_na_radku.Name = "m_sbalitrozbalit_polozku_na_radku"
+        Me.m_sbalitrozbalit_polozku_na_radku.Parent = Me.ActionList0
+        Me.m_sbalitrozbalit_polozku_na_radku.Text = Nothing
+        '
+        'm_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_
+        '
+        Me.ActionList0.SetAction(Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_, Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_)
+        Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Name = "m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_"
+        Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Parent = Me.ActionList0
+        Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Text = Nothing
+        '
+        'm_delimiter3
+        '
+        Me.m_delimiter3.MenuType = ActionListLib.Menu.MenuTypes.Delimiter
+        Me.m_delimiter3.Name = "m_delimiter3"
+        Me.m_delimiter3.Parent = Me.ActionList0
+        Me.m_delimiter3.Text = "  (delimiter)"
         '
         'm_cols
         '
@@ -328,13 +426,6 @@ Partial Class MForm
         Me.a_sprava_aplikace.Parent = Me.ActionList0
         Me.a_sprava_aplikace.Text = "Nastavení aplikace a správa dat"
         '
-        'm_sbalit_vse
-        '
-        Me.ActionList0.SetAction(Me.m_sbalit_vse, Me.a_sbalit_vse)
-        Me.m_sbalit_vse.Name = "m_sbalit_vse"
-        Me.m_sbalit_vse.Parent = Me.ActionList0
-        Me.m_sbalit_vse.Text = Nothing
-        '
         'a_sbalit_vse
         '
         Me.a_sbalit_vse.AltText = "Sbal. vše"
@@ -342,26 +433,12 @@ Partial Class MForm
         Me.a_sbalit_vse.Parent = Me.ActionList0
         Me.a_sbalit_vse.Text = "Sbalit vše (Ctrl -)"
         '
-        'm_rozbalit_vse
-        '
-        Me.ActionList0.SetAction(Me.m_rozbalit_vse, Me.a_rozbalit_vse)
-        Me.m_rozbalit_vse.Name = "m_rozbalit_vse"
-        Me.m_rozbalit_vse.Parent = Me.ActionList0
-        Me.m_rozbalit_vse.Text = Nothing
-        '
         'a_rozbalit_vse
         '
         Me.a_rozbalit_vse.AltText = "Rozb. vše"
         Me.a_rozbalit_vse.Name = "a_rozbalit_vse"
         Me.a_rozbalit_vse.Parent = Me.ActionList0
         Me.a_rozbalit_vse.Text = "Rozbalit vše (Ctrl +)"
-        '
-        'm_sbalitrozbalit_polozku_na_radku
-        '
-        Me.ActionList0.SetAction(Me.m_sbalitrozbalit_polozku_na_radku, Me.a_sbalitrozbalit_polozku_na_radku)
-        Me.m_sbalitrozbalit_polozku_na_radku.Name = "m_sbalitrozbalit_polozku_na_radku"
-        Me.m_sbalitrozbalit_polozku_na_radku.Parent = Me.ActionList0
-        Me.m_sbalitrozbalit_polozku_na_radku.Text = Nothing
         '
         'a_sbalitrozbalit_polozku_na_radku
         '
@@ -383,6 +460,14 @@ Partial Class MForm
         Me.a_o_aplikaci.Name = "a_o_aplikaci"
         Me.a_o_aplikaci.Parent = Me.ActionList0
         Me.a_o_aplikaci.Text = "O aplikaci"
+        '
+        'a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_
+        '
+        Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.AltText = "Sbal. všec. polož. firmy (Shif."
+        Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Name = "a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_"
+        Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Parent = Me.ActionList0
+        Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Text = "Sbalit/rozbalit všechny položky firmy (Shift+Enter)"
+        Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Visible = False
         '
         'ActionListConn
         '
@@ -429,17 +514,11 @@ Partial Class MForm
         Me.m_view.MenuList.Add(Me.m_sbalit_vse)
         Me.m_view.MenuList.Add(Me.m_rozbalit_vse)
         Me.m_view.MenuList.Add(Me.m_sbalitrozbalit_polozku_na_radku)
+        Me.m_view.MenuList.Add(Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_)
         Me.m_view.MergeNode = 300
         Me.m_view.Name = "m_view"
         Me.m_view.Parent = Me.ActionList0
         Me.m_view.Text = "&Zobrazení"
-        '
-        'm_delimiter3
-        '
-        Me.m_delimiter3.MenuType = ActionListLib.Menu.MenuTypes.Delimiter
-        Me.m_delimiter3.Name = "m_delimiter3"
-        Me.m_delimiter3.Parent = Me.ActionList0
-        Me.m_delimiter3.Text = "  (delimiter)"
         '
         'm_tools
         '
@@ -493,10 +572,13 @@ Partial Class MForm
         Me.Name = "MForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Prohlížeč vybraných dat archivu účetnictví Pohoda"
-        Me.XTabControl1.ResumeLayout(False)
+        Me.tbcMain.ResumeLayout(False)
+        Me.pgNab.ResumeLayout(False)
+        Me.pnNab.ResumeLayout(False)
+        CType(Me.FgN, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pgObj.ResumeLayout(False)
-        Me.pnMain.ResumeLayout(False)
-        CType(Me.Fg, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnObj.ResumeLayout(False)
+        CType(Me.FgO, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
@@ -506,11 +588,11 @@ Partial Class MForm
 
     End Sub
     Friend WithEvents poConn As OleDb.OleDbConnection
-    Friend WithEvents XTabControl1 As XControls.XTabControl
+    Friend WithEvents tbcMain As XControls.XTabControl
     Friend WithEvents pgObj As TabPage
     Friend WithEvents Panel1 As Panel
     Friend WithEvents StatusStrip1 As StatusStrip
-    Friend WithEvents Fg As XC1Flexgrid
+    Friend WithEvents FgO As XC1Flexgrid
     Friend WithEvents ActionList0 As ActionListLib.ActionList
     Friend WithEvents ActionListConn As ActionListLib.ActionListConn
     Friend WithEvents m_main As ActionListLib.Menu
@@ -532,7 +614,7 @@ Partial Class MForm
     Friend WithEvents lblArchiveFile As ToolStripStatusLabel
     Friend WithEvents m_znovunacist_data As ActionListLib.Menu
     Friend WithEvents a_znovunacist_data As ActionListLib.Action
-    Friend WithEvents pnMain As Panel
+    Friend WithEvents pnObj As Panel
     Friend WithEvents m_popup1 As ActionListLib.Menu
     Friend WithEvents m_cols As ActionListLib.Menu
     Friend WithEvents a_cols As ActionListLib.Action
@@ -553,4 +635,9 @@ Partial Class MForm
     Friend WithEvents a_sbalitrozbalit_polozku_na_radku As ActionListLib.Action
     Friend WithEvents m_o_aplikaci As ActionListLib.Menu
     Friend WithEvents a_o_aplikaci As ActionListLib.Action
+    Friend WithEvents pgNab As TabPage
+    Friend WithEvents FgN As XC1Flexgrid
+    Friend WithEvents pnNab As Panel
+    Friend WithEvents m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_ As ActionListLib.Menu
+    Friend WithEvents a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_ As ActionListLib.Action
 End Class

@@ -156,16 +156,30 @@ Public Class FOptions
         With opnSaveNewArchiv
             .FileName = AData.CurrentFile
             If .ShowDialog = DialogResult.OK Then
+                Dim sName As String = DriveInfo.GetUNCPath(.FileName)
                 If Not IO.File.Exists(.FileName) Then
-                    Dim sName As String = DriveInfo.GetUNCPath(.FileName)
                     IO.File.WriteAllText(sName, "")
                     txtCurrentFile.Text = sName
                     LoadFgData(sName)
-                    MessageBox.Show(Me, "Nyní byl vytvořen nový, prázdný soubor archivu " & .FileName & " a nastaven jako aktuální", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    MessageBox.Show(Me, "Nyní byl vytvořen nový, prázdný soubor archivu " & .FileName & " a nastaven jako aktuální.", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
                     oMainForm.RefreshStb()
                     btnClose.DialogResult = DialogResult.OK
                 Else
-                    MessageBox.Show(Me, "Soubor " & .FileName & " již existuje, proto nebyl vytvořen.", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Dim tx2 As String = ""
+                    Select Case MessageBox.Show(Me, "Soubor " & .FileName & " již existuje." & vbCrLf & vbCrLf & "Chceš jeho obsah nyní vymazat?", txtAppName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2)
+                        Case DialogResult.Yes
+                            IO.File.Delete(sName)
+                            IO.File.WriteAllText(sName, "")
+                            tx2 = " vyprázdněn a"
+                        Case DialogResult.No
+                        Case Else
+                            Exit Sub
+                    End Select
+                    txtCurrentFile.Text = sName
+                    LoadFgData(sName)
+                    MessageBox.Show(Me, "Nyní byl soubor archivu " & .FileName & tx2 & " nastaven jako aktuální.", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    oMainForm.RefreshStb()
+                    btnClose.DialogResult = DialogResult.OK
                 End If
             End If
         End With
