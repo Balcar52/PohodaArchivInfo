@@ -187,8 +187,10 @@ Public Class FOptions
 
     Private Sub chkAllowImport_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowImport.CheckedChanged
         If chkAllowImport.Checked AndAlso bShowAttentionImportMdb Then
-            MessageBox.Show(Me, "Pozor!" & vbCrLf & vbCrLf & "Nyní bude povolen výmaz, vytvoření a import dat do archivu z databáze. Archiv může být importem změněn nebo zničen!", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            bShowAttentionImportMdb = False
+            If MessageBox.Show(Me, "POZOR!" & vbCrLf & vbCrLf & "Nyní bude povolen výmaz, vytvoření a import dat do archivu z databáze. Archiv může být importem změněn nebo zničen!", txtAppName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) = DialogResult.OK Then
+                bShowAttentionImportMdb = False
+            Else
+            End If
         End If
         gbImport.Enabled = chkAllowImport.Checked
         btnCreateA.Enabled = chkAllowImport.Checked
@@ -204,4 +206,13 @@ Public Class FOptions
         oMainForm.RefreshStb()
     End Sub
 
+    Private Sub btnView_Click(sender As Object, e As EventArgs) Handles btnView.Click
+        Try
+            Dim oPr As New Process
+            oPr.StartInfo.FileName = txtCurrentFile.Text
+            oPr.Start()
+        Catch ex As Exception
+            MessageBox.Show(Me, ex.Message, txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End Try
+    End Sub
 End Class

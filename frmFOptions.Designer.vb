@@ -22,6 +22,7 @@ Partial Class FOptions
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FOptions))
         Me.gbImport = New System.Windows.Forms.GroupBox()
         Me.Panel9 = New System.Windows.Forms.Panel()
@@ -42,11 +43,13 @@ Partial Class FOptions
         Me.FgF = New XForms.XC1Flexgrid()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.btnCreateA = New System.Windows.Forms.Button()
+        Me.txtCurrentFile = New System.Windows.Forms.TextBox()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.btnOpenA = New System.Windows.Forms.Button()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.btnCreateA = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ButtonPanel1 = New XControls.ButtonPanel()
         Me.chkAllowImport = New System.Windows.Forms.CheckBox()
         Me.btnClose = New System.Windows.Forms.Button()
@@ -54,8 +57,9 @@ Partial Class FOptions
         Me.opnDlgXml = New System.Windows.Forms.OpenFileDialog()
         Me.opnMdbDlg = New System.Windows.Forms.OpenFileDialog()
         Me.opnSaveNewArchiv = New System.Windows.Forms.SaveFileDialog()
-        Me.txtCurrentFile = New System.Windows.Forms.TextBox()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btnView = New System.Windows.Forms.Button()
+        Me.Panel12 = New System.Windows.Forms.Panel()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.gbImport.SuspendLayout()
         Me.Panel9.SuspendLayout()
         Me.Panel4.SuspendLayout()
@@ -272,48 +276,60 @@ Partial Class FOptions
         Me.Panel2.Controls.Add(Me.btnCreateA)
         Me.Panel2.Controls.Add(Me.Label1)
         Me.Panel2.Controls.Add(Me.Panel1)
+        Me.Panel2.Controls.Add(Me.btnView)
+        Me.Panel2.Controls.Add(Me.Panel12)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel2.Location = New System.Drawing.Point(3, 17)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(845, 21)
         Me.Panel2.TabIndex = 1
         '
-        'btnCreateA
+        'txtCurrentFile
         '
-        Me.btnCreateA.Dock = System.Windows.Forms.DockStyle.Right
-        Me.btnCreateA.Enabled = False
-        Me.btnCreateA.Location = New System.Drawing.Point(707, 0)
-        Me.btnCreateA.Name = "btnCreateA"
-        Me.btnCreateA.Size = New System.Drawing.Size(129, 21)
-        Me.btnCreateA.TabIndex = 4
-        Me.btnCreateA.Text = "Vymazat, vytvořit nový"
-        Me.btnCreateA.UseVisualStyleBackColor = True
+        Me.txtCurrentFile.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtCurrentFile.Location = New System.Drawing.Point(179, 0)
+        Me.txtCurrentFile.Name = "txtCurrentFile"
+        Me.txtCurrentFile.Size = New System.Drawing.Size(432, 21)
+        Me.txtCurrentFile.TabIndex = 8
         '
         'Panel7
         '
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel7.Location = New System.Drawing.Point(655, 0)
+        Me.Panel7.Location = New System.Drawing.Point(611, 0)
         Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(9, 21)
+        Me.Panel7.Size = New System.Drawing.Size(10, 21)
         Me.Panel7.TabIndex = 5
         '
         'btnOpenA
         '
         Me.btnOpenA.Dock = System.Windows.Forms.DockStyle.Right
-        Me.btnOpenA.Location = New System.Drawing.Point(664, 0)
+        Me.btnOpenA.Location = New System.Drawing.Point(621, 0)
         Me.btnOpenA.Name = "btnOpenA"
         Me.btnOpenA.Size = New System.Drawing.Size(34, 21)
         Me.btnOpenA.TabIndex = 2
         Me.btnOpenA.Text = "..."
+        Me.ToolTip1.SetToolTip(Me.btnOpenA, "Vyhledat soubor archivu")
         Me.btnOpenA.UseVisualStyleBackColor = True
         '
         'Panel3
         '
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel3.Location = New System.Drawing.Point(698, 0)
+        Me.Panel3.Location = New System.Drawing.Point(655, 0)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(9, 21)
         Me.Panel3.TabIndex = 3
+        '
+        'btnCreateA
+        '
+        Me.btnCreateA.Dock = System.Windows.Forms.DockStyle.Right
+        Me.btnCreateA.Enabled = False
+        Me.btnCreateA.Location = New System.Drawing.Point(664, 0)
+        Me.btnCreateA.Name = "btnCreateA"
+        Me.btnCreateA.Size = New System.Drawing.Size(129, 21)
+        Me.btnCreateA.TabIndex = 4
+        Me.btnCreateA.Text = "Vymazat, vytvořit nový"
+        Me.ToolTip1.SetToolTip(Me.btnCreateA, "Vytvoření nového souboru archivu, resp. vymazání obsahu souboru archivu")
+        Me.btnCreateA.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -325,6 +341,14 @@ Partial Class FOptions
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Aktivní soubor dat k prohlížení:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Panel1
+        '
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel1.Location = New System.Drawing.Point(793, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(9, 21)
+        Me.Panel1.TabIndex = 9
         '
         'ButtonPanel1
         '
@@ -387,21 +411,24 @@ Partial Class FOptions
         '
         Me.opnSaveNewArchiv.OverwritePrompt = False
         '
-        'txtCurrentFile
+        'btnView
         '
-        Me.txtCurrentFile.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtCurrentFile.Location = New System.Drawing.Point(179, 0)
-        Me.txtCurrentFile.Name = "txtCurrentFile"
-        Me.txtCurrentFile.Size = New System.Drawing.Size(476, 21)
-        Me.txtCurrentFile.TabIndex = 8
+        Me.btnView.Dock = System.Windows.Forms.DockStyle.Right
+        Me.btnView.Image = Global.PohodaArchivInfo.My.Resources.Resources._026_doc_preview
+        Me.btnView.Location = New System.Drawing.Point(802, 0)
+        Me.btnView.Name = "btnView"
+        Me.btnView.Size = New System.Drawing.Size(34, 21)
+        Me.btnView.TabIndex = 10
+        Me.ToolTip1.SetToolTip(Me.btnView, "Zobrazení zdrojového souboru archivu")
+        Me.btnView.UseVisualStyleBackColor = True
         '
-        'Panel1
+        'Panel12
         '
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel1.Location = New System.Drawing.Point(836, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(9, 21)
-        Me.Panel1.TabIndex = 9
+        Me.Panel12.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel12.Location = New System.Drawing.Point(836, 0)
+        Me.Panel12.Name = "Panel12"
+        Me.Panel12.Size = New System.Drawing.Size(9, 21)
+        Me.Panel12.TabIndex = 11
         '
         'FOptions
         '
@@ -469,4 +496,7 @@ Partial Class FOptions
     Friend WithEvents chkAllowImport As CheckBox
     Friend WithEvents txtCurrentFile As TextBox
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents btnView As Button
+    Friend WithEvents Panel12 As Panel
+    Friend WithEvents ToolTip1 As ToolTip
 End Class
