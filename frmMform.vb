@@ -74,6 +74,53 @@ Public Class MForm
         Fg.SelectionMode = SelectionModeEnum.Cell
     End Sub
 
+    Public Sub InitGridF(Fg As XC1Flexgrid, Nazev1 As String, oBackColor As Color)
+        Fg.BackColor = oBackColor
+        FlexgridSet(Fg) '' [CorrectForm 17.4.2019 22:43]' [CorrectForm 21.6.2023 23:48]
+        iColFg0 = FlexgridSetCol(">")
+        iColFgFirma = FlexgridSetCol("firma,250,RSM<")
+        iColFgICO = FlexgridSetCol("IČ,40,RM>")
+        iColFgKlic = FlexgridSetCol("klíč,100,R<")
+        iColFgTree = FlexgridSetCol(",30,R,")
+        iColFgPocO = FlexgridSetCol("poč.,40,RI^", Nazev1)
+        iColFgDatum = FlexgridSetCol("datum,80,RMd>", "*")
+        iColFgCislo = FlexgridSetCol("číslo,80,RIM>", "*")
+        iColFgNazevFirmy = FlexgridSetCol("název firmy,80,R<", "*")
+        iColFgPocP = FlexgridSetCol("poč.,40,RI^", "položky")
+        iColFgText = FlexgridSetCol("text,80,R<", "*")
+        iColFgMnozstvi = FlexgridSetCol("množství,80,RID>,#####0", "*")
+        iColFgPozn = FlexgridSetCol("pozn.,80,R<")
+        FlexgridSetExec() ' [CorrectForm 21.6.2023 23:48]
+
+        Fg.Cols(iColFgKlic).Visible = False
+        Fg.Cols(iColFgICO).Visible = False
+        Fg.Cols(iColFgNazevFirmy).Visible = False
+
+        Fg.Tree.Column = iColFgTree
+
+        AddFlexGridStyle(1, FontStyle.Bold, C1.Win.C1FlexGrid.TextAlignEnum.LeftCenter)
+        AddFlexGridStyle(2, FontStyle.Italic, C1.Win.C1FlexGrid.TextAlignEnum.LeftCenter)
+
+        Fg.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.Custom
+        Fg.AllowMergingFixed = C1.Win.C1FlexGrid.AllowMergingEnum.Free
+
+        Fg.ShowButtons = C1.Win.C1FlexGrid.ShowButtonsEnum.WithFocus
+        Fg.ExtendLastCol = True
+
+        SetFlexGridStyleToCols(1, iColFgFirma)
+        SetFlexGridStyleToCols(2, iColFgNazevFirmy)
+
+        FlexgridSetGlobalFormat()
+        Fg.SelectionMode = SelectionModeEnum.Default
+
+        Fg.Styles.Highlight.BackColor = Fg.Styles.Normal.BackColor
+        Fg.Styles.Highlight.ForeColor = Fg.Styles.Normal.ForeColor
+        Fg.AutoSearch = AutoSearchEnum.FromCursor
+
+        Fg.FocusRect = FocusRectEnum.Heavy
+        Fg.SelectionMode = SelectionModeEnum.Cell
+    End Sub
+
     Public Sub LoadData()
         FgO.ClearDataRows(True, True)
         FgN.ClearDataRows(True, True)
@@ -137,7 +184,7 @@ Public Class MForm
                     Dim iRow21 As Integer = Fg.Rows.Count
                     LoadDataRow(Fg, iRow, oFrm, oObj)
                     'Dim iRow31 As Integer = Fg.Rows.Count + 1
-                    For Each oObjp As AData.AObjPol In oObj.aoObjPol
+                    For Each oObjp As AData.AObjNabPol In oObj.aoObjPol
                         If oObj.aoObjPol.Count = 1 Then
                             'Debug.WriteLine()
                         End If
@@ -168,7 +215,7 @@ Public Class MForm
 
     End Sub
 
-    Public Sub LoadDataRow(Fg As XC1Flexgrid, ByRef iRow As Integer, Optional oFrm As AData.AFirma = Nothing, Optional oObj As AData.AObjNab = Nothing, Optional oObjP As AData.AObjPol = Nothing)
+    Public Sub LoadDataRow(Fg As XC1Flexgrid, ByRef iRow As Integer, Optional oFrm As AData.AFirma = Nothing, Optional oObj As AData.AObjNab = Nothing, Optional oObjP As AData.AObjNabPol = Nothing)
         iRow = Fg.Rows.Add.Index
         If oFrm IsNot Nothing Then
             'iRow = Fg.Rows.Add.Index
@@ -197,6 +244,7 @@ Public Class MForm
         If oObjP IsNot Nothing Then
             'iRow = Fg.Rows.Add.Index
             Fg(iRow, iColFgText) = Trim(oObjP.Text)
+            Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Bold)
             Fg(iRow, iColFgPozn) = Trim(oObjP.Pozn)
             Fg(iRow, iColFgMnozstvi) = oObjP.Mnoz
             Fg.Rows(iRow).IsNode = True
@@ -221,13 +269,21 @@ Public Class MForm
         sConnStdCtr = poConn.ConnectionString
         oConn = poConn
         RefreshStb()
-        InitGrid(FgO, "objednávky", Color.FromArgb(&HFFEFFFEF))
+        InitGrid(FgO, "objednávky", Color.FromArgb(&HFFE0FFE0))
         InitGrid(FgN, "nabídky", Color.FromArgb(&HFFE0E0FF))
         FGridSearchText.RegisterForAllGrids(Me, a_searchtext, a_searchtextnext)
     End Sub
 
     Public Sub RefreshStb()
-        lblArchiveFile.Text = AData.CurrentFile
+        If IO.File.Exists(AData.CurrentFile) Then
+            lblArchiveFile.Text = AData.CurrentFile
+            lblArchiveFileSize.Text = (New IO.FileInfo(AData.CurrentFile).Length).ToString("## ### ##0B")
+            lblArchiveFileTime.Text = IO.File.GetLastWriteTime(AData.CurrentFile).ToString
+        Else
+            lblArchiveFile.Text = ""
+            lblArchiveFileSize.Text = ""
+            lblArchiveFileTime.Text = ""
+        End If
     End Sub
 
     Public Sub SaveCurrentFileName()
@@ -284,14 +340,14 @@ Public Class MForm
 
     Private Sub AutoSizeFg(Fg As XC1Flexgrid)
         Dim oPar As Control = Fg.Parent
-        Fg.Parent = Nothing
+        'Fg.Parent = Nothing
         Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Upravuji vzhled formuláře")
             Fg.BeginUpdate()
             Fg.AutoSizeCols()
             'Fg.AutoSizeCols(Fg.Row1, iColFg0, Fg.RowN, Fg.Cols.Count - 1, 0, AutoSizeFlags.None)
             Fg.EndUpdate()
         End Using
-        Fg.Parent = oPar
+        'Fg.Parent = oPar
     End Sub
 
     Private Sub ColDialog(Fg As XC1Flexgrid)

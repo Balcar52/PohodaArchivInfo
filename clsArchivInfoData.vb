@@ -22,6 +22,8 @@ Public Class AData
 
     Friend Const txSQL1 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpObj from OBJ order by firma, datum desc"
     Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ)"
+    Friend Const txSQL3 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpObj from OBJ order by firma, datum desc"
+    Friend Const txSQL4 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ)"
     'Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ where reltpobj=1)"
     Friend Const ObjPrij As Integer = 1
     Friend Const Nabidky As Integer = 2
@@ -108,7 +110,7 @@ Public Class AData
             oRdr = Nothing
             oRdr = oCmd.ExecuteReader
             While oRdr.Read
-                Dim oObjP = New AObjPol(GetInt(0), GetStr(1), GetStr(2), GetDec(3))
+                Dim oObjP = New AObjNabPol(GetInt(0), GetStr(1), GetStr(2), GetDec(3))
                 If aoDocs.ContainsKey(oObjP.ID) Then
                     aoDocs(oObjP.ID).aoObjPol.Add(oObjP)
                 End If
