@@ -41,6 +41,12 @@ Partial Public Class AData
     <XmlElement("v")>
     Public aoFirmyNab As New List(Of AFirma)
 
+    <XmlElement("fv")>
+    Public aoFirmyFVyd As New List(Of AFirmaF)
+
+    <XmlElement("fp")>
+    Public aoFirmyFprij As New List(Of AFirmaF)
+
     Public Function GetMaxFileID() As Integer
         Dim iRet As Integer = 0
         For Each oFile As AFile In aoFiles
@@ -401,7 +407,7 @@ Partial Public Class AData
         Public Pozn As String = ""
         <XmlAttribute("m")>
         Public Mnoz As Decimal
-        <XmlAttribute("j")>
+        <XmlAttribute("c")>
         Public JednCena As Decimal
     End Class
 

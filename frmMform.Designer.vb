@@ -78,7 +78,7 @@ Partial Class MForm
         Me.m_help = New ActionListLib.Menu(Me.components)
         Me.a_nastaveni = New ActionListLib.Action(Me.components)
         Me.pgFaktVyd = New System.Windows.Forms.TabPage()
-        Me.pgPrijFakt = New System.Windows.Forms.TabPage()
+        Me.pgFaktPrij = New System.Windows.Forms.TabPage()
         Me.pnVydFakt = New System.Windows.Forms.Panel()
         Me.FgFV = New XForms.XC1Flexgrid()
         Me.pnFgP = New System.Windows.Forms.Panel()
@@ -96,7 +96,7 @@ Partial Class MForm
         Me.StatusStrip1.SuspendLayout()
         CType(Me.ActionList0, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pgFaktVyd.SuspendLayout()
-        Me.pgPrijFakt.SuspendLayout()
+        Me.pgFaktPrij.SuspendLayout()
         Me.pnVydFakt.SuspendLayout()
         CType(Me.FgFV, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnFgP.SuspendLayout()
@@ -112,7 +112,7 @@ Partial Class MForm
         Me.tbcMain.Controls.Add(Me.pgNab)
         Me.tbcMain.Controls.Add(Me.pgObj)
         Me.tbcMain.Controls.Add(Me.pgFaktVyd)
-        Me.tbcMain.Controls.Add(Me.pgPrijFakt)
+        Me.tbcMain.Controls.Add(Me.pgFaktPrij)
         Me.tbcMain.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbcMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed
         Me.tbcMain.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
@@ -586,13 +586,13 @@ Partial Class MForm
         '
         'pgPrijFakt
         '
-        Me.pgPrijFakt.Controls.Add(Me.pnFgP)
-        Me.pgPrijFakt.Location = New System.Drawing.Point(4, 22)
-        Me.pgPrijFakt.Name = "pgPrijFakt"
-        Me.pgPrijFakt.Size = New System.Drawing.Size(982, 513)
-        Me.pgPrijFakt.TabIndex = 3
-        Me.pgPrijFakt.Text = "Archiv přijatých faktur"
-        Me.pgPrijFakt.UseVisualStyleBackColor = True
+        Me.pgFaktPrij.Controls.Add(Me.pnFgP)
+        Me.pgFaktPrij.Location = New System.Drawing.Point(4, 22)
+        Me.pgFaktPrij.Name = "pgPrijFakt"
+        Me.pgFaktPrij.Size = New System.Drawing.Size(982, 513)
+        Me.pgFaktPrij.TabIndex = 3
+        Me.pgFaktPrij.Text = "Archiv přijatých faktur"
+        Me.pgFaktPrij.UseVisualStyleBackColor = True
         '
         'pnVydFakt
         '
@@ -608,7 +608,7 @@ Partial Class MForm
         'FgFV
         '
         Me.FgFV.AllowEditing = False
-        Me.FgFV.BackColor = System.Drawing.Color.Pink
+        Me.FgFV.BackColor = System.Drawing.Color.Magenta
         Me.FgFV.ColumnInfo = "10,1,0,0,0,100,Columns:"
         Me.FgFV.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FgFV.DrawMode = C1.Win.C1FlexGrid.DrawModeEnum.OwnerDraw
@@ -708,7 +708,7 @@ Partial Class MForm
         Me.StatusStrip1.PerformLayout()
         CType(Me.ActionList0, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pgFaktVyd.ResumeLayout(False)
-        Me.pgPrijFakt.ResumeLayout(False)
+        Me.pgFaktPrij.ResumeLayout(False)
         Me.pnVydFakt.ResumeLayout(False)
         CType(Me.FgFV, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnFgP.ResumeLayout(False)
@@ -773,7 +773,7 @@ Partial Class MForm
     Friend WithEvents pgFaktVyd As TabPage
     Friend WithEvents pnVydFakt As Panel
     Friend WithEvents FgFV As XC1Flexgrid
-    Friend WithEvents pgPrijFakt As TabPage
+    Friend WithEvents pgFaktPrij As TabPage
     Friend WithEvents pnFgP As Panel
     Friend WithEvents FgFP As XC1Flexgrid
     Friend WithEvents lblArchiveFileTime As ToolStripStatusLabel

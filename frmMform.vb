@@ -23,11 +23,12 @@ Public Class MForm
     Dim iColFgText As Integer ' [g:6]
     Dim iColFgPozn As Integer ' [g:7]
     Dim iColFgMnozstvi As Integer ' [g:8]
+    Dim iColFgCena As Integer ' [g:8]
     Dim iColFgPocO As Integer ' [g:8]
     Dim iColFgPocP As Integer ' [g:8]
     Dim iColFgTree As Integer ' [g:8]
 
-    Public Sub InitGrid(Fg As XC1Flexgrid, Nazev1 As String, oBackColor As Color)
+    Public Sub InitGrid(Fg As XC1Flexgrid, Nazev1 As String, oBackColor As Color, Optional bFaktMode As Boolean = False)
         Fg.BackColor = oBackColor
         FlexgridSet(Fg) '' [CorrectForm 17.4.2019 22:43]' [CorrectForm 21.6.2023 23:48]
         iColFg0 = FlexgridSetCol(">")
@@ -42,6 +43,11 @@ Public Class MForm
         iColFgPocP = FlexgridSetCol("poč.,40,RI^", "položky")
         iColFgText = FlexgridSetCol("text,80,R<", "*")
         iColFgMnozstvi = FlexgridSetCol("množství,80,RID>,#####0", "*")
+        If bFaktMode Then
+            iColFgMnozstvi = FlexgridSetCol("cena,80,RID>,### ##0", "*")
+        Else
+            iColFgMnozstvi = FlexgridSetCol("@")
+        End If
         iColFgPozn = FlexgridSetCol("pozn.,80,R<")
         FlexgridSetExec() ' [CorrectForm 21.6.2023 23:48]
 
@@ -271,13 +277,15 @@ Public Class MForm
         RefreshStb()
         InitGrid(FgO, "objednávky", Color.FromArgb(&HFFE0FFE0))
         InitGrid(FgN, "nabídky", Color.FromArgb(&HFFE0E0FF))
+        InitGrid(FgFV, "vydané faktury", Color.FromArgb(&HFFFFE0E0), True)
+        InitGrid(FgFP, "přijaté faktury", Color.FromArgb(&HFFFFFFE0), True)
         FGridSearchText.RegisterForAllGrids(Me, a_searchtext, a_searchtextnext)
     End Sub
 
     Public Sub RefreshStb()
         If IO.File.Exists(AData.CurrentFile) Then
             lblArchiveFile.Text = AData.CurrentFile
-            lblArchiveFileSize.Text = (New IO.FileInfo(AData.CurrentFile).Length).ToString("## ### ##0B")
+            lblArchiveFileSize.Text = (New IO.FileInfo(AData.CurrentFile).Length).ToString("## ### ##0 B")
             lblArchiveFileTime.Text = IO.File.GetLastWriteTime(AData.CurrentFile).ToString
         Else
             lblArchiveFile.Text = ""
@@ -444,4 +452,16 @@ Public Class MForm
         End If
     End Sub
 
+    Private Sub tbcMain_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tbcMain.SelectedIndexChanged
+        Select Case True
+            Case tbcMain.SelectedTab Is pgObj
+                FgO.Select()
+            Case tbcMain.SelectedTab Is pgNab
+                FgN.Select()
+            Case tbcMain.SelectedTab Is pgFaktVyd
+                FgFV.Select()
+            Case tbcMain.SelectedTab Is pgFaktPrij
+                FgFP.Select()
+        End Select
+    End Sub
 End Class
