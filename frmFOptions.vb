@@ -185,11 +185,17 @@ Public Class FOptions
         End With
     End Sub
 
+    Dim bPrc As Boolean = False
     Private Sub chkAllowImport_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowImport.CheckedChanged
+        If bPrc Then Exit Sub
         If chkAllowImport.Checked AndAlso bShowAttentionImportMdb Then
             If MessageBox.Show(Me, "POZOR!" & vbCrLf & vbCrLf & "Nyní bude povolen výmaz, vytvoření a import dat do archivu z databáze. Archiv může být importem změněn nebo zničen!", txtAppName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) = DialogResult.OK Then
                 bShowAttentionImportMdb = False
             Else
+                bPrc = True
+                chkAllowImport.Checked = False
+                bShowAttentionImportMdb = True
+                bPrc = False
             End If
         End If
         gbImport.Enabled = chkAllowImport.Checked
