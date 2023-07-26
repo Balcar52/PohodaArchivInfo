@@ -46,7 +46,6 @@ Partial Class FOptions
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.btnOpenA = New System.Windows.Forms.Button()
         Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.txtCurrentFile = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ButtonPanel1 = New XControls.ButtonPanel()
         Me.chkAllowImport = New System.Windows.Forms.CheckBox()
@@ -55,6 +54,8 @@ Partial Class FOptions
         Me.opnDlgXml = New System.Windows.Forms.OpenFileDialog()
         Me.opnMdbDlg = New System.Windows.Forms.OpenFileDialog()
         Me.opnSaveNewArchiv = New System.Windows.Forms.SaveFileDialog()
+        Me.txtCurrentFile = New System.Windows.Forms.TextBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.gbImport.SuspendLayout()
         Me.Panel9.SuspendLayout()
         Me.Panel4.SuspendLayout()
@@ -74,7 +75,7 @@ Partial Class FOptions
         Me.gbImport.Enabled = False
         Me.gbImport.Location = New System.Drawing.Point(0, 298)
         Me.gbImport.Name = "gbImport"
-        Me.gbImport.Size = New System.Drawing.Size(764, 79)
+        Me.gbImport.Size = New System.Drawing.Size(851, 79)
         Me.gbImport.TabIndex = 5
         Me.gbImport.TabStop = False
         Me.gbImport.Text = "Databáze účetnictví Pohoda"
@@ -88,7 +89,7 @@ Partial Class FOptions
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel9.Location = New System.Drawing.Point(3, 46)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(758, 21)
+        Me.Panel9.Size = New System.Drawing.Size(845, 21)
         Me.Panel9.TabIndex = 3
         '
         'brnDefaultMdbPassword
@@ -137,7 +138,7 @@ Partial Class FOptions
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel8.Location = New System.Drawing.Point(3, 38)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(758, 8)
+        Me.Panel8.Size = New System.Drawing.Size(845, 8)
         Me.Panel8.TabIndex = 2
         '
         'Panel4
@@ -151,7 +152,7 @@ Partial Class FOptions
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel4.Location = New System.Drawing.Point(3, 17)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(758, 21)
+        Me.Panel4.Size = New System.Drawing.Size(845, 21)
         Me.Panel4.TabIndex = 1
         '
         'btnProcessImport
@@ -221,7 +222,7 @@ Partial Class FOptions
         Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox1.MinimumSize = New System.Drawing.Size(0, 150)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(764, 292)
+        Me.GroupBox1.Size = New System.Drawing.Size(851, 292)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Data k prohlížení"
@@ -232,7 +233,7 @@ Partial Class FOptions
         Me.Panel10.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel10.Location = New System.Drawing.Point(3, 74)
         Me.Panel10.Name = "Panel10"
-        Me.Panel10.Size = New System.Drawing.Size(758, 215)
+        Me.Panel10.Size = New System.Drawing.Size(845, 215)
         Me.Panel10.TabIndex = 3
         '
         'FgF
@@ -246,7 +247,7 @@ Partial Class FOptions
         Me.FgF.MinimumSize = New System.Drawing.Size(250, 4)
         Me.FgF.Name = "FgF"
         Me.FgF.Rows.DefaultSize = 20
-        Me.FgF.Size = New System.Drawing.Size(758, 215)
+        Me.FgF.Size = New System.Drawing.Size(845, 215)
         Me.FgF.StyleInfo = resources.GetString("FgF.StyleInfo")
         Me.FgF.TabIndex = 7
         Me.FgF.UseCompatibleTextRendering = False
@@ -258,46 +259,48 @@ Partial Class FOptions
         Me.Label3.Location = New System.Drawing.Point(3, 38)
         Me.Label3.Name = "Label3"
         Me.Label3.Padding = New System.Windows.Forms.Padding(5, 15, 5, 5)
-        Me.Label3.Size = New System.Drawing.Size(758, 36)
+        Me.Label3.Size = New System.Drawing.Size(845, 36)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "seznam databází, která archiv aktuálně obsahuje:"
         '
         'Panel2
         '
-        Me.Panel2.Controls.Add(Me.btnCreateA)
+        Me.Panel2.Controls.Add(Me.txtCurrentFile)
         Me.Panel2.Controls.Add(Me.Panel7)
         Me.Panel2.Controls.Add(Me.btnOpenA)
         Me.Panel2.Controls.Add(Me.Panel3)
-        Me.Panel2.Controls.Add(Me.txtCurrentFile)
+        Me.Panel2.Controls.Add(Me.btnCreateA)
         Me.Panel2.Controls.Add(Me.Label1)
+        Me.Panel2.Controls.Add(Me.Panel1)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel2.Location = New System.Drawing.Point(3, 17)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(758, 21)
+        Me.Panel2.Size = New System.Drawing.Size(845, 21)
         Me.Panel2.TabIndex = 1
         '
         'btnCreateA
         '
-        Me.btnCreateA.Dock = System.Windows.Forms.DockStyle.Left
-        Me.btnCreateA.Location = New System.Drawing.Point(631, 0)
+        Me.btnCreateA.Dock = System.Windows.Forms.DockStyle.Right
+        Me.btnCreateA.Enabled = False
+        Me.btnCreateA.Location = New System.Drawing.Point(707, 0)
         Me.btnCreateA.Name = "btnCreateA"
-        Me.btnCreateA.Size = New System.Drawing.Size(112, 21)
+        Me.btnCreateA.Size = New System.Drawing.Size(129, 21)
         Me.btnCreateA.TabIndex = 4
-        Me.btnCreateA.Text = "Vytvořit nový"
+        Me.btnCreateA.Text = "Vymazat, vytvořit nový"
         Me.btnCreateA.UseVisualStyleBackColor = True
         '
         'Panel7
         '
-        Me.Panel7.Dock = System.Windows.Forms.DockStyle.Left
-        Me.Panel7.Location = New System.Drawing.Point(622, 0)
+        Me.Panel7.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel7.Location = New System.Drawing.Point(655, 0)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(9, 21)
         Me.Panel7.TabIndex = 5
         '
         'btnOpenA
         '
-        Me.btnOpenA.Dock = System.Windows.Forms.DockStyle.Left
-        Me.btnOpenA.Location = New System.Drawing.Point(588, 0)
+        Me.btnOpenA.Dock = System.Windows.Forms.DockStyle.Right
+        Me.btnOpenA.Location = New System.Drawing.Point(664, 0)
         Me.btnOpenA.Name = "btnOpenA"
         Me.btnOpenA.Size = New System.Drawing.Size(34, 21)
         Me.btnOpenA.TabIndex = 2
@@ -306,22 +309,11 @@ Partial Class FOptions
         '
         'Panel3
         '
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Left
-        Me.Panel3.Location = New System.Drawing.Point(579, 0)
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel3.Location = New System.Drawing.Point(698, 0)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(9, 21)
         Me.Panel3.TabIndex = 3
-        '
-        'txtCurrentFile
-        '
-        Me.txtCurrentFile.Dock = System.Windows.Forms.DockStyle.Left
-        Me.txtCurrentFile.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.txtCurrentFile.Location = New System.Drawing.Point(179, 0)
-        Me.txtCurrentFile.MaximumSize = New System.Drawing.Size(400, 4)
-        Me.txtCurrentFile.Name = "txtCurrentFile"
-        Me.txtCurrentFile.Size = New System.Drawing.Size(400, 21)
-        Me.txtCurrentFile.TabIndex = 0
-        Me.txtCurrentFile.Text = "d:\Projekty.Metapol\Data\ArchivData.xml"
         '
         'Label1
         '
@@ -344,7 +336,7 @@ Partial Class FOptions
         Me.ButtonPanel1.Name = "ButtonPanel1"
         Me.ButtonPanel1.Padding = New System.Windows.Forms.Padding(9, 8, 9, 13)
         Me.ButtonPanel1.PaddingAutomaticCoef = New System.Drawing.SizeF(0.2!, 0.08!)
-        Me.ButtonPanel1.Size = New System.Drawing.Size(764, 44)
+        Me.ButtonPanel1.Size = New System.Drawing.Size(851, 44)
         Me.ButtonPanel1.TabIndex = 6
         '
         'chkAllowImport
@@ -354,14 +346,14 @@ Partial Class FOptions
         Me.chkAllowImport.Name = "chkAllowImport"
         Me.chkAllowImport.Size = New System.Drawing.Size(328, 23)
         Me.chkAllowImport.TabIndex = 6
-        Me.chkAllowImport.Text = "Povolit import roční databáze do archivu"
+        Me.chkAllowImport.Text = "Povolit vytvoření, výmaz a import roční databáze do archivu"
         Me.chkAllowImport.UseVisualStyleBackColor = True
         '
         'btnClose
         '
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Dock = System.Windows.Forms.DockStyle.Right
-        Me.btnClose.Location = New System.Drawing.Point(656, 8)
+        Me.btnClose.Location = New System.Drawing.Point(743, 8)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(99, 23)
         Me.btnClose.TabIndex = 5
@@ -373,7 +365,7 @@ Partial Class FOptions
         Me.XSplitter1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.XSplitter1.Location = New System.Drawing.Point(0, 292)
         Me.XSplitter1.Name = "XSplitter1"
-        Me.XSplitter1.Size = New System.Drawing.Size(764, 6)
+        Me.XSplitter1.Size = New System.Drawing.Size(851, 6)
         Me.XSplitter1.TabIndex = 7
         Me.XSplitter1.TabStop = False
         '
@@ -395,11 +387,27 @@ Partial Class FOptions
         '
         Me.opnSaveNewArchiv.OverwritePrompt = False
         '
+        'txtCurrentFile
+        '
+        Me.txtCurrentFile.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtCurrentFile.Location = New System.Drawing.Point(179, 0)
+        Me.txtCurrentFile.Name = "txtCurrentFile"
+        Me.txtCurrentFile.Size = New System.Drawing.Size(476, 21)
+        Me.txtCurrentFile.TabIndex = 8
+        '
+        'Panel1
+        '
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel1.Location = New System.Drawing.Point(836, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(9, 21)
+        Me.Panel1.TabIndex = 9
+        '
         'FOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(764, 421)
+        Me.ClientSize = New System.Drawing.Size(851, 421)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.XSplitter1)
         Me.Controls.Add(Me.gbImport)
@@ -451,7 +459,6 @@ Partial Class FOptions
     Friend WithEvents Panel7 As Panel
     Friend WithEvents btnOpenA As Button
     Friend WithEvents Panel3 As Panel
-    Friend WithEvents txtCurrentFile As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents ButtonPanel1 As ButtonPanel
     Friend WithEvents btnClose As Button
@@ -460,4 +467,6 @@ Partial Class FOptions
     Friend WithEvents opnMdbDlg As OpenFileDialog
     Friend WithEvents opnSaveNewArchiv As SaveFileDialog
     Friend WithEvents chkAllowImport As CheckBox
+    Friend WithEvents txtCurrentFile As TextBox
+    Friend WithEvents Panel1 As Panel
 End Class

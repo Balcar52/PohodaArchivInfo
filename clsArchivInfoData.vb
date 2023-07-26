@@ -21,7 +21,8 @@ Public Class AData
     Friend Const constXMLNS2 As String = "xsd:"
 
     Friend Const txSQL1 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpObj from OBJ order by firma, datum desc"
-    Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ where reltpobj=1)"
+    Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ)"
+    'Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ where reltpobj=1)"
     Friend Const ObjPrij As Integer = 1
     Friend Const Nabidky As Integer = 2
     Friend Const txConnStr As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Jet OLEDB:Database Password = {1}"
@@ -69,8 +70,7 @@ Public Class AData
         Dim oCmd As OleDbCommand = Nothing
 
         Try
-            Dim maoObjList As New Dictionary(Of Integer, AObj)
-
+            Dim aoDocs As New Dictionary(Of Integer, AObjNab)
             oConn.Open()
             oCmd = oConn.CreateCommand()
             oCmd.CommandText = txSQL1
@@ -79,8 +79,8 @@ Public Class AData
             While oRdr.Read
                 Try
                     Dim sName As String = GetStr(0)
-                    Dim aoFirmy As List(Of AFirma) = Nothing
-                    Dim oFirma As AFirma = oData.AddFirmaObj(sName, GetDec(1), GetStr(5), iNewID, GetInt(6), aoFirmy)
+                    Dim aoFirmy As List(Of AFirma) = If(GetInt(6) = TypObj.Prij, oData.aoFirmyObj, oData.aoFirmyNab)
+                    Dim oFirma As AFirma = oData.AddFirmaObjNab(sName, GetDec(1), GetStr(5), iNewID, aoFirmy)
                     Dim iRecId As Integer = GetInt(2)
                     Dim iIdx As Integer = -1
                     For i As Integer = 0 To aoFirmy.Count - 1
@@ -93,9 +93,10 @@ Public Class AData
                         aoFirmy.Add(oFirma)
                         iIdx = aoFirmy.Count - 1
                     End If
-                    Dim oObj As New AObj(iRecId, iNewID, sName, GetLong(3), GetDate(4))
-                    aoFirmy(iIdx).aoObj.Add(oObj)
-                    maoObjList(iRecId) = oObj
+                    Dim oObj As New AObjNab(iRecId, iNewID, sName, GetLong(3), GetDate(4))
+                    aoFirmy(iIdx).aoDoc.Add(oObj)
+                    aoDocs(oObj.RecID) = oObj
+                    'aoFirmy(iRecId) = oObj
                 Catch ex As Exception
                     Debug.WriteLine(ex.Message)
                 End Try
@@ -108,10 +109,13 @@ Public Class AData
             oRdr = oCmd.ExecuteReader
             While oRdr.Read
                 Dim oObjP = New AObjPol(GetInt(0), GetStr(1), GetStr(2), GetDec(3))
-                If maoObjList.ContainsKey(oObjP.ID) Then
-                    Dim oObj As AObj = maoObjList(oObjP.ID)
-                    oObj.aoObjPol.Add(oObjP)
+                If aoDocs.ContainsKey(oObjP.ID) Then
+                    aoDocs(oObjP.ID).aoObjPol.Add(oObjP)
                 End If
+                'If maoObjList.ContainsKey(oObjP.ID) Then
+                '    Dim oObj As AObj = maoObjList(oObjP.ID)
+                '    oObj.aoObjPol.Add(oObjP)
+                'End If
             End While
             oRdr.Close()
             Return oData
@@ -198,12 +202,12 @@ Public Class AData
             End If
             If SortData Then
                 oRes.aoFirmyObj.Sort(New AFirma.Sorter)
-                oRes.aoFirmyNab.Sort(New AFirma.Sorter)
                 For i As Integer = 0 To oRes.aoFirmyObj.Count - 1
-                    oRes.aoFirmyObj(i).aoObj.Sort(New AObj.Sorter)
+                    oRes.aoFirmyObj(i).aoDoc.Sort(New AObjNab.Sorter)
                 Next
+                oRes.aoFirmyNab.Sort(New AFirma.Sorter)
                 For i As Integer = 0 To oRes.aoFirmyNab.Count - 1
-                    oRes.aoFirmyObj(i).aoObj.Sort(New AObj.Sorter)
+                    oRes.aoFirmyNab(i).aoDoc.Sort(New AObjNab.Sorter)
                 Next
             End If
             Return oRes

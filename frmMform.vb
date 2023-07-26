@@ -129,11 +129,11 @@ Public Class MForm
         Fg.Redraw = False
         Dim oRg As CellRange
         With AData.oAdata
-            For Each oFrm As AData.AFirma In .aoFirmyObj
+            For Each oFrm As AData.AFirma In List
                 Dim iRow As Integer = 0
                 Dim iRow11 As Integer = Fg.Rows.Count
                 LoadDataRow(Fg, iRow, oFrm)
-                For Each oObj As AData.AObj In oFrm.aoObj
+                For Each oObj As AData.AObjNab In oFrm.aoDoc
                     Dim iRow21 As Integer = Fg.Rows.Count
                     LoadDataRow(Fg, iRow, oFrm, oObj)
                     'Dim iRow31 As Integer = Fg.Rows.Count + 1
@@ -168,7 +168,7 @@ Public Class MForm
 
     End Sub
 
-    Public Sub LoadDataRow(Fg As XC1Flexgrid, ByRef iRow As Integer, Optional oFrm As AData.AFirma = Nothing, Optional oObj As AData.AObj = Nothing, Optional oObjP As AData.AObjPol = Nothing)
+    Public Sub LoadDataRow(Fg As XC1Flexgrid, ByRef iRow As Integer, Optional oFrm As AData.AFirma = Nothing, Optional oObj As AData.AObjNab = Nothing, Optional oObjP As AData.AObjPol = Nothing)
         iRow = Fg.Rows.Add.Index
         If oFrm IsNot Nothing Then
             'iRow = Fg.Rows.Add.Index
@@ -179,7 +179,7 @@ Public Class MForm
                 Fg.SetStyleToCell(iRow, iColFgPozn,,, FontStyle.Italic)
             End If
             Fg(iRow, iColFgKlic) = oFrm.KeyName
-            Fg(iRow, iColFgPocO) = oFrm.aoObj.Count
+            Fg(iRow, iColFgPocO) = oFrm.aoDoc.Count
             Fg.Rows(iRow).IsNode = True
             Fg.Rows(iRow).Node.Level = 0
             Fg.Rows(iRow).UserData = oFrm

@@ -17,13 +17,13 @@ Partial Public Class AData
         For i As Integer = aoFiles.Count - 1 To 0 Step -1
             If String.Compare(aoFiles(i).PureFileName, oFile.PureFileName, True) = 0 Then
                 For i2 As Integer = aoFirmyObj.Count - 1 To 0 Step -1
-                    For i3 As Integer = aoFirmyObj(i2).aoObj.Count - 1 To 0 Step -1
-                        If aoFirmyObj(i2).aoObj(i3).FileID = aoFiles(i).Id Then aoFirmyObj(i2).aoObj.RemoveAt(i3)
+                    For i3 As Integer = aoFirmyObj(i2).aoDoc.Count - 1 To 0 Step -1
+                        If aoFirmyObj(i2).aoDoc(i3).FileID = aoFiles(i).Id Then aoFirmyObj(i2).aoDoc.RemoveAt(i3)
                     Next
                 Next
                 For i2 As Integer = aoFirmyNab.Count - 1 To 0 Step -1
-                    For i3 As Integer = aoFirmyNab(i2).aoObj.Count - 1 To 0 Step -1
-                        If aoFirmyNab(i2).aoObj(i3).FileID = aoFiles(i).Id Then aoFirmyNab(i2).aoObj.RemoveAt(i3)
+                    For i3 As Integer = aoFirmyNab(i2).aoDoc.Count - 1 To 0 Step -1
+                        If aoFirmyNab(i2).aoDoc(i3).FileID = aoFiles(i).Id Then aoFirmyNab(i2).aoDoc.RemoveAt(i3)
                     Next
                 Next
                 aoFiles.RemoveAt(i)
@@ -50,15 +50,10 @@ Partial Public Class AData
     End Function
 
 
-    Public Function AddFirmaObj(JmenoFirmy As String, ICO As Decimal, Email As String, iFId As Integer, iTypRec As Integer, ByRef aoFirmy As List(Of AFirma)) As AFirma
+    Public Function AddFirmaObjNab(JmenoFirmy As String, ICO As Decimal, Email As String, iFId As Integer, aoFirmy As List(Of AFirma)) As AFirma
         Dim oFrm As New AFirma(JmenoFirmy, ICO, Email, iFId)
         Dim iIdx As Integer = -1
         Dim o As AFirma = Nothing
-        If iTypRec = TypObj.Prij Then
-            aoFirmy = aoFirmyObj
-        Else
-            aoFirmy = aoFirmyNab
-        End If
         For i As Integer = 0 To aoFirmy.Count - 1
             o = aoFirmy(i)
             If (o.ICO = oFrm.ICO AndAlso o.ICO > 0) OrElse o.KeyName = oFrm.KeyName Then
@@ -138,22 +133,26 @@ Partial Public Class AData
         <XmlAttribute("e")>
         Public Email As String = ""
         <XmlElement("d")>
-        Public aoObj As New List(Of AObj)
+        Public aoDoc As New List(Of AObjNab)
         '<XmlAttribute("t"), DefaultValue(TypObj.Prij)>
         'Public Typ As Integer = TypObj.Prij
         <XmlIgnore>
         Public DisplayName As String = KeyName
 
+        Public Overrides Function ToString() As String
+            Return String.Format("{0}; {1}; {2}; {3}; ", DisplayName, Email, aoDoc.Count, KeyName)
+        End Function
+
         Public Sub SetDisplayName()
             Dim aoNames As New Dictionary(Of String, Integer)
             Dim iMax As Integer = 0
-            For i As Integer = 0 To aoObj.Count - 1
-                If Not aoNames.ContainsKey(aoObj(i).Name) Then
-                    aoNames(aoObj(i).Name) = 1
+            For i As Integer = 0 To aoDoc.Count - 1
+                If Not aoNames.ContainsKey(aoDoc(i).Name) Then
+                    aoNames(aoDoc(i).Name) = 1
                 Else
-                    aoNames(aoObj(i).Name) = aoNames(aoObj(i).Name) + 1
+                    aoNames(aoDoc(i).Name) = aoNames(aoDoc(i).Name) + 1
                 End If
-                If aoNames(aoObj(i).Name) > iMax Then iMax = aoNames(aoObj(i).Name)
+                If aoNames(aoDoc(i).Name) > iMax Then iMax = aoNames(aoDoc(i).Name)
             Next
             For Each s In aoNames.Keys
                 If aoNames(s) = iMax Then
@@ -181,7 +180,7 @@ Partial Public Class AData
     End Class
 
     ''' <summary> polozka prijate/vydane objednavky </summary>
-    Public Class AObj
+    Public Class AObjNab
         Public Sub New()
             MyBase.New
         End Sub
@@ -216,8 +215,8 @@ Partial Public Class AData
         End Property
 
         Public Class Sorter
-            Implements IComparer(Of AObj)
-            Public Function Compare(x As AObj, y As AObj) As Integer Implements IComparer(Of AObj).Compare
+            Implements IComparer(Of AObjNab)
+            Public Function Compare(x As AObjNab, y As AObjNab) As Integer Implements IComparer(Of AObjNab).Compare
                 Dim iRet As Integer = Date.Compare(x.dtDatum, y.dtDatum)
                 If iRet = 0 Then iRet = CompareLong(x.Cislo, y.Cislo)
                 If iRet = 0 Then iRet = String.Compare(x.Name, y.Name, True)
@@ -252,14 +251,14 @@ Partial Public Class AData
 
 
     Public Class APolozka
-        Public Sub New(oFirma As AFirma, oObj As AObj, oObjP As AObjPol)
+        Public Sub New(oFirma As AFirma, oObj As AObjNab, oObjP As AObjPol)
             MyBase.New
             Firma = oFirma
             Obj = oObj
             ObjP = oObjP
         End Sub
         Public Firma As AFirma = Nothing
-        Public Obj As AObj = Nothing
+        Public Obj As AObjNab = Nothing
         Public ObjP As AObjPol = Nothing
     End Class
 

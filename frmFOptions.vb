@@ -187,13 +187,14 @@ Public Class FOptions
 
     Private Sub chkAllowImport_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowImport.CheckedChanged
         If chkAllowImport.Checked AndAlso bShowAttentionImportMdb Then
-            MessageBox.Show(Me, "Pozor!" & vbCrLf & vbCrLf & "Nyní bude povolen import dat do archivu z databáze. Archiv může být importem změněn nebo zničen!", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show(Me, "Pozor!" & vbCrLf & vbCrLf & "Nyní bude povolen výmaz, vytvoření a import dat do archivu z databáze. Archiv může být importem změněn nebo zničen!", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
             bShowAttentionImportMdb = False
         End If
         gbImport.Enabled = chkAllowImport.Checked
+        btnCreateA.Enabled = chkAllowImport.Checked
     End Sub
 
-    Private Sub txtCurrentFile_Validated(sender As Object, e As EventArgs) Handles txtCurrentFile.Validated
+    Private Sub txtCurrentFile_Validated(sender As Object, e As EventArgs)
         If bLoaded Then btnClose.DialogResult = DialogResult.OK
         LoadFgData(txtCurrentFile.Text)
         AData.CurrentFile = txtCurrentFile.Text
