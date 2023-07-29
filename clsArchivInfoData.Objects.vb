@@ -140,6 +140,8 @@ Partial Public Class AData
         Public Email As String = ""
         <XmlElement("d")>
         Public aoDoc As New List(Of AObjNab)
+        <XmlElement("f")>
+        Public aoDocF As New List(Of AFakt)
         <XmlIgnore>
         Public DisplayName As String = KeyName
 
@@ -176,7 +178,6 @@ Partial Public Class AData
             ''' <param name="y"></param>
             Public Function Compare(x As AFirma, y As AFirma) As Integer Implements IComparer(Of AFirma).Compare
                 Dim iRet As Integer = String.Compare(x.DisplayName, y.DisplayName, True)
-                If iRet = 0 Then iRet = String.Compare(x.KeyName, y.KeyName, True)
                 If iRet = 0 Then iRet = String.Compare(x.KeyName, y.KeyName, True)
                 Return iRet
             End Function
@@ -263,80 +264,6 @@ Partial Public Class AData
         Public Firma As AFirma = Nothing
         Public Obj As AObjNab = Nothing
         Public ObjP As AObjNabPol = Nothing
-    End Class
-
-    Public Class AFirmaF
-        Public Sub New()
-            MyBase.New
-        End Sub
-        Public Sub New(JmenoFirmy As String, dcICO As Decimal, sEmail As String, iFileId As Integer)
-            MyBase.New
-            KeyName = Trim(XControls.CutDiacritic(UCase(JmenoFirmy)))
-            While KeyName.Contains(". ")
-                KeyName = Replace(KeyName, ". ", ".")
-            End While
-            While KeyName.Contains("  ")
-                KeyName = Replace(KeyName, "  ", " ")
-            End While
-            While KeyName.Contains("- ")
-                KeyName = Replace(KeyName, "- ", "-")
-            End While
-            While KeyName.Contains(" -")
-                KeyName = Replace(KeyName, " -", "-")
-            End While
-            ICO = dcICO
-            Email = sEmail
-            'Typ = iTypRec
-        End Sub
-        <XmlAttribute("k")>
-        Public KeyName As String = ""
-        <XmlAttribute("i")>
-        Public ICO As Decimal = 0
-        <XmlAttribute("e")>
-        Public Email As String = ""
-        <XmlElement("d")>
-        Public aoDoc As New List(Of AFakt)
-        <XmlIgnore>
-        Public DisplayName As String = KeyName
-
-        Public Overrides Function ToString() As String
-            Return String.Format("{0}; {1}; {2}; {3}; ", DisplayName, Email, aoDoc.Count, KeyName)
-        End Function
-
-        Public Sub SetDisplayName()
-            Dim aoNames As New Dictionary(Of String, Integer)
-            Dim iMax As Integer = 0
-            For i As Integer = 0 To aoDoc.Count - 1
-                If Not aoNames.ContainsKey(aoDoc(i).Name) Then
-                    aoNames(aoDoc(i).Name) = 1
-                Else
-                    aoNames(aoDoc(i).Name) = aoNames(aoDoc(i).Name) + 1
-                End If
-                If aoNames(aoDoc(i).Name) > iMax Then iMax = aoNames(aoDoc(i).Name)
-            Next
-            For Each s In aoNames.Keys
-                If aoNames(s) = iMax Then
-                    If String.IsNullOrWhiteSpace(s) Then
-                        DisplayName = "(neuvedeno)"
-                    Else
-                        DisplayName = s
-                    End If
-                End If
-            Next
-        End Sub
-
-        Public Class Sorter
-            Implements IComparer(Of AFirma)
-            ''' <summary> sorter rekapitulace </summary>
-            ''' <param name="x"></param>
-            ''' <param name="y"></param>
-            Public Function Compare(x As AFirma, y As AFirma) As Integer Implements IComparer(Of AFirma).Compare
-                Dim iRet As Integer = String.Compare(x.DisplayName, y.DisplayName, True)
-                If iRet = 0 Then iRet = String.Compare(x.KeyName, y.KeyName, True)
-                If iRet = 0 Then iRet = String.Compare(x.KeyName, y.KeyName, True)
-                Return iRet
-            End Function
-        End Class
     End Class
 
     ''' <summary> prijata/vydana faktura </summary>

@@ -22,7 +22,7 @@ Public Class AData
 
     Friend Const txSQL1 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpObj from OBJ order by firma, datum desc"
     Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ)"
-    Friend Const txSQL3 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpObj from OBJ order by firma, datum desc"
+    Friend Const txSQL3 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpObj from FA order by firma, datum desc"
     Friend Const txSQL4 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ)"
     'Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ where reltpobj=1)"
     Friend Const ObjPrij As Integer = 1
