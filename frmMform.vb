@@ -471,6 +471,38 @@ Public Class MForm
         If Fg.Rows(Fg.Row).Node.Expanded Then Fg.AutoSizeCol(iColFgText)
     End Sub
 
+    Private Sub Fg_DoubleClick(sender As Object, e As EventArgs) Handles FgO.DoubleClick, FgN.DoubleClick, FgFP.DoubleClick, FgFV.DoubleClick
+        Dim Fg As XC1Flexgrid = FgA()
+        If Fg.RowIsValid Then
+            Try
+                Fg.BeginInit()
+                If Fg.Col <= iColFgTree Then
+                    a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter__Execute(Nothing, Nothing)
+                Else
+                    Dim iRow As Integer = Fg.Row
+                    If Fg.Rows(iRow).IsNode AndAlso Fg.Rows(Fg.Row).Node.Level = 1 Then
+                        Fg.Rows(iRow).Node.Expanded = Not Fg.Rows(iRow).Node.Expanded
+                        Fg.Row = iRow
+                        Fg.EnsureVisibleSelectedRow()
+                    Else
+                        For iRow = Fg.Row To Fg.Row1 Step -1
+                            If Fg.Rows(iRow).IsNode AndAlso Fg.Rows(iRow).Node.Level > 1 Then
+                            Else
+                                Fg.Rows(iRow).Node.Expanded = Not Fg.Rows(iRow).Node.Expanded
+                                Fg.Row = iRow
+                                Fg.EnsureVisibleSelectedRow()
+                                Exit For
+                            End If
+                        Next
+                    End If
+                End If
+            Catch ex As Exception
+            Finally
+                Fg.EndInit()
+            End Try
+        End If
+    End Sub
+
     Private Sub a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter__Execute(sender As Object, e As EventArgs) Handles a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Execute
         Dim Fg As XC1Flexgrid = FgA()
         Try
@@ -515,7 +547,6 @@ Public Class MForm
         End Try
     End Sub
 
-
     Private Sub Fg_KeyPress(sender As Object, e As KeyPressEventArgs) Handles FgO.KeyPress, FgN.KeyPress, FgFP.KeyPress, FgFV.KeyPress
         Dim Fg As XC1Flexgrid = FgA()
         If e.KeyChar = " "c OrElse e.KeyChar = vbCr Then
@@ -553,13 +584,6 @@ Public Class MForm
 
     Public Shared Sub ShowError(oForm As Form, ex As Exception)
         MessageBox.Show(oForm, "POZOR!" & vbCrLf & vbCrLf & "Nyní bude povolen import dat do archivu z databáze. Archiv může být importem změněn nebo zničen!", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-    End Sub
-
-    Private Sub Fg_DoubleClick(sender As Object, e As EventArgs) Handles FgO.DoubleClick
-        Dim Fg As XC1Flexgrid = FgA()
-        If Fg.RowIsValid Then
-            If Fg.Rows(Fg.Row).IsNode Then Fg.Rows(Fg.Row).Node.Expanded = Not Fg.Rows(Fg.Row).Node.Expanded
-        End If
     End Sub
 
     Private Sub tbcMain_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tbcMain.SelectedIndexChanged
