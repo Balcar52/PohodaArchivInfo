@@ -28,7 +28,7 @@ Public Class FOptions
 
     Private Sub btnProcessImport_Click(sender As Object, e As EventArgs) Handles btnProcessImport.Click
         Try
-            Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.DisableFormOnly, "Načítám data z databáze Pohoda")
+            Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Načítám data z databáze Pohoda")
                 AData.oAdata = AData.LoadMdbData(txtMdbFile.Text, txtMdbPassword.Text, txtCurrentFile.Text)
                 If AData.oAdata IsNot Nothing Then
                     IO.File.WriteAllText(txtCurrentFile.Text, AData.oAdata.ToXml)

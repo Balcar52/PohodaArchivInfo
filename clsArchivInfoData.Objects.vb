@@ -6,6 +6,8 @@ Partial Public Class AData
     Public Enum TypObj As Integer
         Prij = 1
         Vyd = 2
+        FakV = 1
+        FakP = 11
     End Enum
 
     Public Sub New()
@@ -41,11 +43,11 @@ Partial Public Class AData
     <XmlElement("v")>
     Public aoFirmyNab As New List(Of AFirma)
 
-    <XmlElement("fv")>
-    Public aoFirmyFVyd As New List(Of AFirmaF)
+    <XmlElement("f")>
+    Public aoFirmyFVyd As New List(Of AFirma)
 
     <XmlElement("fp")>
-    Public aoFirmyFprij As New List(Of AFirmaF)
+    Public aoFirmyFPrij As New List(Of AFirma)
 
     Public Function GetMaxFileID() As Integer
         Dim iRet As Integer = 0
@@ -146,7 +148,7 @@ Partial Public Class AData
         Public DisplayName As String = KeyName
 
         Public Overrides Function ToString() As String
-            Return String.Format("{0}; {1}; {2}; {3}; ", DisplayName, Email, aoDoc.Count, KeyName)
+            Return String.Format("{0}; {1}; {2}; {3}; {4};", DisplayName, Email, aoDoc.Count, aoDocF.Count, KeyName)
         End Function
 
         Public Sub SetDisplayName()
@@ -159,6 +161,28 @@ Partial Public Class AData
                     aoNames(aoDoc(i).Name) = aoNames(aoDoc(i).Name) + 1
                 End If
                 If aoNames(aoDoc(i).Name) > iMax Then iMax = aoNames(aoDoc(i).Name)
+            Next
+            For Each s In aoNames.Keys
+                If aoNames(s) = iMax Then
+                    If String.IsNullOrWhiteSpace(s) Then
+                        DisplayName = "(neuvedeno)"
+                    Else
+                        DisplayName = s
+                    End If
+                End If
+            Next
+        End Sub
+
+        Public Sub SetDisplayNameF()
+            Dim aoNames As New Dictionary(Of String, Integer)
+            Dim iMax As Integer = 0
+            For i As Integer = 0 To aoDocF.Count - 1
+                If Not aoNames.ContainsKey(aoDocF(i).Name) Then
+                    aoNames(aoDocF(i).Name) = 1
+                Else
+                    aoNames(aoDocF(i).Name) = aoNames(aoDocF(i).Name) + 1
+                End If
+                If aoNames(aoDocF(i).Name) > iMax Then iMax = aoNames(aoDocF(i).Name)
             Next
             For Each s In aoNames.Keys
                 If aoNames(s) = iMax Then
@@ -302,8 +326,8 @@ Partial Public Class AData
         End Property
 
         Public Class Sorter
-            Implements IComparer(Of AObjNab)
-            Public Function Compare(x As AObjNab, y As AObjNab) As Integer Implements IComparer(Of AObjNab).Compare
+            Implements IComparer(Of AFakt)
+            Public Function Compare(x As AFakt, y As AFakt) As Integer Implements IComparer(Of AFakt).Compare
                 Dim iRet As Integer = Date.Compare(x.dtDatum, y.dtDatum)
                 If iRet = 0 Then iRet = CompareLong(x.Cislo, y.Cislo)
                 If iRet = 0 Then iRet = String.Compare(x.Name, y.Name, True)
@@ -339,12 +363,12 @@ Partial Public Class AData
     End Class
 
     Public Class APolozkaF
-        Public Sub New(oFirma As AFirmaF, oFPol As AFaktPol)
+        Public Sub New(oFirma As AFirma, oFPol As AFaktPol)
             MyBase.New
             Firma = oFirma
             FPol = oFPol
         End Sub
-        Public Firma As AFirmaF = Nothing
+        Public Firma As AFirma = Nothing
         Public FPol As AFaktPol = Nothing
     End Class
 

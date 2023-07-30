@@ -22,9 +22,9 @@ Public Class AData
 
     Friend Const txSQL1 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpObj from OBJ order by firma, datum desc"
     Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ)"
-    Friend Const txSQL3 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpObj from FA order by firma, datum desc"
-    Friend Const txSQL4 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ)"
-    'Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ where reltpobj=1)"
+    Friend Const txSQL3 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpFak from FA where RelTpFak in (1,11) order by firma, datum desc"
+    Friend Const txSQL4 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from FApol where RefAg in (SELECT ID from FA where RelTpFak in (1,11))"
+
     Friend Const ObjPrij As Integer = 1
     Friend Const Nabidky As Integer = 2
     Friend Const txConnStr As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Jet OLEDB:Database Password = {1}"
@@ -73,8 +73,11 @@ Public Class AData
 
         Try
             Dim aoDocs As New Dictionary(Of Integer, AObjNab)
+            Dim aoDocsF As New Dictionary(Of Integer, AFakt)
             oConn.Open()
             oCmd = oConn.CreateCommand()
+
+            ' hlavicky objednavek/nabidek
             oCmd.CommandText = txSQL1
             Debug.WriteLine(oCmd.CommandText)
             oRdr = oCmd.ExecuteReader
@@ -104,7 +107,7 @@ Public Class AData
                 End Try
             End While
             oRdr.Close()
-
+            ' polozky objednavek/nabidek
             oCmd.CommandText = txSQL2
             Debug.WriteLine(oCmd.CommandText)
             oRdr = Nothing
@@ -114,12 +117,57 @@ Public Class AData
                 If aoDocs.ContainsKey(oObjP.ID) Then
                     aoDocs(oObjP.ID).aoObjPol.Add(oObjP)
                 End If
+            End While
+            oRdr.Close()
+            aoDocs.Clear()
+
+            ' hlavicky faktur
+            oCmd.CommandText = txSQL3
+            Debug.WriteLine(oCmd.CommandText)
+            oRdr = oCmd.ExecuteReader
+            While oRdr.Read
+                Try
+                    Dim sName As String = GetStr(0)
+                    Dim aoFirmy As List(Of AFirma) = If(GetInt(6) = TypObj.FakV, oData.aoFirmyFVyd, oData.aoFirmyFPrij)
+                    Dim oFirma As AFirma = oData.AddFirmaObjNab(sName, GetDec(1), GetStr(5), iNewID, aoFirmy)
+                    Dim iRecId As Integer = GetInt(2)
+                    Dim iIdx As Integer = -1
+                    For i As Integer = 0 To aoFirmy.Count - 1
+                        If aoFirmy(i).KeyName = oFirma.KeyName Then
+                            iIdx = i
+                            Exit For
+                        End If
+                    Next
+                    If iIdx < 0 Then
+                        aoFirmy.Add(oFirma)
+                        iIdx = aoFirmy.Count - 1
+                    End If
+                    Dim oFak As New AFakt(iRecId, iNewID, sName, GetLong(3), GetDate(4))
+                    aoFirmy(iIdx).aoDocF.Add(oFak)
+                    aoDocsF(oFak.RecID) = oFak
+                    'aoFirmy(iRecId) = oObj
+                Catch ex As Exception
+                    Debug.WriteLine(ex.Message)
+                End Try
+            End While
+            oRdr.Close()
+            ' polozky faktur
+            oCmd.CommandText = txSQL4
+            Debug.WriteLine(oCmd.CommandText)
+            oRdr = Nothing
+            oRdr = oCmd.ExecuteReader
+            While oRdr.Read
+                Dim oObjP = New AFaktPol(GetInt(0), GetStr(1), GetStr(2), GetDec(3))
+                If aoDocsF.ContainsKey(oObjP.ID) Then
+                    aoDocsF(oObjP.ID).aoFaktPol.Add(oObjP)
+                End If
                 'If maoObjList.ContainsKey(oObjP.ID) Then
                 '    Dim oObj As AObj = maoObjList(oObjP.ID)
                 '    oObj.aoObjPol.Add(oObjP)
                 'End If
             End While
             oRdr.Close()
+
             Return oData
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical)
@@ -201,6 +249,12 @@ Public Class AData
                 For i As Integer = 0 To oRes.aoFirmyNab.Count - 1
                     oRes.aoFirmyNab(i).SetDisplayName()
                 Next
+                For i As Integer = 0 To oRes.aoFirmyFVyd.Count - 1
+                    oRes.aoFirmyFVyd(i).SetDisplayNameF()
+                Next
+                For i As Integer = 0 To oRes.aoFirmyFPrij.Count - 1
+                    oRes.aoFirmyFPrij(i).SetDisplayNameF()
+                Next
             End If
             If SortData Then
                 oRes.aoFirmyObj.Sort(New AFirma.Sorter)
@@ -210,6 +264,14 @@ Public Class AData
                 oRes.aoFirmyNab.Sort(New AFirma.Sorter)
                 For i As Integer = 0 To oRes.aoFirmyNab.Count - 1
                     oRes.aoFirmyNab(i).aoDoc.Sort(New AObjNab.Sorter)
+                Next
+                oRes.aoFirmyFVyd.Sort(New AFirma.Sorter)
+                For i As Integer = 0 To oRes.aoFirmyFVyd.Count - 1
+                    oRes.aoFirmyFVyd(i).aoDocF.Sort(New AFakt.Sorter)
+                Next
+                oRes.aoFirmyFPrij.Sort(New AFirma.Sorter)
+                For i As Integer = 0 To oRes.aoFirmyFPrij.Count - 1
+                    oRes.aoFirmyFPrij(i).aoDocF.Sort(New AFakt.Sorter)
                 Next
             End If
             Return oRes
