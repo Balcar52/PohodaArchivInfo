@@ -498,6 +498,7 @@ Public Class MForm
                 End If
             Catch ex As Exception
             Finally
+                Fg.AutoSizeCol(iColFgText)
                 Fg.EndInit()
             End Try
         End If
@@ -543,6 +544,7 @@ Public Class MForm
             Next
         Catch
         Finally
+            Fg.AutoSizeCol(iColFgText)
             Fg.EndUpdate()
         End Try
     End Sub

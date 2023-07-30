@@ -60,6 +60,8 @@ Public Class FAbout
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents l6 As Label
     Friend WithEvents l9 As Label
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Label4 As Label
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
@@ -84,6 +86,8 @@ Public Class FAbout
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.l8 = New System.Windows.Forms.Label()
         Me.pnMid = New System.Windows.Forms.Panel()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.pnBott.SuspendLayout()
         Me.pnTop.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -115,6 +119,8 @@ Public Class FAbout
         'pnBott
         '
         Me.pnBott.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.pnBott.Controls.Add(Me.Label3)
+        Me.pnBott.Controls.Add(Me.Label4)
         Me.pnBott.Controls.Add(Me.Label2)
         Me.pnBott.Controls.Add(Me.Label1)
         Me.pnBott.Controls.Add(Me.lblAutor)
@@ -128,9 +134,9 @@ Public Class FAbout
         '
         Me.Label2.Cursor = System.Windows.Forms.Cursors.Hand
         Me.Label2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.Label2.Location = New System.Drawing.Point(57, 56)
+        Me.Label2.Location = New System.Drawing.Point(57, 41)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(252, 14)
+        Me.Label2.Size = New System.Drawing.Size(252, 13)
         Me.Label2.TabIndex = 18
         Me.Label2.Tag = "www.chaps.cz"
         Me.Label2.Text = "Hartmanice 76, okres Svitavy"
@@ -138,9 +144,9 @@ Public Class FAbout
         'Label1
         '
         Me.Label1.Font = New System.Drawing.Font("Tahoma", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.Label1.Location = New System.Drawing.Point(58, 16)
+        Me.Label1.Location = New System.Drawing.Point(58, 10)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(168, 12)
+        Me.Label1.Size = New System.Drawing.Size(168, 11)
         Me.Label1.TabIndex = 16
         Me.Label1.Text = "vývoj a autorská práva"
         '
@@ -148,9 +154,9 @@ Public Class FAbout
         '
         Me.lblAutor.Cursor = System.Windows.Forms.Cursors.Hand
         Me.lblAutor.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.lblAutor.Location = New System.Drawing.Point(57, 33)
+        Me.lblAutor.Location = New System.Drawing.Point(57, 27)
         Me.lblAutor.Name = "lblAutor"
-        Me.lblAutor.Size = New System.Drawing.Size(252, 14)
+        Me.lblAutor.Size = New System.Drawing.Size(252, 13)
         Me.lblAutor.TabIndex = 17
         Me.lblAutor.Tag = "www.chaps.cz"
         Me.lblAutor.Text = "Ing. Jiøí Bartùšek"
@@ -306,6 +312,26 @@ Public Class FAbout
         Me.pnMid.Name = "pnMid"
         Me.pnMid.Size = New System.Drawing.Size(334, 73)
         Me.pnMid.TabIndex = 17
+        '
+        'Label3
+        '
+        Me.Label3.Font = New System.Drawing.Font("Tahoma", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.Label3.Location = New System.Drawing.Point(58, 62)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(168, 12)
+        Me.Label3.TabIndex = 19
+        Me.Label3.Text = "výhradní licence pro provoz"
+        '
+        'Label4
+        '
+        Me.Label4.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.Label4.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.Label4.Location = New System.Drawing.Point(57, 77)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(252, 14)
+        Me.Label4.TabIndex = 20
+        Me.Label4.Tag = ""
+        Me.Label4.Text = "Metapol spol. s r.o., Polièka"
         '
         'FAbout
         '
