@@ -842,7 +842,7 @@ Partial Class MForm2
         Me.a_sprava_aplikace.Image = CType(resources.GetObject("a_sprava_aplikace.Image"), System.Drawing.Image)
         Me.a_sprava_aplikace.Name = "a_sprava_aplikace"
         Me.a_sprava_aplikace.Parent = Me.ActionList0
-        Me.a_sprava_aplikace.Text = "Nastavení aplikace a správa dat"
+        Me.a_sprava_aplikace.Text = "Správa dat a nastavení aplikace"
         '
         'm_o_aplikaci
         '
