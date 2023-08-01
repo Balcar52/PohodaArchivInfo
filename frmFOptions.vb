@@ -270,6 +270,7 @@ Public Class FOptions
         clrFgN.ColorSetting = dfFgN
         clrFgFV.ColorSetting = dfFgFV
         clrFgFP.ColorSetting = dfFgFP
+        btnOK.Visible = True
     End Sub
 
 End Class

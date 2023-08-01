@@ -112,7 +112,7 @@ Partial Class FOptions
         Me.gbImport.Location = New System.Drawing.Point(0, 226)
         Me.gbImport.Name = "gbImport"
         Me.gbImport.Size = New System.Drawing.Size(800, 79)
-        Me.gbImport.TabIndex = 5
+        Me.gbImport.TabIndex = 1
         Me.gbImport.TabStop = False
         Me.gbImport.Text = "Databáze účetnictví Pohoda"
         '
@@ -134,7 +134,7 @@ Partial Class FOptions
         Me.brnDefaultMdbPassword.Location = New System.Drawing.Point(588, 0)
         Me.brnDefaultMdbPassword.Name = "brnDefaultMdbPassword"
         Me.brnDefaultMdbPassword.Size = New System.Drawing.Size(149, 21)
-        Me.brnDefaultMdbPassword.TabIndex = 4
+        Me.brnDefaultMdbPassword.TabIndex = 3
         Me.brnDefaultMdbPassword.Text = "Nastavit výchozí heslo"
         Me.brnDefaultMdbPassword.UseVisualStyleBackColor = True
         '
@@ -144,7 +144,7 @@ Partial Class FOptions
         Me.Panel11.Location = New System.Drawing.Point(579, 0)
         Me.Panel11.Name = "Panel11"
         Me.Panel11.Size = New System.Drawing.Size(9, 21)
-        Me.Panel11.TabIndex = 3
+        Me.Panel11.TabIndex = 2
         '
         'txtMdbPassword
         '
@@ -155,7 +155,7 @@ Partial Class FOptions
         Me.txtMdbPassword.Name = "txtMdbPassword"
         Me.txtMdbPassword.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.txtMdbPassword.Size = New System.Drawing.Size(400, 21)
-        Me.txtMdbPassword.TabIndex = 0
+        Me.txtMdbPassword.TabIndex = 1
         Me.txtMdbPassword.Text = "168BF465F0FB19"
         '
         'Label4
@@ -165,7 +165,7 @@ Partial Class FOptions
         Me.Label4.Name = "Label4"
         Me.Label4.Padding = New System.Windows.Forms.Padding(0, 0, 5, 0)
         Me.Label4.Size = New System.Drawing.Size(179, 21)
-        Me.Label4.TabIndex = 1
+        Me.Label4.TabIndex = 0
         Me.Label4.Text = "Heslo pro přístup do databáze:"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -175,7 +175,7 @@ Partial Class FOptions
         Me.Panel8.Location = New System.Drawing.Point(3, 38)
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(794, 8)
-        Me.Panel8.TabIndex = 2
+        Me.Panel8.TabIndex = 0
         '
         'Panel4
         '
@@ -197,7 +197,7 @@ Partial Class FOptions
         Me.btnProcessImport.Location = New System.Drawing.Point(631, 0)
         Me.btnProcessImport.Name = "btnProcessImport"
         Me.btnProcessImport.Size = New System.Drawing.Size(164, 21)
-        Me.btnProcessImport.TabIndex = 4
+        Me.btnProcessImport.TabIndex = 5
         Me.btnProcessImport.Text = "Importovat data z databáze"
         Me.btnProcessImport.UseVisualStyleBackColor = True
         '
@@ -207,7 +207,7 @@ Partial Class FOptions
         Me.Panel6.Location = New System.Drawing.Point(622, 0)
         Me.Panel6.Name = "Panel6"
         Me.Panel6.Size = New System.Drawing.Size(9, 21)
-        Me.Panel6.TabIndex = 5
+        Me.Panel6.TabIndex = 4
         '
         'btnSearchMdb
         '
@@ -215,7 +215,7 @@ Partial Class FOptions
         Me.btnSearchMdb.Location = New System.Drawing.Point(588, 0)
         Me.btnSearchMdb.Name = "btnSearchMdb"
         Me.btnSearchMdb.Size = New System.Drawing.Size(34, 21)
-        Me.btnSearchMdb.TabIndex = 2
+        Me.btnSearchMdb.TabIndex = 3
         Me.btnSearchMdb.Text = "..."
         Me.btnSearchMdb.UseVisualStyleBackColor = True
         '
@@ -225,7 +225,7 @@ Partial Class FOptions
         Me.Panel5.Location = New System.Drawing.Point(579, 0)
         Me.Panel5.Name = "Panel5"
         Me.Panel5.Size = New System.Drawing.Size(9, 21)
-        Me.Panel5.TabIndex = 3
+        Me.Panel5.TabIndex = 2
         '
         'txtMdbFile
         '
@@ -235,7 +235,7 @@ Partial Class FOptions
         Me.txtMdbFile.MaximumSize = New System.Drawing.Size(400, 4)
         Me.txtMdbFile.Name = "txtMdbFile"
         Me.txtMdbFile.Size = New System.Drawing.Size(400, 21)
-        Me.txtMdbFile.TabIndex = 0
+        Me.txtMdbFile.TabIndex = 1
         Me.txtMdbFile.Text = "d:\Projekty.Metapol\Data\47471255_2022.mdb"
         '
         'Label2
@@ -245,7 +245,7 @@ Partial Class FOptions
         Me.Label2.Name = "Label2"
         Me.Label2.Padding = New System.Windows.Forms.Padding(0, 0, 5, 0)
         Me.Label2.Size = New System.Drawing.Size(179, 21)
-        Me.Label2.TabIndex = 1
+        Me.Label2.TabIndex = 0
         Me.Label2.Text = "Databáze pro import dat:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -260,7 +260,7 @@ Partial Class FOptions
         Me.GroupBox1.MinimumSize = New System.Drawing.Size(0, 150)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(800, 226)
-        Me.GroupBox1.TabIndex = 4
+        Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Data k prohlížení"
         '
@@ -286,7 +286,7 @@ Partial Class FOptions
         Me.FgF.Rows.DefaultSize = 20
         Me.FgF.Size = New System.Drawing.Size(794, 149)
         Me.FgF.StyleInfo = resources.GetString("FgF.StyleInfo")
-        Me.FgF.TabIndex = 7
+        Me.FgF.TabIndex = 0
         Me.FgF.UseCompatibleTextRendering = False
         Me.FgF.XSearchTextMode = XForms.XC1Flexgrid.XSearchTextModes.[Default]
         '
@@ -297,7 +297,7 @@ Partial Class FOptions
         Me.Label3.Name = "Label3"
         Me.Label3.Padding = New System.Windows.Forms.Padding(5, 15, 5, 5)
         Me.Label3.Size = New System.Drawing.Size(794, 36)
-        Me.Label3.TabIndex = 2
+        Me.Label3.TabIndex = 0
         Me.Label3.Text = "seznam databází, která archiv aktuálně obsahuje:"
         '
         'Panel2
@@ -323,7 +323,7 @@ Partial Class FOptions
         Me.txtCurrentFile.Location = New System.Drawing.Point(179, 0)
         Me.txtCurrentFile.Name = "txtCurrentFile"
         Me.txtCurrentFile.Size = New System.Drawing.Size(381, 21)
-        Me.txtCurrentFile.TabIndex = 8
+        Me.txtCurrentFile.TabIndex = 1
         '
         'Panel7
         '
@@ -331,7 +331,7 @@ Partial Class FOptions
         Me.Panel7.Location = New System.Drawing.Point(560, 0)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(10, 21)
-        Me.Panel7.TabIndex = 5
+        Me.Panel7.TabIndex = 2
         '
         'btnOpenA
         '
@@ -339,7 +339,7 @@ Partial Class FOptions
         Me.btnOpenA.Location = New System.Drawing.Point(570, 0)
         Me.btnOpenA.Name = "btnOpenA"
         Me.btnOpenA.Size = New System.Drawing.Size(34, 21)
-        Me.btnOpenA.TabIndex = 2
+        Me.btnOpenA.TabIndex = 3
         Me.btnOpenA.Text = "..."
         Me.ToolTip1.SetToolTip(Me.btnOpenA, "Vyhledat soubor archivu")
         Me.btnOpenA.UseVisualStyleBackColor = True
@@ -350,7 +350,7 @@ Partial Class FOptions
         Me.Panel3.Location = New System.Drawing.Point(604, 0)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(9, 21)
-        Me.Panel3.TabIndex = 3
+        Me.Panel3.TabIndex = 4
         '
         'btnCreateA
         '
@@ -359,7 +359,7 @@ Partial Class FOptions
         Me.btnCreateA.Location = New System.Drawing.Point(613, 0)
         Me.btnCreateA.Name = "btnCreateA"
         Me.btnCreateA.Size = New System.Drawing.Size(129, 21)
-        Me.btnCreateA.TabIndex = 4
+        Me.btnCreateA.TabIndex = 5
         Me.btnCreateA.Text = "Vymazat, vytvořit nový"
         Me.ToolTip1.SetToolTip(Me.btnCreateA, "Vytvoření nového souboru archivu, resp. vymazání obsahu souboru archivu")
         Me.btnCreateA.UseVisualStyleBackColor = True
@@ -371,7 +371,7 @@ Partial Class FOptions
         Me.Label1.Name = "Label1"
         Me.Label1.Padding = New System.Windows.Forms.Padding(0, 0, 5, 0)
         Me.Label1.Size = New System.Drawing.Size(179, 21)
-        Me.Label1.TabIndex = 1
+        Me.Label1.TabIndex = 0
         Me.Label1.Text = "Aktivní soubor dat k prohlížení:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -381,7 +381,7 @@ Partial Class FOptions
         Me.Panel1.Location = New System.Drawing.Point(742, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(9, 21)
-        Me.Panel1.TabIndex = 9
+        Me.Panel1.TabIndex = 6
         '
         'btnView
         '
@@ -413,7 +413,7 @@ Partial Class FOptions
         Me.ButtonPanel1.Padding = New System.Windows.Forms.Padding(9, 8, 9, 13)
         Me.ButtonPanel1.PaddingAutomaticCoef = New System.Drawing.SizeF(0.2!, 0.08!)
         Me.ButtonPanel1.Size = New System.Drawing.Size(814, 44)
-        Me.ButtonPanel1.TabIndex = 6
+        Me.ButtonPanel1.TabIndex = 1
         '
         'btnOK
         '
@@ -422,7 +422,7 @@ Partial Class FOptions
         Me.btnOK.Location = New System.Drawing.Point(607, 8)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(99, 23)
-        Me.btnOK.TabIndex = 6
+        Me.btnOK.TabIndex = 0
         Me.btnOK.Text = "Uložit"
         Me.btnOK.UseVisualStyleBackColor = True
         Me.btnOK.Visible = False
@@ -434,7 +434,7 @@ Partial Class FOptions
         Me.btnClose.Location = New System.Drawing.Point(706, 8)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(99, 23)
-        Me.btnClose.TabIndex = 5
+        Me.btnClose.TabIndex = 1
         Me.btnClose.Text = "Zavřít"
         Me.btnClose.UseVisualStyleBackColor = True
         '
@@ -444,7 +444,7 @@ Partial Class FOptions
         Me.chkAllowImport.Location = New System.Drawing.Point(10, 3)
         Me.chkAllowImport.Name = "chkAllowImport"
         Me.chkAllowImport.Size = New System.Drawing.Size(328, 24)
-        Me.chkAllowImport.TabIndex = 6
+        Me.chkAllowImport.TabIndex = 0
         Me.chkAllowImport.Text = "Povolit vytvoření, výmaz a import roční databáze do archivu"
         Me.chkAllowImport.UseVisualStyleBackColor = True
         '
@@ -468,8 +468,8 @@ Partial Class FOptions
         '
         'tbcMain
         '
-        Me.tbcMain.Controls.Add(Me.pgData)
         Me.tbcMain.Controls.Add(Me.pgVolby)
+        Me.tbcMain.Controls.Add(Me.pgData)
         Me.tbcMain.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbcMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed
         Me.tbcMain.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
@@ -477,7 +477,7 @@ Partial Class FOptions
         Me.tbcMain.Name = "tbcMain"
         Me.tbcMain.SelectedIndex = 0
         Me.tbcMain.Size = New System.Drawing.Size(814, 367)
-        Me.tbcMain.TabIndex = 8
+        Me.tbcMain.TabIndex = 0
         '
         'pgData
         '
@@ -487,7 +487,7 @@ Partial Class FOptions
         Me.pgData.Padding = New System.Windows.Forms.Padding(3)
         Me.pgData.Size = New System.Drawing.Size(806, 341)
         Me.pgData.TabIndex = 1
-        Me.pgData.Text = "Data"
+        Me.pgData.Text = "Správa dat"
         Me.pgData.UseVisualStyleBackColor = True
         '
         'pnData
@@ -512,7 +512,7 @@ Partial Class FOptions
         Me.Panel13.Name = "Panel13"
         Me.Panel13.Padding = New System.Windows.Forms.Padding(10, 3, 0, 3)
         Me.Panel13.Size = New System.Drawing.Size(800, 30)
-        Me.Panel13.TabIndex = 6
+        Me.Panel13.TabIndex = 2
         '
         'pgVolby
         '
