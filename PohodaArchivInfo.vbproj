@@ -95,10 +95,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Projekty.ISOB\Dlllib\C1.Win.C1FlexGrid.4.dll</HintPath>
     </Reference>
-    <Reference Include="Controls2">
+    <Reference Include="Controls2, Version=2.3.39.4, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Projekty.ISOB\Dlllib\Controls2.dll</HintPath>
     </Reference>
-    <Reference Include="Controls3">
+    <Reference Include="Controls3, Version=1.1.5.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Projekty.ISOB\Dlllib\Controls3.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">

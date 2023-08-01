@@ -343,12 +343,13 @@ Partial Public Class AData
             MyBase.New
         End Sub
 
-        Public Sub New(iID As Integer, sText As String, sPozn As String, dcMnoz As Decimal)
+        Public Sub New(iID As Integer, sText As String, sPozn As String, dcMnoz As Decimal, dcCena As Decimal)
             MyBase.New
             ID = iID
             Text = sText
             Pozn = sPozn
             Mnoz = dcMnoz
+            JednCena = dcCena
         End Sub
         <XmlAttribute("x")>
         Public ID As Integer = 0

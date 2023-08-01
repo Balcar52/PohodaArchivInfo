@@ -5,11 +5,28 @@
 Imports XControls
 Imports XForms
 Imports C1.Win.C1FlexGrid
+Imports Microsoft.Office.Interop
 
-Public Class MForm
+Public Class MForm2
 
     Public Const nmCurrentFile As String = "CurrentFile"
+    Public Const nmbSetTabColors As String = "SetTabColors"
+    Public Const nmbSimpleExcel As String = "SimpleExcel"
+    Public Const nmsExcelExpDir As String = "ExcelDir"
+    Public Const nmsColorFgO As String = "ColorsFgO"
+    Public Const nmsColorFgN As String = "ColorsFgN"
+    Public Const nmsColorFgFV As String = "ColorsFgFV"
+    Public Const nmsColorFgFP As String = "ColorsFgFP"
 
+    Dim bLoading As Boolean = True
+
+    Public clrFgO As New ColorPair(SystemColors.WindowText, SystemColors.Window)
+    Public clrFgN As New ColorPair(SystemColors.WindowText, SystemColors.Window)
+    Public clrFgFV As New ColorPair(SystemColors.WindowText, SystemColors.Window)
+    Public clrFgFP As New ColorPair(SystemColors.WindowText, SystemColors.Window)
+    Public bSetTabColors As Boolean = True
+    Public bSimpleExcel As Boolean = True
+    Public sExcelExpDir As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), IO.Path.GetFileNameWithoutExtension(Application.ExecutablePath))
 
     ' deklarace promennych cisel sloupcu gridu 
 
@@ -28,8 +45,16 @@ Public Class MForm
     Dim iColFgPocP As Integer ' [g:8]
     Dim iColFgTree As Integer ' [g:8]
 
-    Public Sub InitGrid(Fg As XC1Flexgrid, Nazev1 As String, oBackColor As Color, Optional bFaktMode As Boolean = False)
-        Fg.BackColor = oBackColor
+    Public Sub InitGrid(Fg As XC1Flexgrid, oColor As ColorPair, Optional bSetColors As Boolean = True)
+        Fg.Styles.Clear()
+        If bSetColors AndAlso Not ColorPairIsEmpty(oColor) Then
+            Fg.ForeColor = oColor.ForeColor
+            Fg.BackColor = oColor.BackColor
+        End If
+    End Sub
+
+    Public Sub InitGrid(Fg As XC1Flexgrid, Nazev1 As String, oColor As ColorPair, Optional bSetColors As Boolean = True, Optional bFaktMode As Boolean = False)
+        InitGrid(Fg, oColor, bSetColors)
         FlexgridSet(Fg) '' [CorrectForm 17.4.2019 22:43]' [CorrectForm 21.6.2023 23:48]
         iColFg0 = FlexgridSetCol(">")
         iColFgFirma = FlexgridSetCol("firma,250,RSM<")
@@ -42,61 +67,22 @@ Public Class MForm
         iColFgNazevFirmy = FlexgridSetCol("název firmy,80,R<", "*")
         iColFgPocP = FlexgridSetCol("poč.,40,RI^", "položky")
         iColFgText = FlexgridSetCol("text,80,R<", "*")
-        iColFgMnozstvi = FlexgridSetCol("množství,80,RID>,#####0", "*")
+        iColFgMnozstvi = FlexgridSetCol("množ.,80,RID>,#####0", "*")
         If bFaktMode Then
-            iColFgMnozstvi = FlexgridSetCol("cena,80,RID>,### ##0", "*")
+            iColFgCena = FlexgridSetCol("cena,80,RID>,### ##0,00", "*")
         Else
-            iColFgMnozstvi = FlexgridSetCol("@")
+            iColFgCena = FlexgridSetCol("@")
         End If
         iColFgPozn = FlexgridSetCol("pozn.,80,R<")
         FlexgridSetExec() ' [CorrectForm 21.6.2023 23:48]
 
-        Fg.Cols(iColFgKlic).Visible = False
-        Fg.Cols(iColFgICO).Visible = False
-        Fg.Cols(iColFgNazevFirmy).Visible = False
-
-        Fg.Tree.Column = iColFgTree
-
         AddFlexGridStyle(1, FontStyle.Bold, C1.Win.C1FlexGrid.TextAlignEnum.LeftCenter)
         AddFlexGridStyle(2, FontStyle.Italic, C1.Win.C1FlexGrid.TextAlignEnum.LeftCenter)
-
-        Fg.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.Custom
-        Fg.AllowMergingFixed = C1.Win.C1FlexGrid.AllowMergingEnum.Free
-
-        Fg.ShowButtons = C1.Win.C1FlexGrid.ShowButtonsEnum.WithFocus
-        Fg.ExtendLastCol = True
-
         SetFlexGridStyleToCols(1, iColFgFirma)
         SetFlexGridStyleToCols(2, iColFgNazevFirmy)
-
-        FlexgridSetGlobalFormat()
-        Fg.SelectionMode = SelectionModeEnum.Default
-
         Fg.Styles.Highlight.BackColor = Fg.Styles.Normal.BackColor
         Fg.Styles.Highlight.ForeColor = Fg.Styles.Normal.ForeColor
-        Fg.AutoSearch = AutoSearchEnum.FromCursor
 
-        Fg.FocusRect = FocusRectEnum.Heavy
-        Fg.SelectionMode = SelectionModeEnum.Cell
-    End Sub
-
-    Public Sub InitGridF(Fg As XC1Flexgrid, Nazev1 As String, oBackColor As Color)
-        Fg.BackColor = oBackColor
-        FlexgridSet(Fg) '' [CorrectForm 17.4.2019 22:43]' [CorrectForm 21.6.2023 23:48]
-        iColFg0 = FlexgridSetCol(">")
-        iColFgFirma = FlexgridSetCol("firma,250,RSM<")
-        iColFgICO = FlexgridSetCol("IČ,40,RM>")
-        iColFgKlic = FlexgridSetCol("klíč,100,R<")
-        iColFgTree = FlexgridSetCol(",30,R,")
-        iColFgPocO = FlexgridSetCol("poč.,40,RI^", Nazev1)
-        iColFgDatum = FlexgridSetCol("datum,80,RMd>", "*")
-        iColFgCislo = FlexgridSetCol("číslo,80,RIM>", "*")
-        iColFgNazevFirmy = FlexgridSetCol("název firmy,80,R<", "*")
-        iColFgPocP = FlexgridSetCol("poč.,40,RI^", "položky")
-        iColFgText = FlexgridSetCol("text,80,R<", "*")
-        iColFgMnozstvi = FlexgridSetCol("množství,80,RID>,#####0", "*")
-        iColFgPozn = FlexgridSetCol("pozn.,80,R<")
-        FlexgridSetExec() ' [CorrectForm 21.6.2023 23:48]
 
         Fg.Cols(iColFgKlic).Visible = False
         Fg.Cols(iColFgICO).Visible = False
@@ -104,23 +90,15 @@ Public Class MForm
 
         Fg.Tree.Column = iColFgTree
 
-        AddFlexGridStyle(1, FontStyle.Bold, C1.Win.C1FlexGrid.TextAlignEnum.LeftCenter)
-        AddFlexGridStyle(2, FontStyle.Italic, C1.Win.C1FlexGrid.TextAlignEnum.LeftCenter)
-
         Fg.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.Custom
         Fg.AllowMergingFixed = C1.Win.C1FlexGrid.AllowMergingEnum.Free
 
         Fg.ShowButtons = C1.Win.C1FlexGrid.ShowButtonsEnum.WithFocus
         Fg.ExtendLastCol = True
 
-        SetFlexGridStyleToCols(1, iColFgFirma)
-        SetFlexGridStyleToCols(2, iColFgNazevFirmy)
-
         FlexgridSetGlobalFormat()
         Fg.SelectionMode = SelectionModeEnum.Default
 
-        Fg.Styles.Highlight.BackColor = Fg.Styles.Normal.BackColor
-        Fg.Styles.Highlight.ForeColor = Fg.Styles.Normal.ForeColor
         Fg.AutoSearch = AutoSearchEnum.FromCursor
 
         Fg.FocusRect = FocusRectEnum.Heavy
@@ -128,6 +106,7 @@ Public Class MForm
     End Sub
 
     Public Sub LoadData()
+        bLoading = True
         a_excel.Enabled = False
         FgO.ClearDataRows(True, True)
         FgN.ClearDataRows(True, True)
@@ -135,7 +114,7 @@ Public Class MForm
         FgFV.ClearDataRows(True, True)
         Application.DoEvents()
 
-        Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Načítám data z archivu " & IO.Path.GetFileName(AData.CurrentFile))
+        Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Načítám data z archivu """ & AData.CurrentFile & """")
             AData.LoadXMLData()
             RefreshStb()
             With AData.oAdata
@@ -166,6 +145,7 @@ Public Class MForm
         Fg.Redraw = True
         Fg.Select()
         Fg.Focus()
+        bLoading = False
     End Sub
 
     Public Sub LoadObjList(Fg As XC1Flexgrid, List As List(Of AData.AFirma), Optional SelectGrid As Boolean = False)
@@ -285,7 +265,7 @@ Public Class MForm
             Fg(iRow, iColFgText) = Trim(oObjP.Text)
             Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Bold)
             Fg(iRow, iColFgPozn) = Trim(oObjP.Pozn)
-            Fg(iRow, iColFgMnozstvi) = oObjP.Mnoz
+            If oObjP.Mnoz > 0 Then Fg(iRow, iColFgMnozstvi) = oObjP.Mnoz
             Fg.Rows(iRow).IsNode = True
             Fg.Rows(iRow).Node.Level = 2
             Fg.Rows(iRow).UserData = oObjP
@@ -323,7 +303,8 @@ Public Class MForm
             Fg(iRow, iColFgText) = Trim(oFakP.Text)
             Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Bold)
             Fg(iRow, iColFgPozn) = Trim(oFakP.Pozn)
-            Fg(iRow, iColFgMnozstvi) = oFakP.Mnoz
+            If oFakP.Mnoz > 0 Then Fg(iRow, iColFgMnozstvi) = oFakP.Mnoz
+            If oFakP.JednCena > 0 Then Fg(iRow, iColFgCena) = oFakP.JednCena
             Fg.Rows(iRow).IsNode = True
             Fg.Rows(iRow).Node.Level = 2
             Fg.Rows(iRow).UserData = oFakP
@@ -334,22 +315,45 @@ Public Class MForm
         WindowRestore(Me)
         FlexgridRestore(FgO,,,, False)
         FlexgridRestore(FgN,,,, False)
-        AData.CurrentFile = StringRestore(nmCurrentFile)
+        FlexgridRestore(FgFV,,,, False)
+        FlexgridRestore(FgFP,,,, False)
         LoadData()
         FlexgridRestorePosition(FgO)
         FlexgridRestorePosition(FgN)
+        FlexgridRestorePosition(FgFV)
+        FlexgridRestorePosition(FgFP)
         TabControlRestore(tbcMain)
+        tbcMain_SelectedIndexChanged(Nothing, Nothing)
     End Sub
+
+
 
     Private Sub MForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         iMForm = Me
         sConnStdCtr = poConn.ConnectionString
         oConn = poConn
         RefreshStb()
-        InitGrid(FgO, "objednávky", Color.FromArgb(&HFFE0FFE0))
-        InitGrid(FgN, "nabídky", Color.FromArgb(&HFFE0E0FF))
-        InitGrid(FgFV, "vydané faktury", Color.FromArgb(&HFFFFE0E0), True)
-        InitGrid(FgFP, "přijaté faktury", Color.FromArgb(&HFFFFFFE0), True)
+        WindowRestore(Me)
+        clrFgO = ColorPairFromString(StringRestore(nmsColorFgO), True)
+        clrFgN = ColorPairFromString(StringRestore(nmsColorFgN), True)
+        clrFgFV = ColorPairFromString(StringRestore(nmsColorFgFV), True)
+        clrFgFP = ColorPairFromString(StringRestore(nmsColorFgFP), True)
+        If ColorPairIsEmpty(clrFgO) OrElse ColorPairIsEmpty(clrFgN) OrElse ColorPairIsEmpty(clrFgFV) OrElse ColorPairIsEmpty(clrFgFP) Then
+            Dim oOpt As New FOptions(Nothing, False)
+            If ColorPairIsEmpty(clrFgO) Then clrFgO = oOpt.clrFgO.ColorSetting
+            If ColorPairIsEmpty(clrFgN) Then clrFgN = oOpt.clrFgN.ColorSetting
+            If ColorPairIsEmpty(clrFgFV) Then clrFgFV = oOpt.clrFgFV.ColorSetting
+            If ColorPairIsEmpty(clrFgFP) Then clrFgFP = oOpt.clrFgFP.ColorSetting
+            oOpt = Nothing
+        End If
+        AData.CurrentFile = StringRestore(nmCurrentFile,, AData.CurrentFile)
+        sExcelExpDir = StringRestore(nmsExcelExpDir,, sExcelExpDir)
+        bSimpleExcel = BooleanRestore(nmbSimpleExcel,, bSimpleExcel)
+        bSetTabColors = BooleanRestore(nmbSetTabColors,, bSetTabColors)
+        InitGrid(FgO, "objednávky", clrFgO, bSetTabColors)
+        InitGrid(FgN, "nabídky", clrFgN, bSetTabColors)
+        InitGrid(FgFV, "vydané faktury", clrFgFV, bSetTabColors, True)
+        InitGrid(FgFP, "přijaté faktury", clrFgFP, bSetTabColors, True)
         FGridSearchText.RegisterForAllGrids(Me, a_searchtext, a_searchtextnext)
     End Sub
 
@@ -371,13 +375,28 @@ Public Class MForm
     End Sub
 
     Private Sub MForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        SaveForm()
+    End Sub
+
+    Private Sub SaveForm()
         WindowSave(Me)
         TabControlSave(tbcMain)
         FlexgridSave(FgO)
         FlexgridSave(FgN)
+        FlexgridSave(FgFV)
+        FlexgridSave(FgFP)
         FlexgridSavePosition(FgO)
         FlexgridSavePosition(FgN)
+        FlexgridSavePosition(FgFV)
+        FlexgridSavePosition(FgFP)
         StringSave(nmCurrentFile, AData.CurrentFile)
+        StringSave(nmsExcelExpDir, sExcelExpDir)
+        BooleanSave(nmbSimpleExcel, bSimpleExcel)
+        BooleanSave(nmbSetTabColors, bSetTabColors)
+        If Not ColorPairIsEmpty(clrFgO) Then StringSave(nmsColorFgO, ColorPairToString(clrFgO))
+        If Not ColorPairIsEmpty(clrFgN) Then StringSave(nmsColorFgN, ColorPairToString(clrFgN))
+        If Not ColorPairIsEmpty(clrFgFP) Then StringSave(nmsColorFgFP, ColorPairToString(clrFgFP))
+        If Not ColorPairIsEmpty(clrFgFV) Then StringSave(nmsColorFgFV, ColorPairToString(clrFgFV))
     End Sub
 
     Private Sub a_close_Execute(sender As Object, e As EventArgs) Handles a_close.Execute
@@ -385,7 +404,25 @@ Public Class MForm
     End Sub
 
     Private Sub a_sprava_aplikace_Execute(sender As Object, e As EventArgs) Handles a_sprava_aplikace.Execute
-        If FOptions.Run(Me) = DialogResult.OK Then LoadData()
+        Dim oRetForm As FOptions = Nothing
+        If FOptions.Run(Me, oRetForm) = DialogResult.OK Then
+            WindowSet(Me)
+            StringSave(nmCurrentFile, AData.CurrentFile)
+            AData.CurrentFile = oRetForm.txtCurrentFile.Text
+            clrFgO = oRetForm.clrFgO.ColorSetting
+            clrFgN = oRetForm.clrFgN.ColorSetting
+            clrFgFV = oRetForm.clrFgFV.ColorSetting
+            clrFgFP = oRetForm.clrFgFP.ColorSetting
+            bSetTabColors = oRetForm.gbColors.Checked
+            bSimpleExcel = oRetForm.chkSimpleExcel.Checked
+            sExcelExpDir = oRetForm.txtMSExcelDir.Text
+            InitGrid(FgO, "objednávky", clrFgO, bSetTabColors)
+            InitGrid(FgN, "nabídky", clrFgN, bSetTabColors)
+            InitGrid(FgFV, "vydané faktury", clrFgFV, bSetTabColors, True)
+            InitGrid(FgFP, "přijaté faktury", clrFgFP, bSetTabColors, True)
+            SaveForm()
+            LoadData()
+        End If
     End Sub
 
     Private Sub a_znovunacist_data_Execute(sender As Object, e As EventArgs) Handles a_znovunacist_data.Execute
@@ -446,6 +483,7 @@ Public Class MForm
     End Sub
 
     Private Sub SbalitRozbalit(Fg As XC1Flexgrid, bRozbalit As Boolean)
+        bLoading = True
         Application.DoEvents()
         Fg.BeginUpdate()
         If Not bRozbalit Then
@@ -463,6 +501,7 @@ Public Class MForm
         Next
         Fg.EnsureVisibleSelectedRow(Fg.Row)
         Fg.EndUpdate()
+        bLoading = False
     End Sub
 
     Private Sub a_sbalitrozbalit_polozku_na_radku_Execute(sender As Object, e As EventArgs) Handles a_sbalitrozbalit_polozku_na_radku.Execute
@@ -472,6 +511,7 @@ Public Class MForm
     End Sub
 
     Private Sub Fg_DoubleClick(sender As Object, e As EventArgs) Handles FgO.DoubleClick, FgN.DoubleClick, FgFP.DoubleClick, FgFV.DoubleClick
+        bLoading = True
         Dim Fg As XC1Flexgrid = FgA()
         If Fg.RowIsValid Then
             Try
@@ -500,56 +540,61 @@ Public Class MForm
             Finally
                 Fg.AutoSizeCol(iColFgText)
                 Fg.EndInit()
+                bLoading = False
             End Try
         End If
     End Sub
 
     Private Sub a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter__Execute(sender As Object, e As EventArgs) Handles a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Execute
+        bLoading = True
         Dim Fg As XC1Flexgrid = FgA()
-        Try
-            Fg.BeginUpdate()
-
-            For iRow As Integer = Fg.Row To Fg.Row1 Step -1
-                If Fg.RowIsValid(iRow) AndAlso Fg.Rows(iRow).IsNode Then
-                    '§ nasel jsem koren
-                    If Fg.Rows(iRow).Node.Level > 0 Then Continue For
-                    Dim iRowRoot As Integer = Fg.Rows(iRow).Node.Row.Index
-                    Dim iExp As Integer = If(Fg.Rows(iRow).Node.Expanded, 1, 0)
-                    Dim iCnt As Integer = 1
-                    For Each oNd In Fg.Rows(iRow).Node.Nodes
-                        iExp += If(oNd.Expanded, 1, 0)
-                        iCnt += 1
-                        For Each oNd2 In oNd.Nodes
-                            iExp += If(oNd2.Expanded, 1, 0)
+        Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Upravuji zobrazení dat..")
+            Try
+                Fg.BeginUpdate()
+                For iRow As Integer = Fg.Row To Fg.Row1 Step -1
+                    If Fg.RowIsValid(iRow) AndAlso Fg.Rows(iRow).IsNode Then
+                        '§ nasel jsem koren
+                        If Fg.Rows(iRow).Node.Level > 0 Then Continue For
+                        Dim iRowRoot As Integer = Fg.Rows(iRow).Node.Row.Index
+                        Dim iExp As Integer = If(Fg.Rows(iRow).Node.Expanded, 1, 0)
+                        Dim iCnt As Integer = 1
+                        For Each oNd In Fg.Rows(iRow).Node.Nodes
+                            iExp += If(oNd.Expanded, 1, 0)
                             iCnt += 1
+                            For Each oNd2 In oNd.Nodes
+                                iExp += If(oNd2.Expanded, 1, 0)
+                                iCnt += 1
+                            Next
                         Next
-                    Next
-                    Dim bNewState As Boolean = If(iExp = iCnt, False, True)
-                    Fg.Rows(iRowRoot).Node.Expanded = bNewState
-                    For Each oNd In Fg.Rows(iRow).Node.Nodes
-                        oNd.Expanded = bNewState
-                        For Each oNd2 In oNd.Nodes
-                            oNd2.Expanded = bNewState
+                        Dim bNewState As Boolean = If(iExp = iCnt, False, True)
+                        Fg.Rows(iRowRoot).Node.Expanded = bNewState
+                        For Each oNd In Fg.Rows(iRow).Node.Nodes
+                            oNd.Expanded = bNewState
+                            For Each oNd2 In oNd.Nodes
+                                oNd2.Expanded = bNewState
+                            Next
                         Next
-                    Next
-                    If Not bNewState Then Fg.Row = iRow
-                    If bNewState Then Fg.AutoSizeCol(iColFgText)
-                    Fg.Refresh()
-                    Fg.EnsureVisibleSelectedRow()
-                    'MsgBox("Node " & iRow)
-                    Exit Try
-                Else
-                    Exit Try
-                End If
-            Next
-        Catch
-        Finally
-            Fg.AutoSizeCol(iColFgText)
-            Fg.EndUpdate()
-        End Try
+                        If Not bNewState Then Fg.Row = iRow
+                        If bNewState Then Fg.AutoSizeCol(iColFgText)
+                        Fg.Refresh()
+                        Fg.EnsureVisibleSelectedRow()
+                        'MsgBox("Node " & iRow)
+                        Exit Try
+                    Else
+                        Exit Try
+                    End If
+                Next
+            Catch
+            Finally
+                Fg.AutoSizeCol(iColFgText)
+                Fg.EndUpdate()
+                bLoading = False
+            End Try
+        End Using
     End Sub
 
     Private Sub Fg_KeyPress(sender As Object, e As KeyPressEventArgs) Handles FgO.KeyPress, FgN.KeyPress, FgFP.KeyPress, FgFV.KeyPress
+        bLoading = True
         Dim Fg As XC1Flexgrid = FgA()
         If e.KeyChar = " "c OrElse e.KeyChar = vbCr Then
             If Control.ModifierKeys And Keys.Shift Then
@@ -570,6 +615,7 @@ Public Class MForm
         ElseIf e.KeyChar = "-"c Then
             If Fg.Rows(Fg.Row).IsNode Then Fg.Rows(Fg.Row).Node.Expanded = False
         End If
+        bLoading = False
     End Sub
 
     Private Sub a_o_aplikaci_Execute(sender As Object, e As EventArgs) Handles a_o_aplikaci.Execute
@@ -683,13 +729,128 @@ Public Class MForm
         Return bRet
     End Function
 
+    Public oEx As Excel.Application
+
     Private Sub a_excel_Execute(sender As Object, e As EventArgs) Handles a_excel.Execute
-        Dim sFilename As String = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-        sFilename = IO.Path.Combine(IO.Path.Combine(sFilename, tbcMain.SelectedTab.Text & Now.ToString("_yyyyMMdd_Hmm") & ".xlsx"))
-        'FgA.SaveExcel(sFilename, C1.Win.C1FlexGrid.FileFlags.IncludeFixedCells Or C1.Win.C1FlexGrid.FileFlags.AsDisplayed Or C1.Win.C1FlexGrid.FileFlags.VisibleOnly Or C1.Win.C1FlexGrid.FileFlags.IncludeMergedRanges Or C1.Win.C1FlexGrid.FileFlags.SaveMergedRanges)
-        FgA.BaseGrid.SaveExcel(sFilename, C1.Win.C1FlexGrid.FileFlags.AsDisplayed Or FileFlags.VisibleOnly Or FileFlags.IncludeFixedCells Or FileFlags.IncludeMergedRanges Or FileFlags.LoadMergedRanges)
-        Dim oPr As New Process
-        oPr.StartInfo.FileName = sFilename
-        oPr.Start()
+        Dim oEx As Excel.Application = Nothing
+        Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Vytváří se sešit MS Excel (může trvat i několik minut).. ")
+            Dim sFilename As String = sExcelExpDir
+            If Not IO.Directory.Exists(sExcelExpDir) Then
+                Try
+                    IO.Directory.CreateDirectory(sExcelExpDir)
+                Catch : End Try
+            End If
+            sFilename = IO.Path.Combine(IO.Path.Combine(sFilename, tbcMain.SelectedTab.Text & Now.ToString("_yyyyMMdd_Hmm") & ".xlsx"))
+            'FgA.SaveExcel(sFilename, C1.Win.C1FlexGrid.FileFlags.IncludeFixedCells Or C1.Win.C1FlexGrid.FileFlags.AsDisplayed Or C1.Win.C1FlexGrid.FileFlags.VisibleOnly Or C1.Win.C1FlexGrid.FileFlags.IncludeMergedRanges Or C1.Win.C1FlexGrid.FileFlags.SaveMergedRanges)
+            FgA.BaseGrid.SaveExcel(sFilename, C1.Win.C1FlexGrid.FileFlags.AsDisplayed Or FileFlags.VisibleOnly Or FileFlags.IncludeFixedCells Or FileFlags.IncludeMergedRanges Or FileFlags.LoadMergedRanges)
+
+            oEx = New Excel.Application
+            oEx.ScreenUpdating = False
+            Dim oWbk As Excel.Workbook = oEx.Workbooks.Open(sFilename)
+            oEx.WindowState = Excel.XlWindowState.xlNormal
+            Dim oWsh As Excel.Worksheet = oWbk.Sheets(1)
+
+            'Dim iMaxCol As Integer = 0
+            'For i As Integer = 0 To FgA.ColN
+            '    If FgA.Cols(i).Visible Then iMaxCol += 1
+            'Next
+            clck.SetProgressText("Nastavuje se viditelnost jednotlivých řádků")
+            Dim iRow As Integer = 0
+            Dim iExr As Integer = FgA.Rows.Fixed
+            Dim oRg As Excel.Range = oWsh.Rows(String.Format("{0}:{1}", FgA.Rows.Fixed + 1, FgA.Rows.Count))
+            If bSimpleExcel Then oRg.Hidden = True
+            For iRow = FgA.Row1 To FgA.RowN
+                If FgA.Rows(iRow).IsNode AndAlso FgA.Rows(iRow).Node.Level = 0 Then iExr += 1
+                If FgA.Rows(iRow).IsNode AndAlso FgA.Rows(iRow).Node.Level = 0 AndAlso FgA.Rows(iRow).Node.Expanded Then
+                    oRg = oWsh.Rows(iExr)
+                    oRg.Hidden = False
+                    For Each oNd As Node In FgA.Rows(iRow).Node.Nodes
+                        iExr += 1
+                        oRg = oWsh.Rows(iExr)
+                        oRg.Hidden = False
+                        If oNd.Expanded Then
+                            For Each oNd2 As Node In oNd.Nodes
+                                iExr += 1
+                                oRg = oWsh.Rows(iExr)
+                                oRg.Hidden = False
+                            Next
+                        End If
+                    Next
+                End If
+            Next
+            oRg = oWsh.Range(oWsh.Cells(1, 1), oWsh.Cells(2, FgA.Cols.Count + 1))
+            With oRg
+                .Borders(Excel.XlBordersIndex.xlDiagonalDown).LineStyle = Excel.XlLineStyle.xlLineStyleNone
+                .Borders(Excel.XlBordersIndex.xlDiagonalUp).LineStyle = Excel.XlLineStyle.xlLineStyleNone
+                .Font.Size = 7
+                .Font.Italic = True
+                With .Borders(Excel.XlBordersIndex.xlEdgeLeft)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlHairline
+                End With
+                With .Borders(Excel.XlBordersIndex.xlEdgeTop)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlHairline
+                End With
+                With .Borders(Excel.XlBordersIndex.xlEdgeRight)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlHairline
+                End With
+                With .Borders(Excel.XlBordersIndex.xlInsideVertical)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlHairline
+                End With
+                With .Borders(Excel.XlBordersIndex.xlInsideHorizontal)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlHairline
+                End With
+            End With
+            oRg = oWsh.Range(oWsh.Cells(FgA.Rows.Fixed + 1, 1), oWsh.Cells(iExr, FgA.Cols.Count + 1))
+            With oRg
+                .Borders(Excel.XlBordersIndex.xlDiagonalDown).LineStyle = Excel.XlLineStyle.xlLineStyleNone
+                .Borders(Excel.XlBordersIndex.xlDiagonalUp).LineStyle = Excel.XlLineStyle.xlLineStyleNone
+                With .Borders(Excel.XlBordersIndex.xlEdgeLeft)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlThin
+                End With
+                With .Borders(Excel.XlBordersIndex.xlEdgeTop)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlThin
+                End With
+                With .Borders(Excel.XlBordersIndex.xlEdgeBottom)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlThin
+                End With
+                With .Borders(Excel.XlBordersIndex.xlEdgeRight)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlThin
+                End With
+                With .Borders(Excel.XlBordersIndex.xlInsideVertical)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlThin
+                End With
+                With .Borders(Excel.XlBordersIndex.xlInsideHorizontal)
+                    .LineStyle = Excel.XlLineStyle.xlContinuous
+                    .Weight = Excel.XlBorderWeight.xlThin
+                End With
+            End With
+            oRg = oWsh.Range(oWsh.Cells(FgA.Rows.Fixed + 1, 1), oWsh.Cells(iExr, 2))
+            oRg.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft
+            oRg.VerticalAlignment = Excel.XlVAlign.xlVAlignTop
+        End Using
+        If oEx IsNot Nothing Then
+            oEx.ScreenUpdating = True
+            oEx.Visible = True
+        End If
+
+    End Sub
+
+    Private Sub FgO_AfterCollapse(sender As Object, e As RowColEventArgs) Handles FgO.AfterCollapse, FgN.AfterCollapse, FgFP.AfterCollapse, FgFV.AfterCollapse
+        If Not bLoading Then
+            Dim Fg As XC1Flexgrid = DirectCast(sender, XC1Flexgrid)
+            If Fg.Rows(e.Row).IsNode AndAlso Fg.Rows(e.Row).Node.Expanded Then
+                Fg.AutoSizeCol(iColFgText)
+            End If
+        End If
     End Sub
 End Class

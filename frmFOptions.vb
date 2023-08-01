@@ -6,7 +6,8 @@ Imports System.Data.OleDb
 
 Public Class FOptions
 
-    Dim oMainForm As MForm
+    Dim oMainForm As MForm2
+    Dim bLoading As Boolean = True
     Dim bLoaded As Boolean = False
 
     ' deklarace promennych cisel sloupcu gridu 
@@ -17,13 +18,44 @@ Public Class FOptions
     Dim iColFgFImportovano As Integer ' [g:3]
     Dim iColFgFId As Integer ' [g:4]
 
-    Public Shared Function Run(oOwner As MForm) As DialogResult
-        Dim oFrm As New FOptions
-        With oFrm
-            .Owner = oOwner
-            .oMainForm = oOwner
-            Return .ShowDialog()
-        End With
+    Dim dfFgO As ColorPair
+    Dim dfFgN As ColorPair
+    Dim dfFgFV As ColorPair
+    Dim dfFgFP As ColorPair
+
+    Public Sub New(oOwner As MForm2, Optional RestoreMain As Boolean = True)
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        dfFgO = clrFgO.ColorSetting
+        dfFgN = clrFgN.ColorSetting
+        dfFgFV = clrFgFV.ColorSetting
+        dfFgFP = clrFgFP.ColorSetting
+        If RestoreMain Then
+            clrFgN.ColorSetting = oOwner.clrFgN
+            clrFgO.ColorSetting = oOwner.clrFgO
+            clrFgFV.ColorSetting = oOwner.clrFgFV
+            clrFgFP.ColorSetting = oOwner.clrFgFP
+            gbColors.Checked = oOwner.bSetTabColors
+            chkSimpleExcel.Checked = oOwner.bSimpleExcel
+            txtMSExcelDir.Text = oOwner.sExcelExpDir
+        End If
+        If oOwner IsNot Nothing Then
+            oMainForm = oOwner
+            Me.Owner = oOwner
+            Init()
+            RestoreFrm()
+        End If
+    End Sub
+
+    Public Shared Function Run(oOwner As MForm2, Optional ByRef oRetForm As FOptions = Nothing) As DialogResult
+        Dim oFrm As New FOptions(oOwner)
+        Dim oRes As DialogResult = DialogResult.None
+        oRes = oFrm.ShowDialog
+        oRetForm = oFrm
+        Return oRes
     End Function
 
     Private Sub btnProcessImport_Click(sender As Object, e As EventArgs) Handles btnProcessImport.Click
@@ -38,20 +70,14 @@ Public Class FOptions
                 LoadFgData(txtCurrentFile.Text)
             End Using
         Catch ex As Exception
-            MForm.ShowError(Me, ex)
+            MForm2.ShowError(Me, ex)
         End Try
     End Sub
 
     Private Sub FOptions_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        WindowRestore(Me)
-        XSplitterRestore(XSplitter1)
-        TextBoxRestore(txtMdbFile)
-        TextBoxRestore(txtMdbPassword)
-        txtCurrentFile.Text = AData.CurrentFile
-        If String.IsNullOrEmpty(txtMdbPassword.Text) Then txtMdbPassword.Text = AData.txDefaultPassword
-        Init()
         LoadFgData(txtCurrentFile.Text)
         bLoaded = True
+        bLoading = False
     End Sub
 
     Private Sub Init()
@@ -97,14 +123,21 @@ Public Class FOptions
     End Sub
 
     Public Sub SaveFrm()
-        WindowSet(oMainForm)
-        StringSave(MForm.nmCurrentFile, AData.CurrentFile)
         WindowSave(Me)
-        XSplitterSave(XSplitter1)
         TextBoxSave(txtMdbFile)
         TextBoxSave(txtMdbPassword)
+        TabControlSave(tbcMain)
     End Sub
 
+    Public Sub RestoreFrm()
+        WindowRestore(Me)
+        TextBoxRestore(txtMdbFile)
+        TextBoxRestore(txtMdbPassword)
+        TabControlRestore(tbcMain)
+        If String.IsNullOrEmpty(txtCurrentFile.Text) Then txtCurrentFile.Text = AData.CurrentFile
+        If String.IsNullOrEmpty(txtMdbPassword.Text) Then txtMdbPassword.Text = AData.txDefaultPassword
+        'If String.IsNullOrEmpty(txtMSExcelDir.Text) Then txtMSExcelDir.Text = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), IO.Path.GetFileNameWithoutExtension(Application.ExecutablePath))
+    End Sub
 
     Private Sub brnDefaultMdbPassword_Click(sender As Object, e As EventArgs) Handles brnDefaultMdbPassword.Click
         txtMdbPassword.Text = AData.txDefaultPassword
@@ -163,7 +196,7 @@ Public Class FOptions
                     LoadFgData(sName)
                     MessageBox.Show(Me, "Nyní byl vytvořen nový, prázdný soubor archivu " & .FileName & " a nastaven jako aktuální.", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
                     oMainForm.RefreshStb()
-                    btnClose.DialogResult = DialogResult.OK
+                    btnOK.Visible = True
                 Else
                     Dim tx2 As String = ""
                     Select Case MessageBox.Show(Me, "Soubor " & .FileName & " již existuje." & vbCrLf & vbCrLf & "Chceš jeho obsah nyní vymazat?", txtAppName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2)
@@ -179,7 +212,7 @@ Public Class FOptions
                     LoadFgData(sName)
                     MessageBox.Show(Me, "Nyní byl soubor archivu " & .FileName & tx2 & " nastaven jako aktuální.", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
                     oMainForm.RefreshStb()
-                    btnClose.DialogResult = DialogResult.OK
+                    btnOK.Visible = True
                 End If
             End If
         End With
@@ -207,7 +240,7 @@ Public Class FOptions
         LoadFgData(txtCurrentFile.Text)
         AData.CurrentFile = txtCurrentFile.Text
         WindowSet(oMainForm)
-        StringSave(MForm.nmCurrentFile, AData.CurrentFile)
+        StringSave(MForm2.nmCurrentFile, AData.CurrentFile)
         txtCurrentFile.Text = AData.CurrentFile
         oMainForm.RefreshStb()
     End Sub
@@ -221,4 +254,22 @@ Public Class FOptions
             MessageBox.Show(Me, ex.Message, txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End Try
     End Sub
+
+    Private Sub txtCurrentFile_TextChanged(sender As Object, e As EventArgs) Handles txtCurrentFile.TextChanged, txtMdbFile.TextChanged, txtMdbPassword.TextChanged,
+                                                                                     clrFgO.ColorChange, clrFgN.ColorChange, clrFgFP.ColorChange, clrFgFV.ColorChange,
+                                                                                     chkSimpleExcel.CheckedChanged, gbColors.CheckedChanged, chkSimpleExcel.CheckedChanged, txtMSExcelDir.TextChanged
+        If Not bLoading Then btnOK.Visible = True
+    End Sub
+
+    Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
+        SaveFrm()
+    End Sub
+
+    Private Sub btnDefaultFgColors_Click(sender As Object, e As EventArgs) Handles btnDefaultFgColors.Click
+        clrFgO.ColorSetting = dfFgO
+        clrFgN.ColorSetting = dfFgN
+        clrFgFV.ColorSetting = dfFgFV
+        clrFgFP.ColorSetting = dfFgFP
+    End Sub
+
 End Class

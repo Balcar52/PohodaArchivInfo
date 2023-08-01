@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MForm
+Partial Class MForm2
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,7 +23,7 @@ Partial Class MForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MForm))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MForm2))
         Me.poConn = New System.Data.OleDb.OleDbConnection()
         Me.tbcMain = New XControls.XTabControl()
         Me.pgNab = New System.Windows.Forms.TabPage()
@@ -82,12 +82,12 @@ Partial Class MForm
         Me.a_najit_vpravo = New ActionListLib.Action(Me.components)
         Me.a_najit_vlevo = New ActionListLib.Action(Me.components)
         Me.a_rozbalit_vse = New ActionListLib.Action(Me.components)
-        Me.a_znovunacist_data = New ActionListLib.Action(Me.components)
-        Me.a_excel = New ActionListLib.Action(Me.components)
-        Me.a_close = New ActionListLib.Action(Me.components)
         Me.a_sbalit_vse = New ActionListLib.Action(Me.components)
         Me.a_sbalitrozbalit_polozku_na_radku = New ActionListLib.Action(Me.components)
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_ = New ActionListLib.Action(Me.components)
+        Me.a_znovunacist_data = New ActionListLib.Action(Me.components)
+        Me.a_excel = New ActionListLib.Action(Me.components)
+        Me.a_close = New ActionListLib.Action(Me.components)
         Me.a_cols = New ActionListLib.Action(Me.components)
         Me.a_colwidths = New ActionListLib.Action(Me.components)
         Me.m_excel = New ActionListLib.Menu(Me.components)
@@ -248,6 +248,7 @@ Partial Class MForm
         Me.pgFaktVyd.Controls.Add(Me.pnVydFakt)
         Me.pgFaktVyd.Location = New System.Drawing.Point(4, 22)
         Me.pgFaktVyd.Name = "pgFaktVyd"
+        Me.pgFaktVyd.Padding = New System.Windows.Forms.Padding(3)
         Me.pgFaktVyd.Size = New System.Drawing.Size(982, 472)
         Me.pgFaktVyd.TabIndex = 2
         Me.pgFaktVyd.Text = "Archiv vydaných faktur"
@@ -259,9 +260,9 @@ Partial Class MForm
         Me.pnVydFakt.Controls.Add(Me.FgFV)
         Me.pnVydFakt.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pnVydFakt.Font = New System.Drawing.Font("Tahoma", 8.25!)
-        Me.pnVydFakt.Location = New System.Drawing.Point(0, 0)
+        Me.pnVydFakt.Location = New System.Drawing.Point(3, 3)
         Me.pnVydFakt.Name = "pnVydFakt"
-        Me.pnVydFakt.Size = New System.Drawing.Size(982, 472)
+        Me.pnVydFakt.Size = New System.Drawing.Size(976, 466)
         Me.pnVydFakt.TabIndex = 9
         '
         'FgFV
@@ -282,7 +283,7 @@ Partial Class MForm
         Me.ActionList0.SetPopupMenu(Me.FgFV, Me.m_popup1)
         Me.FgFV.Rows.DefaultSize = 20
         Me.FgFV.ShowCursor = True
-        Me.FgFV.Size = New System.Drawing.Size(982, 472)
+        Me.FgFV.Size = New System.Drawing.Size(976, 466)
         Me.FgFV.StyleInfo = resources.GetString("FgFV.StyleInfo")
         Me.FgFV.TabIndex = 7
         Me.FgFV.Tree.Column = 1
@@ -295,6 +296,7 @@ Partial Class MForm
         Me.pgFaktPrij.Controls.Add(Me.pnFgP)
         Me.pgFaktPrij.Location = New System.Drawing.Point(4, 22)
         Me.pgFaktPrij.Name = "pgFaktPrij"
+        Me.pgFaktPrij.Padding = New System.Windows.Forms.Padding(3)
         Me.pgFaktPrij.Size = New System.Drawing.Size(982, 472)
         Me.pgFaktPrij.TabIndex = 3
         Me.pgFaktPrij.Text = "Archiv přijatých faktur"
@@ -306,9 +308,9 @@ Partial Class MForm
         Me.pnFgP.Controls.Add(Me.FgFP)
         Me.pnFgP.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pnFgP.Font = New System.Drawing.Font("Tahoma", 8.25!)
-        Me.pnFgP.Location = New System.Drawing.Point(0, 0)
+        Me.pnFgP.Location = New System.Drawing.Point(3, 3)
         Me.pnFgP.Name = "pnFgP"
-        Me.pnFgP.Size = New System.Drawing.Size(982, 472)
+        Me.pnFgP.Size = New System.Drawing.Size(976, 466)
         Me.pnFgP.TabIndex = 10
         '
         'FgFP
@@ -329,7 +331,7 @@ Partial Class MForm
         Me.ActionList0.SetPopupMenu(Me.FgFP, Me.m_popup1)
         Me.FgFP.Rows.DefaultSize = 20
         Me.FgFP.ShowCursor = True
-        Me.FgFP.Size = New System.Drawing.Size(982, 472)
+        Me.FgFP.Size = New System.Drawing.Size(976, 466)
         Me.FgFP.StyleInfo = resources.GetString("FgFP.StyleInfo")
         Me.FgFP.TabIndex = 7
         Me.FgFP.Tree.Column = 1
@@ -362,7 +364,7 @@ Partial Class MForm
         '
         Me.ToolStrip2.AutoSize = False
         Me.ToolStrip2.Dock = System.Windows.Forms.DockStyle.Left
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripButton5, Me.ToolStripButton6, Me.ToolStripButton7, Me.ToolStripButton10, Me.ToolStripButton9, Me.ToolStripButton8, Me.ToolStripButton11})
+        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripButton6, Me.ToolStripButton5, Me.ToolStripButton7, Me.ToolStripButton10, Me.ToolStripButton9, Me.ToolStripButton8, Me.ToolStripButton11})
         Me.ToolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip2.Location = New System.Drawing.Point(191, 0)
         Me.ToolStrip2.Name = "ToolStrip2"
@@ -744,31 +746,6 @@ Partial Class MForm
         Me.a_rozbalit_vse.Text = "Rozbalit vše (Ctrl +)"
         Me.a_rozbalit_vse.TipText = "Rozbalit všechny položky"
         '
-        'a_znovunacist_data
-        '
-        Me.a_znovunacist_data.AltText = "Obnovit"
-        Me.a_znovunacist_data.Image = CType(resources.GetObject("a_znovunacist_data.Image"), System.Drawing.Image)
-        Me.a_znovunacist_data.Name = "a_znovunacist_data"
-        Me.a_znovunacist_data.Parent = Me.ActionList0
-        Me.a_znovunacist_data.Text = "Znovunačíst data"
-        '
-        'a_excel
-        '
-        Me.a_excel.Enabled = False
-        Me.a_excel.Image = CType(resources.GetObject("a_excel.Image"), System.Drawing.Image)
-        Me.a_excel.Name = "a_excel"
-        Me.a_excel.Parent = Me.ActionList0
-        Me.a_excel.Text = "&Excel"
-        Me.a_excel.TipText = "Export do MS Excel"
-        '
-        'a_close
-        '
-        Me.a_close.Image = CType(resources.GetObject("a_close.Image"), System.Drawing.Image)
-        Me.a_close.Name = "a_close"
-        Me.a_close.Parent = Me.ActionList0
-        Me.a_close.Shortcut = System.Windows.Forms.Shortcut.AltF4
-        Me.a_close.Text = "&Zavřít"
-        '
         'a_sbalit_vse
         '
         Me.a_sbalit_vse.AltText = "Sbalit"
@@ -795,6 +772,31 @@ Partial Class MForm
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Parent = Me.ActionList0
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Text = "Sbalit/rozbalit všechny položky firmy (Shift+Enter)"
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.TipText = "Sbalit/rozbalit všechny položky firmy na aktuálním řádku"
+        '
+        'a_znovunacist_data
+        '
+        Me.a_znovunacist_data.AltText = "Obnovit"
+        Me.a_znovunacist_data.Image = CType(resources.GetObject("a_znovunacist_data.Image"), System.Drawing.Image)
+        Me.a_znovunacist_data.Name = "a_znovunacist_data"
+        Me.a_znovunacist_data.Parent = Me.ActionList0
+        Me.a_znovunacist_data.Text = "Znovunačíst data"
+        '
+        'a_excel
+        '
+        Me.a_excel.Enabled = False
+        Me.a_excel.Image = CType(resources.GetObject("a_excel.Image"), System.Drawing.Image)
+        Me.a_excel.Name = "a_excel"
+        Me.a_excel.Parent = Me.ActionList0
+        Me.a_excel.Text = "&Excel"
+        Me.a_excel.TipText = "Export do MS Excel"
+        '
+        'a_close
+        '
+        Me.a_close.Image = CType(resources.GetObject("a_close.Image"), System.Drawing.Image)
+        Me.a_close.Name = "a_close"
+        Me.a_close.Parent = Me.ActionList0
+        Me.a_close.Shortcut = System.Windows.Forms.Shortcut.AltF4
+        Me.a_close.Text = "&Zavřít"
         '
         'a_cols
         '
@@ -948,7 +950,7 @@ Partial Class MForm
         Me.a_nastaveni.Parent = Me.ActionList0
         Me.a_nastaveni.Text = "Nastavení"
         '
-        'MForm
+        'MForm2
         '
         Me.ActionListConn.SetActionListConn(Me, Me.ActionList0)
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -959,7 +961,7 @@ Partial Class MForm
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(800, 600)
-        Me.Name = "MForm"
+        Me.Name = "MForm2"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Prohlížeč vybraných dat archivu účetnictví Pohoda"
         Me.tbcMain.ResumeLayout(False)
