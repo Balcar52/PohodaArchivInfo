@@ -43,8 +43,8 @@ Partial Class MForm2
         Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton7 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton10 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton9 = New System.Windows.Forms.ToolStripButton()
@@ -58,8 +58,7 @@ Partial Class MForm2
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lblArchiveFile = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.lblArchiveFileTime = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.lblArchiveFileSize = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.lblArchiveFileTimeSize = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ActionList0 = New ActionListLib.ActionList(Me.components)
         Me.m_popup1 = New ActionListLib.Menu(Me.components)
         Me.m_znovunacist_data = New ActionListLib.Menu(Me.components)
@@ -106,6 +105,9 @@ Partial Class MForm2
         Me.m_window = New ActionListLib.Menu(Me.components)
         Me.m_help = New ActionListLib.Menu(Me.components)
         Me.a_nastaveni = New ActionListLib.Action(Me.components)
+        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.lblVer = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel3 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tbcMain.SuspendLayout()
         Me.pgNab.SuspendLayout()
         Me.pnNab.SuspendLayout()
@@ -394,17 +396,6 @@ Partial Class MForm2
         Me.ToolStripButton4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.ToolStripButton4.ToolTipText = "Vyhledat další výskyt zadaného textového řetězce"
         '
-        'ToolStripButton5
-        '
-        Me.ActionList0.SetAction(Me.ToolStripButton5, Me.a_najit_vpravo)
-        Me.ToolStripButton5.Image = CType(resources.GetObject("ToolStripButton5.Image"), System.Drawing.Image)
-        Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton5.Name = "ToolStripButton5"
-        Me.ToolStripButton5.Size = New System.Drawing.Size(48, 38)
-        Me.ToolStripButton5.Text = "Vpravo"
-        Me.ToolStripButton5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ToolStripButton5.ToolTipText = "Najít firmu na záložce vlevo"
-        '
         'ToolStripButton6
         '
         Me.ActionList0.SetAction(Me.ToolStripButton6, Me.a_najit_vlevo)
@@ -415,6 +406,17 @@ Partial Class MForm2
         Me.ToolStripButton6.Text = "Vlevo"
         Me.ToolStripButton6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.ToolStripButton6.ToolTipText = "Najít firmu na záložce vpravo"
+        '
+        'ToolStripButton5
+        '
+        Me.ActionList0.SetAction(Me.ToolStripButton5, Me.a_najit_vpravo)
+        Me.ToolStripButton5.Image = CType(resources.GetObject("ToolStripButton5.Image"), System.Drawing.Image)
+        Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton5.Name = "ToolStripButton5"
+        Me.ToolStripButton5.Size = New System.Drawing.Size(48, 38)
+        Me.ToolStripButton5.Text = "Vpravo"
+        Me.ToolStripButton5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ToolStripButton5.ToolTipText = "Najít firmu na záložce vlevo"
         '
         'ToolStripButton7
         '
@@ -533,7 +535,7 @@ Partial Class MForm2
         'StatusStrip1
         '
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 8.5!)
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.lblArchiveFile, Me.lblArchiveFileTime, Me.lblArchiveFileSize})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.lblArchiveFile, Me.lblArchiveFileTimeSize, Me.ToolStripStatusLabel3, Me.ToolStripStatusLabel2, Me.lblVer})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 539)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(990, 22)
@@ -542,8 +544,9 @@ Partial Class MForm2
         '
         'ToolStripStatusLabel1
         '
+        Me.ToolStripStatusLabel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(134, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(121, 17)
         Me.ToolStripStatusLabel1.Text = "aktuální soubor archivu:"
         '
         'lblArchiveFile
@@ -553,19 +556,12 @@ Partial Class MForm2
         Me.lblArchiveFile.Size = New System.Drawing.Size(19, 17)
         Me.lblArchiveFile.Text = "    "
         '
-        'lblArchiveFileTime
+        'lblArchiveFileTimeSize
         '
-        Me.lblArchiveFileTime.Font = New System.Drawing.Font("Segoe UI", 8.5!)
-        Me.lblArchiveFileTime.Name = "lblArchiveFileTime"
-        Me.lblArchiveFileTime.Size = New System.Drawing.Size(19, 17)
-        Me.lblArchiveFileTime.Text = "    "
-        '
-        'lblArchiveFileSize
-        '
-        Me.lblArchiveFileSize.Font = New System.Drawing.Font("Segoe UI", 8.5!)
-        Me.lblArchiveFileSize.Name = "lblArchiveFileSize"
-        Me.lblArchiveFileSize.Size = New System.Drawing.Size(19, 17)
-        Me.lblArchiveFileSize.Text = "    "
+        Me.lblArchiveFileTimeSize.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.lblArchiveFileTimeSize.Name = "lblArchiveFileTimeSize"
+        Me.lblArchiveFileTimeSize.Size = New System.Drawing.Size(19, 17)
+        Me.lblArchiveFileTimeSize.Text = "    "
         '
         'ActionList0
         '
@@ -950,6 +946,26 @@ Partial Class MForm2
         Me.a_nastaveni.Parent = Me.ActionList0
         Me.a_nastaveni.Text = "Nastavení"
         '
+        'ToolStripStatusLabel2
+        '
+        Me.ToolStripStatusLabel2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
+        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(75, 17)
+        Me.ToolStripStatusLabel2.Text = "verze aplikace:"
+        Me.ToolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lblVer
+        '
+        Me.lblVer.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.lblVer.Name = "lblVer"
+        Me.lblVer.Size = New System.Drawing.Size(0, 17)
+        '
+        'ToolStripStatusLabel3
+        '
+        Me.ToolStripStatusLabel3.Name = "ToolStripStatusLabel3"
+        Me.ToolStripStatusLabel3.Size = New System.Drawing.Size(710, 17)
+        Me.ToolStripStatusLabel3.Spring = True
+        '
         'MForm2
         '
         Me.ActionListConn.SetActionListConn(Me, Me.ActionList0)
@@ -1051,8 +1067,7 @@ Partial Class MForm2
     Friend WithEvents pgFaktPrij As TabPage
     Friend WithEvents pnFgP As Panel
     Friend WithEvents FgFP As XC1Flexgrid
-    Friend WithEvents lblArchiveFileTime As ToolStripStatusLabel
-    Friend WithEvents lblArchiveFileSize As ToolStripStatusLabel
+    Friend WithEvents lblArchiveFileTimeSize As ToolStripStatusLabel
     Friend WithEvents tp1 As ToolStrip
     Friend WithEvents tpClose As ToolStripButton
     Friend WithEvents Panel2 As Panel
@@ -1074,4 +1089,7 @@ Partial Class MForm2
     Friend WithEvents ToolStripButton9 As ToolStripButton
     Friend WithEvents ToolStripButton8 As ToolStripButton
     Friend WithEvents ToolStripButton11 As ToolStripButton
+    Friend WithEvents ToolStripStatusLabel3 As ToolStripStatusLabel
+    Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
+    Friend WithEvents lblVer As ToolStripStatusLabel
 End Class

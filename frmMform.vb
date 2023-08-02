@@ -6,6 +6,7 @@ Imports XControls
 Imports XForms
 Imports C1.Win.C1FlexGrid
 Imports Microsoft.Office.Interop
+Imports System.Reflection
 
 Public Class MForm2
 
@@ -326,8 +327,6 @@ Public Class MForm2
         tbcMain_SelectedIndexChanged(Nothing, Nothing)
     End Sub
 
-
-
     Private Sub MForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         iMForm = Me
         sConnStdCtr = poConn.ConnectionString
@@ -355,17 +354,16 @@ Public Class MForm2
         InitGrid(FgFV, "vydané faktury", clrFgFV, bSetTabColors, True)
         InitGrid(FgFP, "přijaté faktury", clrFgFP, bSetTabColors, True)
         FGridSearchText.RegisterForAllGrids(Me, a_searchtext, a_searchtextnext)
+        lblVer.Text = GetAssemblyVersion(Assembly.GetExecutingAssembly, "") & IO.File.GetLastWriteTime(Application.ExecutablePath).ToString(" (d.M.yyyy H:mm)")
     End Sub
 
     Public Sub RefreshStb()
         If IO.File.Exists(AData.CurrentFile) Then
             lblArchiveFile.Text = AData.CurrentFile
-            lblArchiveFileSize.Text = (New IO.FileInfo(AData.CurrentFile).Length).ToString("## ### ##0 B")
-            lblArchiveFileTime.Text = IO.File.GetLastWriteTime(AData.CurrentFile).ToString
+            lblArchiveFileTimeSize.Text = IO.File.GetLastWriteTime(AData.CurrentFile).ToString(" (d.M.yyyy H:mm, ") & New IO.FileInfo(AData.CurrentFile).Length.ToString("## ### ##0 B)")
         Else
             lblArchiveFile.Text = ""
-            lblArchiveFileSize.Text = ""
-            lblArchiveFileTime.Text = ""
+            lblArchiveFileTimeSize.Text = ""
         End If
     End Sub
 
