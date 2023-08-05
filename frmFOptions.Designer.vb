@@ -61,9 +61,6 @@ Partial Class FOptions
         Me.opnSaveNewArchiv = New System.Windows.Forms.SaveFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.tbcMain = New XControls.XTabControl()
-        Me.pgData = New System.Windows.Forms.TabPage()
-        Me.pnData = New System.Windows.Forms.Panel()
-        Me.Panel13 = New System.Windows.Forms.Panel()
         Me.pgVolby = New System.Windows.Forms.TabPage()
         Me.pnVolby = New System.Windows.Forms.Panel()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -81,6 +78,10 @@ Partial Class FOptions
         Me.clrFgFV = New XControls.ColorSettingBox()
         Me.clrFgO = New XControls.ColorSettingBox()
         Me.clrFgN = New XControls.ColorSettingBox()
+        Me.pgData = New System.Windows.Forms.TabPage()
+        Me.pnData = New System.Windows.Forms.Panel()
+        Me.Panel13 = New System.Windows.Forms.Panel()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.gbImport.SuspendLayout()
         Me.Panel9.SuspendLayout()
         Me.Panel4.SuspendLayout()
@@ -90,15 +91,15 @@ Partial Class FOptions
         Me.Panel2.SuspendLayout()
         Me.ButtonPanel1.SuspendLayout()
         Me.tbcMain.SuspendLayout()
-        Me.pgData.SuspendLayout()
-        Me.pnData.SuspendLayout()
-        Me.Panel13.SuspendLayout()
         Me.pgVolby.SuspendLayout()
         Me.pnVolby.SuspendLayout()
         Me.gbExcel.SuspendLayout()
         Me.FlexPanel1.SuspendLayout()
         Me.gbColors.SuspendLayout()
         Me.ButtonPanel2.SuspendLayout()
+        Me.pgData.SuspendLayout()
+        Me.pnData.SuspendLayout()
+        Me.Panel13.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbImport
@@ -277,7 +278,6 @@ Partial Class FOptions
         '
         Me.FgF.AllowEditing = False
         Me.FgF.ColumnInfo = "10,1,0,0,0,100,Columns:"
-        Me.FgF.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FgF.FillStandardContextMenu = False
         Me.FgF.Font = New System.Drawing.Font("Tahoma", 8.25!)
         Me.FgF.Location = New System.Drawing.Point(0, 0)
@@ -478,41 +478,6 @@ Partial Class FOptions
         Me.tbcMain.SelectedIndex = 0
         Me.tbcMain.Size = New System.Drawing.Size(814, 367)
         Me.tbcMain.TabIndex = 0
-        '
-        'pgData
-        '
-        Me.pgData.Controls.Add(Me.pnData)
-        Me.pgData.Location = New System.Drawing.Point(4, 22)
-        Me.pgData.Name = "pgData"
-        Me.pgData.Padding = New System.Windows.Forms.Padding(3)
-        Me.pgData.Size = New System.Drawing.Size(806, 341)
-        Me.pgData.TabIndex = 1
-        Me.pgData.Text = "Správa dat"
-        Me.pgData.UseVisualStyleBackColor = True
-        '
-        'pnData
-        '
-        Me.pnData.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.pnData.Controls.Add(Me.GroupBox1)
-        Me.pnData.Controls.Add(Me.gbImport)
-        Me.pnData.Controls.Add(Me.Panel13)
-        Me.pnData.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pnData.Font = New System.Drawing.Font("Tahoma", 8.25!)
-        Me.pnData.Location = New System.Drawing.Point(3, 3)
-        Me.pnData.Name = "pnData"
-        Me.pnData.Size = New System.Drawing.Size(800, 335)
-        Me.pnData.TabIndex = 8
-        '
-        'Panel13
-        '
-        Me.Panel13.BackColor = System.Drawing.SystemColors.Control
-        Me.Panel13.Controls.Add(Me.chkAllowImport)
-        Me.Panel13.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel13.Location = New System.Drawing.Point(0, 305)
-        Me.Panel13.Name = "Panel13"
-        Me.Panel13.Padding = New System.Windows.Forms.Padding(10, 3, 0, 3)
-        Me.Panel13.Size = New System.Drawing.Size(800, 30)
-        Me.Panel13.TabIndex = 2
         '
         'pgVolby
         '
@@ -722,6 +687,47 @@ Partial Class FOptions
         Me.clrFgN.Size = New System.Drawing.Size(444, 25)
         Me.clrFgN.TabIndex = 1
         '
+        'pgData
+        '
+        Me.pgData.Controls.Add(Me.pnData)
+        Me.pgData.Location = New System.Drawing.Point(4, 22)
+        Me.pgData.Name = "pgData"
+        Me.pgData.Padding = New System.Windows.Forms.Padding(3)
+        Me.pgData.Size = New System.Drawing.Size(806, 341)
+        Me.pgData.TabIndex = 1
+        Me.pgData.Text = "Správa dat"
+        Me.pgData.UseVisualStyleBackColor = True
+        '
+        'pnData
+        '
+        Me.pnData.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.pnData.Controls.Add(Me.GroupBox1)
+        Me.pnData.Controls.Add(Me.gbImport)
+        Me.pnData.Controls.Add(Me.Panel13)
+        Me.pnData.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnData.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.pnData.Location = New System.Drawing.Point(3, 3)
+        Me.pnData.Name = "pnData"
+        Me.pnData.Size = New System.Drawing.Size(800, 335)
+        Me.pnData.TabIndex = 8
+        '
+        'Panel13
+        '
+        Me.Panel13.BackColor = System.Drawing.SystemColors.Control
+        Me.Panel13.Controls.Add(Me.chkAllowImport)
+        Me.Panel13.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel13.Location = New System.Drawing.Point(0, 305)
+        Me.Panel13.Name = "Panel13"
+        Me.Panel13.Padding = New System.Windows.Forms.Padding(10, 3, 0, 3)
+        Me.Panel13.Size = New System.Drawing.Size(800, 30)
+        Me.Panel13.TabIndex = 2
+        '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "202-delete.gif")
+        '
         'FOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -750,9 +756,6 @@ Partial Class FOptions
         Me.Panel2.PerformLayout()
         Me.ButtonPanel1.ResumeLayout(False)
         Me.tbcMain.ResumeLayout(False)
-        Me.pgData.ResumeLayout(False)
-        Me.pnData.ResumeLayout(False)
-        Me.Panel13.ResumeLayout(False)
         Me.pgVolby.ResumeLayout(False)
         Me.pnVolby.ResumeLayout(False)
         Me.gbExcel.ResumeLayout(False)
@@ -762,6 +765,9 @@ Partial Class FOptions
         Me.gbColors.ResumeLayout(False)
         Me.gbColors.PerformLayout()
         Me.ButtonPanel2.ResumeLayout(False)
+        Me.pgData.ResumeLayout(False)
+        Me.pnData.ResumeLayout(False)
+        Me.Panel13.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -823,4 +829,5 @@ Partial Class FOptions
     Friend WithEvents btnDefaultFgColors As Button
     Friend WithEvents Panel14 As Panel
     Friend WithEvents btnDefaultExcDir As Button
+    Friend WithEvents ImageList1 As ImageList
 End Class

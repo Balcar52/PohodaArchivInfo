@@ -7,6 +7,8 @@ Imports System.IO
 
 Public Class AData
 
+    Public Const ValidFileVersion As String = "4.8.2023"
+
     Public Shared CurrentFile As String = ""
     Public Shared CurrentPsw As String = txDefaultPassword
 
@@ -30,43 +32,66 @@ Public Class AData
     Friend Const txConnStr As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Jet OLEDB:Database Password = {1}"
     Friend Const txDefaultPassword As String = "168BF465F0FB19"
 
-    Public Shared Function LoadXMLData() As Boolean
+    Public Const txLoadNotFound As String = "Soubor archivu ""{0}"" nebyl nalezen, nebo není dostupný"
+    Public Const txLoadBadFormat As String = "Soubor archivu ""{0}"" má vadný formát, nebo je poškozen"
+    Public Const txLoadBadVersion As String = "Verze souboru archivu ""{0}"" ({1}) není kompatibilní s požadovanou aktuální verzí této aplikace ({2})"
+
+    Public Shared Function LoadXMLData(RequiredFileversion As String) As Boolean
         sError = ""
+        oAdata = Nothing
         Try
-            If IO.File.Exists(AData.CurrentFile) Then
+            If Not IO.File.Exists(AData.CurrentFile) Then
+                Throw New Exception(String.Format(txLoadNotFound, AData.CurrentFile))
+            Else
                 oAdata = AData.FromXML(IO.File.ReadAllText(CurrentFile), True)
+                If oAdata Is Nothing Then
+                    Throw New Exception(String.Format(txLoadBadFormat, AData.CurrentFile))
+                ElseIf oAdata.FileVersion <> RequiredFileversion Then
+                    Throw New Exception(String.Format(txLoadBadVersion, AData.CurrentFile, oAdata.FileVersion, RequiredFileversion))
+                End If
                 Return True
             End If
         Catch ex As Exception
             sError = ex.Message
         End Try
-        oAdata = New AData
         Return False
     End Function
 
-    Public Shared Function LoadXMLDataInfo(sFileName As String) As AData
+    Public Shared Function LoadXMLDataInfo(sXMLFileName As String) As AData
         sError = ""
-        Dim oRet As New AData
+        Dim oData As New AData
         Try
-            If IO.File.Exists(sFileName) Then
-                oRet = AData.FromXML(IO.File.ReadAllText(sFileName), False)
+            If IO.File.Exists(sXMLFileName) Then
+                oData = AData.FromXML(IO.File.ReadAllText(sXMLFileName), False)
+                If oData.IsNotEmpty AndAlso oData.FileVersion <> AData.ValidFileVersion Then
+                    sError = String.Format(txLoadBadVersion, sXMLFileName, oData.GetFileVersion, ValidFileVersion)
+                    oData = Nothing
+                    Return oData
+                End If
             End If
         Catch ex As Exception
             sError = ex.Message
         End Try
-        Return oRet
+        Return oData
     End Function
 
-    Public Shared Function LoadMdbData(sMdbFileName As String, sPassword As String, ByRef sXMLFileName As String) As AData
+    Public Shared Function LoadMdbData(sMdbFileName As String, sPassword As String, ByRef sXMLFileName As String, ByRef iRemoved As Integer, ByRef iAdded As Integer) As AData
 
         sError = ""
+        iRemoved = 0
+        iAdded = 0
         Dim oData As New AData
         If Not IO.File.Exists(sMdbFileName) Then Throw New Exception(String.Format("Databázový soubor {0} nebyl nalezen", sMdbFileName))
         If IO.File.Exists(sXMLFileName) Then
             oData = AData.FromXML(IO.File.ReadAllText(sXMLFileName))
+            If oData IsNot Nothing AndAlso oData.aoFiles.Count > 0 AndAlso oData.FileVersion <> AData.ValidFileVersion Then
+                oData = Nothing
+                sError = String.Format(txLoadBadVersion, sXMLFileName, oData.GetFileVersion, ValidFileVersion)
+                Return oData
+            End If
         End If
         Dim iNewID As Integer = oData.GetMaxFileID
-        oData.AddMdbFile(sMdbFileName, sPassword, iNewID)
+        oData.AddMdbFile(sMdbFileName, sPassword, iNewID, iRemoved)
 
         oConn.ConnectionString = String.Format(txConnStr, sMdbFileName, sPassword)
         Dim oCmd As OleDbCommand = Nothing
@@ -116,6 +141,7 @@ Public Class AData
                 Dim oObjP = New AObjNabPol(GetInt(0), GetStr(1), GetStr(2), GetDec(3))
                 If aoDocs.ContainsKey(oObjP.ID) Then
                     aoDocs(oObjP.ID).aoObjPol.Add(oObjP)
+                    iAdded += 1
                 End If
             End While
             oRdr.Close()
@@ -160,6 +186,7 @@ Public Class AData
                 Dim oObjP = New AFaktPol(GetInt(0), GetStr(1), GetStr(2), GetDec(3), GetDec(4))
                 If aoDocsF.ContainsKey(oObjP.ID) Then
                     aoDocsF(oObjP.ID).aoFaktPol.Add(oObjP)
+                    iAdded += 1
                 End If
                 'If maoObjList.ContainsKey(oObjP.ID) Then
                 '    Dim oObj As AObj = maoObjList(oObjP.ID)
@@ -276,7 +303,6 @@ Public Class AData
             End If
             Return oRes
         Catch ex As System.Exception
-            Throw New System.Exception("Chyba při deserializaci vypoctu vodneho")
         End Try
         Return Nothing
     End Function

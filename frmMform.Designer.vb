@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MForm2
+Partial Class MForm3
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,7 +23,7 @@ Partial Class MForm2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MForm2))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MForm3))
         Me.poConn = New System.Data.OleDb.OleDbConnection()
         Me.tbcMain = New XControls.XTabControl()
         Me.pgNab = New System.Windows.Forms.TabPage()
@@ -59,6 +59,9 @@ Partial Class MForm2
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lblArchiveFile = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lblArchiveFileTimeSize = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel3 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.lblVer = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ActionList0 = New ActionListLib.ActionList(Me.components)
         Me.m_popup1 = New ActionListLib.Menu(Me.components)
         Me.m_znovunacist_data = New ActionListLib.Menu(Me.components)
@@ -78,8 +81,8 @@ Partial Class MForm2
         Me.m_colwidths = New ActionListLib.Menu(Me.components)
         Me.a_searchtext = New ActionListLib.Action(Me.components)
         Me.a_searchtextnext = New ActionListLib.Action(Me.components)
-        Me.a_najit_vpravo = New ActionListLib.Action(Me.components)
         Me.a_najit_vlevo = New ActionListLib.Action(Me.components)
+        Me.a_najit_vpravo = New ActionListLib.Action(Me.components)
         Me.a_rozbalit_vse = New ActionListLib.Action(Me.components)
         Me.a_sbalit_vse = New ActionListLib.Action(Me.components)
         Me.a_sbalitrozbalit_polozku_na_radku = New ActionListLib.Action(Me.components)
@@ -105,9 +108,8 @@ Partial Class MForm2
         Me.m_window = New ActionListLib.Menu(Me.components)
         Me.m_help = New ActionListLib.Menu(Me.components)
         Me.a_nastaveni = New ActionListLib.Action(Me.components)
-        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.lblVer = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ToolStripStatusLabel3 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.m_statistika_polozek_v_databazi = New ActionListLib.Menu(Me.components)
+        Me.a_statistika_polozek_v_databazi = New ActionListLib.Action(Me.components)
         Me.tbcMain.SuspendLayout()
         Me.pgNab.SuspendLayout()
         Me.pnNab.SuspendLayout()
@@ -563,6 +565,26 @@ Partial Class MForm2
         Me.lblArchiveFileTimeSize.Size = New System.Drawing.Size(19, 17)
         Me.lblArchiveFileTimeSize.Text = "    "
         '
+        'ToolStripStatusLabel3
+        '
+        Me.ToolStripStatusLabel3.Name = "ToolStripStatusLabel3"
+        Me.ToolStripStatusLabel3.Size = New System.Drawing.Size(741, 17)
+        Me.ToolStripStatusLabel3.Spring = True
+        '
+        'ToolStripStatusLabel2
+        '
+        Me.ToolStripStatusLabel2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
+        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(75, 17)
+        Me.ToolStripStatusLabel2.Text = "verze aplikace:"
+        Me.ToolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lblVer
+        '
+        Me.lblVer.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.lblVer.Name = "lblVer"
+        Me.lblVer.Size = New System.Drawing.Size(0, 17)
+        '
         'ActionList0
         '
         Me.ActionListConn.SetActionListConn(Me.ActionList0, Me)
@@ -715,15 +737,6 @@ Partial Class MForm2
         Me.a_searchtextnext.Text = "&Znovu hledat text"
         Me.a_searchtextnext.TipText = "Vyhledat další výskyt zadaného textového řetězce"
         '
-        'a_najit_vpravo
-        '
-        Me.a_najit_vpravo.AltText = "Vpravo"
-        Me.a_najit_vpravo.Image = CType(resources.GetObject("a_najit_vpravo.Image"), System.Drawing.Image)
-        Me.a_najit_vpravo.Name = "a_najit_vpravo"
-        Me.a_najit_vpravo.Parent = Me.ActionList0
-        Me.a_najit_vpravo.Text = "Najít vpravo"
-        Me.a_najit_vpravo.TipText = "Najít firmu na záložce vlevo"
-        '
         'a_najit_vlevo
         '
         Me.a_najit_vlevo.AltText = "Vlevo"
@@ -732,6 +745,15 @@ Partial Class MForm2
         Me.a_najit_vlevo.Parent = Me.ActionList0
         Me.a_najit_vlevo.Text = "Najít vlevo"
         Me.a_najit_vlevo.TipText = "Najít firmu na záložce vpravo"
+        '
+        'a_najit_vpravo
+        '
+        Me.a_najit_vpravo.AltText = "Vpravo"
+        Me.a_najit_vpravo.Image = CType(resources.GetObject("a_najit_vpravo.Image"), System.Drawing.Image)
+        Me.a_najit_vpravo.Name = "a_najit_vpravo"
+        Me.a_najit_vpravo.Parent = Me.ActionList0
+        Me.a_najit_vpravo.Text = "Najít vpravo"
+        Me.a_najit_vpravo.TipText = "Najít firmu na záložce vlevo"
         '
         'a_rozbalit_vse
         '
@@ -838,7 +860,7 @@ Partial Class MForm2
         Me.a_sprava_aplikace.Image = CType(resources.GetObject("a_sprava_aplikace.Image"), System.Drawing.Image)
         Me.a_sprava_aplikace.Name = "a_sprava_aplikace"
         Me.a_sprava_aplikace.Parent = Me.ActionList0
-        Me.a_sprava_aplikace.Text = "Správa dat a nastavení aplikace"
+        Me.a_sprava_aplikace.Text = "Nastavení aplikace a správa dat"
         '
         'm_o_aplikaci
         '
@@ -910,6 +932,7 @@ Partial Class MForm2
         '
         'm_tools
         '
+        Me.m_tools.MenuList.Add(Me.m_statistika_polozek_v_databazi)
         Me.m_tools.MergeNode = 400
         Me.m_tools.Name = "m_tools"
         Me.m_tools.Parent = Me.ActionList0
@@ -946,27 +969,21 @@ Partial Class MForm2
         Me.a_nastaveni.Parent = Me.ActionList0
         Me.a_nastaveni.Text = "Nastavení"
         '
-        'ToolStripStatusLabel2
+        'm_statistika_polozek_v_databazi
         '
-        Me.ToolStripStatusLabel2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
-        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(75, 17)
-        Me.ToolStripStatusLabel2.Text = "verze aplikace:"
-        Me.ToolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ActionList0.SetAction(Me.m_statistika_polozek_v_databazi, Me.a_statistika_polozek_v_databazi)
+        Me.m_statistika_polozek_v_databazi.Name = "m_statistika_polozek_v_databazi"
+        Me.m_statistika_polozek_v_databazi.Parent = Me.ActionList0
+        Me.m_statistika_polozek_v_databazi.Text = Nothing
         '
-        'lblVer
+        'a_statistika_polozek_v_databazi
         '
-        Me.lblVer.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.lblVer.Name = "lblVer"
-        Me.lblVer.Size = New System.Drawing.Size(0, 17)
+        Me.a_statistika_polozek_v_databazi.AltText = "Stat. polož. v datab."
+        Me.a_statistika_polozek_v_databazi.Name = "a_statistika_polozek_v_databazi"
+        Me.a_statistika_polozek_v_databazi.Parent = Me.ActionList0
+        Me.a_statistika_polozek_v_databazi.Text = "Statistika položek v databázi"
         '
-        'ToolStripStatusLabel3
-        '
-        Me.ToolStripStatusLabel3.Name = "ToolStripStatusLabel3"
-        Me.ToolStripStatusLabel3.Size = New System.Drawing.Size(710, 17)
-        Me.ToolStripStatusLabel3.Spring = True
-        '
-        'MForm2
+        'MForm3
         '
         Me.ActionListConn.SetActionListConn(Me, Me.ActionList0)
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -977,7 +994,7 @@ Partial Class MForm2
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(800, 600)
-        Me.Name = "MForm2"
+        Me.Name = "MForm3"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Prohlížeč vybraných dat archivu účetnictví Pohoda"
         Me.tbcMain.ResumeLayout(False)
@@ -1092,4 +1109,6 @@ Partial Class MForm2
     Friend WithEvents ToolStripStatusLabel3 As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
     Friend WithEvents lblVer As ToolStripStatusLabel
+    Friend WithEvents m_statistika_polozek_v_databazi As ActionListLib.Menu
+    Friend WithEvents a_statistika_polozek_v_databazi As ActionListLib.Action
 End Class

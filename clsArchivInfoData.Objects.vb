@@ -14,25 +14,78 @@ Partial Public Class AData
         MyBase.New
     End Sub
 
-    Public Sub AddMdbFile(sMdbFilename As String, sPassword As String, iNewFileID As Integer)
+    Public Sub AddMdbFile(sMdbFilename As String, sPassword As String, iNewFileID As Integer, Optional ByRef iRemoved As Integer = 0)
         Dim oFile As New AFile(sMdbFilename, sPassword, iNewFileID)
+        RemoveDataMdbFile(sMdbFilename, iRemoved)
+        aoFiles.Add(oFile)
+    End Sub
+
+    Public Sub RemoveDataMdbFile(sMdbFilename As String, Optional ByRef iRemoved As Integer = 0)
+        Dim oFile As New AFile(sMdbFilename)
+        iRemoved = 0
         For i As Integer = aoFiles.Count - 1 To 0 Step -1
             If String.Compare(aoFiles(i).PureFileName, oFile.PureFileName, True) = 0 Then
                 For i2 As Integer = aoFirmyObj.Count - 1 To 0 Step -1
                     For i3 As Integer = aoFirmyObj(i2).aoDoc.Count - 1 To 0 Step -1
-                        If aoFirmyObj(i2).aoDoc(i3).FileID = aoFiles(i).Id Then aoFirmyObj(i2).aoDoc.RemoveAt(i3)
+                        If aoFirmyObj(i2).aoDoc(i3).FileID = aoFiles(i).Id Then
+                            iRemoved += aoFirmyObj(i2).aoDoc(i3).aoObjPol.Count
+                            aoFirmyObj(i2).aoDoc.RemoveAt(i3)
+                        End If
                     Next
+                    If aoFirmyObj(i2).aoDoc.Count = 0 Then aoFirmyObj.RemoveAt(i2)
                 Next
                 For i2 As Integer = aoFirmyNab.Count - 1 To 0 Step -1
                     For i3 As Integer = aoFirmyNab(i2).aoDoc.Count - 1 To 0 Step -1
-                        If aoFirmyNab(i2).aoDoc(i3).FileID = aoFiles(i).Id Then aoFirmyNab(i2).aoDoc.RemoveAt(i3)
+                        If aoFirmyNab(i2).aoDoc(i3).FileID = aoFiles(i).Id Then
+                            iRemoved += aoFirmyNab(i2).aoDoc(i3).aoObjPol.Count
+                            aoFirmyNab(i2).aoDoc.RemoveAt(i3)
+                        End If
                     Next
+                    If aoFirmyNab(i2).aoDoc.Count = 0 Then aoFirmyNab.RemoveAt(i2)
+                Next
+                For i2 As Integer = aoFirmyFVyd.Count - 1 To 0 Step -1
+                    For i3 As Integer = aoFirmyFVyd(i2).aoDocF.Count - 1 To 0 Step -1
+                        If aoFirmyFVyd(i2).aoDocF(i3).FileID = aoFiles(i).Id Then
+                            iRemoved += aoFirmyFVyd(i2).aoDocF(i3).aoFaktPol.Count
+                            aoFirmyFVyd(i2).aoDocF.RemoveAt(i3)
+                        End If
+                    Next
+                    If aoFirmyFVyd(i2).aoDocF.Count = 0 Then aoFirmyFVyd.RemoveAt(i2)
+                Next
+                For i2 As Integer = aoFirmyFPrij.Count - 1 To 0 Step -1
+                    For i3 As Integer = aoFirmyFPrij(i2).aoDocF.Count - 1 To 0 Step -1
+                        If aoFirmyFPrij(i2).aoDocF(i3).FileID = aoFiles(i).Id Then
+                            iRemoved += aoFirmyFPrij(i2).aoDocF(i3).aoFaktPol.Count
+                            aoFirmyFPrij(i2).aoDocF.RemoveAt(i3)
+                        End If
+                    Next
+                    If aoFirmyFPrij(i2).aoDocF.Count = 0 Then aoFirmyFPrij.RemoveAt(i2)
                 Next
                 aoFiles.RemoveAt(i)
             End If
         Next
-        aoFiles.Add(oFile)
     End Sub
+
+    Public ReadOnly Property IsEmpty As Boolean
+        Get
+            Return aoFiles.Count = 0
+        End Get
+    End Property
+
+    Public ReadOnly Property IsNotEmpty As Boolean
+        Get
+            Return Not IsEmpty
+        End Get
+    End Property
+
+    <XmlElement("ver")>
+    Public FileVersion As String = "not defined"
+
+    Public ReadOnly Property GetFileVersion As String
+        Get
+            Return CStr(FileVersion)
+        End Get
+    End Property
 
     <XmlElement("fil")>
     Public aoFiles As New List(Of AFile)
@@ -95,6 +148,11 @@ Partial Public Class AData
             FileDate = IO.File.GetLastWriteTime(sFilename)
             DateImported = Now
             Id = iId
+        End Sub
+        Public Sub New(sFileName)
+            MyBase.New
+            UsedFileName = sFileName
+            PureFileName = LCase(IO.Path.GetFileName(sFileName))
         End Sub
         <XmlAttribute("pn")>
         Public PureFileName As String = ""

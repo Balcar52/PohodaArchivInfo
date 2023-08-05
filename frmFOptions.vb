@@ -6,7 +6,7 @@ Imports System.Data.OleDb
 
 Public Class FOptions
 
-    Dim oMainForm As MForm2
+    Dim oMainForm As MForm3
     Dim bLoading As Boolean = True
     Dim bLoaded As Boolean = False
 
@@ -16,6 +16,7 @@ Public Class FOptions
     Dim iColFgFCesta As Integer ' [g:2]
     Dim iColFgFDatum As Integer ' [g:3]
     Dim iColFgFImportovano As Integer ' [g:3]
+    Dim iColFgFDel As Integer ' [g:3]
     Dim iColFgFId As Integer ' [g:4]
 
     Dim dfFgO As ColorPair
@@ -23,7 +24,7 @@ Public Class FOptions
     Dim dfFgFV As ColorPair
     Dim dfFgFP As ColorPair
 
-    Public Sub New(oOwner As MForm2, Optional RestoreMain As Boolean = True)
+    Public Sub New(oOwner As MForm3, Optional RestoreMain As Boolean = True)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -50,7 +51,7 @@ Public Class FOptions
         End If
     End Sub
 
-    Public Shared Function Run(oOwner As MForm2, Optional ByRef oRetForm As FOptions = Nothing) As DialogResult
+    Public Shared Function Run(oOwner As MForm3, Optional ByRef oRetForm As FOptions = Nothing) As DialogResult
         Dim oFrm As New FOptions(oOwner)
         Dim oRes As DialogResult = DialogResult.None
         oRes = oFrm.ShowDialog
@@ -60,17 +61,22 @@ Public Class FOptions
 
     Private Sub btnProcessImport_Click(sender As Object, e As EventArgs) Handles btnProcessImport.Click
         Try
+            Dim iRemoved As Integer = 0
+            Dim iAdded As Integer = 0
             Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Načítám data z databáze Pohoda")
-                AData.oAdata = AData.LoadMdbData(txtMdbFile.Text, txtMdbPassword.Text, txtCurrentFile.Text)
+                AData.oAdata = AData.LoadMdbData(txtMdbFile.Text, txtMdbPassword.Text, txtCurrentFile.Text, iRemoved, iAdded)
                 If AData.oAdata IsNot Nothing Then
+                    AData.oAdata.FileVersion = AData.ValidFileVersion
                     IO.File.WriteAllText(txtCurrentFile.Text, AData.oAdata.ToXml)
                     LoadFgData(txtCurrentFile.Text)
                 End If
                 If bLoaded Then btnClose.DialogResult = DialogResult.OK
                 LoadFgData(txtCurrentFile.Text)
             End Using
+            MessageBox.Show(Me, String.Format("Import dat z databáze ""{0}"" do archivu ""{1}"" byl úspěšně dokončen.{2}{2}Počet položek: odstraněných: {3}, přidaných: {4}.",
+                                              txtMdbFile.Text, txtCurrentFile.Text, vbCrLf, iRemoved, iAdded), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
         Catch ex As Exception
-            MForm2.ShowError(Me, ex)
+            MForm3.ShowError(Me, ex)
         End Try
     End Sub
 
@@ -87,6 +93,7 @@ Public Class FOptions
         iColFgFCesta = FlexgridSetCol("cesta,100,RS<", "*")
         iColFgFDatum = FlexgridSetCol("datum,80,Rd>", "*")
         iColFgFImportovano = FlexgridSetCol("importováno,100,RDT>", "*")
+        iColFgFDel = FlexgridSetCol(",50,^", "*")
         iColFgFId = FlexgridSetCol("ID,80,RI>", "*")
         FlexgridSetExec() ' [CorrectForm 22.6.2023 3:58]
 
@@ -96,6 +103,12 @@ Public Class FOptions
         FgF.Styles.Highlight.ForeColor = FgF.Styles.Normal.ForeColor
         FgF.SelectionMode = SelectionModeEnum.Cell
 
+        ShowDelImages()
+
+    End Sub
+
+    Public Sub ShowDelImages()
+        FgF.Cols(iColFgFDel).Visible = chkAllowImport.Checked
     End Sub
 
     Private Sub LoadFgData(sFileName As String)
@@ -109,10 +122,14 @@ Public Class FOptions
                     FgF(iRow, iColFgFKlicoveJmeno) = o.PureFileName
                     FgF(iRow, iColFgFCesta) = o.UsedFileName
                     FgF(iRow, iColFgFDatum) = o.FileDate
+                    FgF.SetCellImage(iRow, iColFgFDel, ImageList1.Images(0))
                     If ValidDate(o.DateImported) Then FgF(iRow, iColFgFImportovano) = o.DateImported
                     FgF(iRow, iColFgFId) = o.Id
                 Next
             End With
+        ElseIf oData IsNot Nothing Then
+            oData = Nothing
+            MessageBox.Show(Me, "Chyba při otvírání databáze." & vbCrLf & vbCrLf & AData.sError, txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
         FgF.AutoSizeCols()
         FgF.Redraw = True
@@ -191,6 +208,7 @@ Public Class FOptions
             If .ShowDialog = DialogResult.OK Then
                 Dim sName As String = DriveInfo.GetUNCPath(.FileName)
                 If Not IO.File.Exists(.FileName) Then
+                    AData.oAdata.FileVersion = AData.ValidFileVersion
                     IO.File.WriteAllText(sName, "")
                     txtCurrentFile.Text = sName
                     LoadFgData(sName)
@@ -231,6 +249,7 @@ Public Class FOptions
                 bPrc = False
             End If
         End If
+        ShowDelImages()
         gbImport.Enabled = chkAllowImport.Checked
         btnCreateA.Enabled = chkAllowImport.Checked
     End Sub
@@ -240,7 +259,7 @@ Public Class FOptions
         LoadFgData(txtCurrentFile.Text)
         AData.CurrentFile = txtCurrentFile.Text
         WindowSet(oMainForm)
-        StringSave(MForm2.nmCurrentFile, AData.CurrentFile)
+        StringSave(MForm3.nmCurrentFile, AData.CurrentFile)
         txtCurrentFile.Text = AData.CurrentFile
         oMainForm.RefreshStb()
     End Sub
@@ -273,4 +292,18 @@ Public Class FOptions
         btnOK.Visible = True
     End Sub
 
+    Private Sub FgF_Click(sender As Object, e As EventArgs) Handles FgF.Click
+        If FgF.Col = iColFgFDel AndAlso FgF.RowIsValid(FgF.Row) Then
+            Dim iRemoved As Integer = 0
+            If MessageBox.Show(Me.Owner, String.Format("Chceš nyní skutečně odstranit data, importovaná z databáze {0}?", CStr(FgF(FgF.Row, iColFgFCesta))), txtAppName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
+                Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Odstaňuji data z archivu databáze Pohoda")
+                    AData.oAdata.RemoveDataMdbFile(CStr(FgF(FgF.Row, iColFgFCesta)), iRemoved)
+                    IO.File.WriteAllText(txtCurrentFile.Text, AData.oAdata.ToXml)
+                    LoadFgData(txtCurrentFile.Text)
+                End Using
+                MessageBox.Show(Me, String.Format("Odstranění dat z archivu databáze ""{0}"" z archivu ""{1}"" bylo úspěšně dokončeno.{2}{2}Bylo celkem odstraněno {3} položek.", txtMdbFile.Text, txtCurrentFile.Text, vbCrLf, iremoved), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                btnClose.DialogResult = DialogResult.OK
+            End If
+        End If
+    End Sub
 End Class

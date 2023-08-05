@@ -8,7 +8,9 @@ Imports C1.Win.C1FlexGrid
 Imports Microsoft.Office.Interop
 Imports System.Reflection
 
-Public Class MForm2
+Public Class MForm3
+
+    Public Const FormVersion As String = "v. 4.8.2023"
 
     Public Const nmCurrentFile As String = "CurrentFile"
     Public Const nmbSetTabColors As String = "SetTabColors"
@@ -106,7 +108,7 @@ Public Class MForm2
         Fg.SelectionMode = SelectionModeEnum.Cell
     End Sub
 
-    Public Sub LoadData()
+    Public Function LoadData() As Boolean
         bLoading = True
         a_excel.Enabled = False
         FgO.ClearDataRows(True, True)
@@ -116,38 +118,46 @@ Public Class MForm2
         Application.DoEvents()
 
         Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Načítám data z archivu """ & AData.CurrentFile & """")
-            AData.LoadXMLData()
-            RefreshStb()
-            With AData.oAdata
-                LoadObjList(FgO, .aoFirmyObj)
-                LoadObjList(FgN, .aoFirmyNab)
-                LoadFakList(FgFV, .aoFirmyFVyd)
-                LoadFakList(FgFP, .aoFirmyFPrij)
-            End With
+            If AData.LoadXMLData(AData.ValidFileVersion) Then
+                RefreshStb()
+                With AData.oAdata
+                    LoadObjList(FgO, .aoFirmyObj)
+                    LoadObjList(FgN, .aoFirmyNab)
+                    LoadFakList(FgFV, .aoFirmyFVyd)
+                    LoadFakList(FgFP, .aoFirmyFPrij)
+                End With
+                a_excel.Enabled = True
+                Dim Fg As XC1Flexgrid
+                If tbcMain.SelectedTab Is pgObj Then
+                    Fg = FgO
+                ElseIf tbcMain.SelectedTab Is pgNab Then
+                    Fg = FgN
+                ElseIf tbcMain.SelectedTab Is pgFaktVyd Then
+                    Fg = FgFV
+                ElseIf tbcMain.SelectedTab Is pgFaktPrij Then
+                    Fg = FgFP
+                Else
+                    Return False
+                End If
+                SetTreeCol(FgO)
+                SetTreeCol(FgN)
+                SetTreeCol(FgFP)
+                SetTreeCol(FgFV)
+                Fg.Col = iColFgFirma
+                Fg.Redraw = True
+                Fg.Select()
+                Fg.Focus()
+                bLoading = False
+                Return True
+            Else
+                lblArchiveFile.Text = AData.sError
+                lblArchiveFileTimeSize.Text = ""
+                bLoading = False
+                MessageBox.Show(Me, String.Format("Chyba načítání vstupních dat.{0}{0}{1}.", vbCrLf, AData.sError), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return False
+            End If
         End Using
-        a_excel.Enabled = True
-        Dim Fg As XC1Flexgrid
-        If tbcMain.SelectedTab Is pgObj Then
-            Fg = FgO
-        ElseIf tbcMain.SelectedTab Is pgNab Then
-            Fg = FgN
-        ElseIf tbcMain.SelectedTab Is pgFaktVyd Then
-            Fg = FgFV
-        ElseIf tbcMain.SelectedTab Is pgFaktPrij Then
-            Fg = FgFP
-        Else
-            Exit Sub
-        End If
-        SetTreeCol(FgO)
-        SetTreeCol(FgN)
-        SetTreeCol(FgFP)
-        SetTreeCol(FgFV)
-        Fg.Col = iColFgFirma
-        Fg.Redraw = True
-        Fg.Select()
-        Fg.Focus()
-        bLoading = False
-    End Sub
+    End Function
 
     Public Sub LoadObjList(Fg As XC1Flexgrid, List As List(Of AData.AFirma), Optional SelectGrid As Boolean = False)
         Fg.MergedRanges.Clear()
@@ -313,17 +323,21 @@ Public Class MForm2
     End Sub
 
     Private Sub MForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        WindowRestore(Me)
-        FlexgridRestore(FgO,,,, False)
-        FlexgridRestore(FgN,,,, False)
-        FlexgridRestore(FgFV,,,, False)
-        FlexgridRestore(FgFP,,,, False)
-        LoadData()
-        FlexgridRestorePosition(FgO)
-        FlexgridRestorePosition(FgN)
-        FlexgridRestorePosition(FgFV)
-        FlexgridRestorePosition(FgFP)
-        TabControlRestore(tbcMain)
+        If Not FormVersionChanged(Me, FormVersion, False) Then
+            WindowRestore(Me)
+            FlexgridRestore(FgO,,,, False)
+            FlexgridRestore(FgN,,,, False)
+            FlexgridRestore(FgFV,,,, False)
+            FlexgridRestore(FgFP,,,, False)
+            LoadData()
+            FlexgridRestorePosition(FgO)
+            FlexgridRestorePosition(FgN)
+            FlexgridRestorePosition(FgFV)
+            FlexgridRestorePosition(FgFP)
+            TabControlRestore(tbcMain)
+        Else
+            LoadData()
+        End If
         tbcMain_SelectedIndexChanged(Nothing, Nothing)
     End Sub
 
@@ -362,7 +376,7 @@ Public Class MForm2
             lblArchiveFile.Text = AData.CurrentFile
             lblArchiveFileTimeSize.Text = IO.File.GetLastWriteTime(AData.CurrentFile).ToString(" (d.M.yyyy H:mm, ") & New IO.FileInfo(AData.CurrentFile).Length.ToString("## ### ##0 B)")
         Else
-            lblArchiveFile.Text = ""
+            lblArchiveFile.Text = "není definován aktuální soubor archivu. Nastav, nebo vytvoř aktuální soubor archivu."
             lblArchiveFileTimeSize.Text = ""
         End If
     End Sub
@@ -850,5 +864,50 @@ Public Class MForm2
                 Fg.AutoSizeCol(iColFgText)
             End If
         End If
+    End Sub
+
+    Private Sub a_statistika_polozek_v_databazi_Execute(sender As Object, e As EventArgs) Handles a_statistika_polozek_v_databazi.Execute
+        Dim iPolN As Integer = 0
+        Dim iPolO As Integer = 0
+        Dim iPolFV As Integer = 0
+        Dim iPolFP As Integer = 0
+        Dim iPolNi As Integer = 0
+        Dim iPolOi As Integer = 0
+        Dim iPolFVi As Integer = 0
+        Dim iPolFPi As Integer = 0
+        If AData.LoadXMLData(AData.ValidFileVersion) Then
+            For Each o As AData.AFirma In AData.oAdata.aoFirmyNab
+                iPolN += o.aoDoc.Count
+                For Each o2 In o.aoDoc
+                    iPolNi += o2.aoObjPol.Count
+                Next
+            Next
+            For Each o As AData.AFirma In AData.oAdata.aoFirmyObj
+                iPolO += o.aoDoc.Count
+                For Each o2 In o.aoDoc
+                    iPolOi += o2.aoObjPol.Count
+                Next
+            Next
+            For Each o As AData.AFirma In AData.oAdata.aoFirmyFVyd
+                iPolFV += o.aoDocF.Count
+                For Each o2 In o.aoDocF
+                    iPolFVi += o2.aoFaktPol.Count
+                Next
+            Next
+            For Each o As AData.AFirma In AData.oAdata.aoFirmyFPrij
+                iPolFP += o.aoDocF.Count
+                For Each o2 In o.aoDocF
+                    iPolFPi += o2.aoFaktPol.Count
+                Next
+            Next
+        End If
+        Dim s1 As String = "Nabídky: {2}{0} firem, {2}{1} položek"
+        Dim s2 As String = "Objednávky: {2}{0} firem, {2}{1} položek"
+        Dim s3 As String = "Faktury vydané: {2}{0} firem, {2}{1} položek"
+        Dim s4 As String = "Faktury přijaté: {2}{0} firem, {2}{1} položek"
+        Dim s5 As String = "Celkem: {1}{0} položek"
+        Dim s As String = String.Format(s1, iPolN, iPolNi, vbTab) & vbCrLf & String.Format(s2, iPolO, iPolOi, vbTab) & vbCrLf & String.Format(s3, iPolFV, iPolFVi, vbTab) &
+                          vbCrLf & String.Format(s4, iPolFP, iPolFPi, vbTab) & vbCrLf & vbCrLf & String.Format(s5, iPolNi + iPolOi + iPolFVi + iPolFPi, vbTab)
+        MessageBox.Show(Me, String.Format("Statistika počtů položek archivu ""{2}"":{0}{0}{1}", vbCrLf, s, AData.CurrentFile), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 End Class
