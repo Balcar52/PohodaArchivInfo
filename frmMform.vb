@@ -15,21 +15,29 @@ Public Class MForm3
     Public Const nmCurrentFile As String = "CurrentFile"
     Public Const nmbSetTabColors As String = "SetTabColors"
     Public Const nmbSimpleExcel As String = "SimpleExcel"
+    Public Const nmbUseExcel As String = "UseExcel"
     Public Const nmsExcelExpDir As String = "ExcelDir"
-    Public Const nmsColorFgO As String = "ColorsFgO"
+    Public Const nmsColorFgOP As String = "ColorsFgOP"
+    Public Const nmsColorFgOV As String = "ColorsFgOV"
     Public Const nmsColorFgN As String = "ColorsFgN"
     Public Const nmsColorFgFV As String = "ColorsFgFV"
     Public Const nmsColorFgFP As String = "ColorsFgFP"
 
+    Public Const txText As String = " (text)"
+    Public Const txFontNarrow As String = "Arial Narrow"
+
     Dim bLoading As Boolean = True
 
-    Public clrFgO As New ColorPair(SystemColors.WindowText, SystemColors.Window)
+    Public clrFgOP As New ColorPair(SystemColors.WindowText, SystemColors.Window)
     Public clrFgN As New ColorPair(SystemColors.WindowText, SystemColors.Window)
     Public clrFgFV As New ColorPair(SystemColors.WindowText, SystemColors.Window)
     Public clrFgFP As New ColorPair(SystemColors.WindowText, SystemColors.Window)
+    Public clrFgOV As New ColorPair(SystemColors.WindowText, SystemColors.Window)
+
     Public bSetTabColors As Boolean = True
     Public bSimpleExcel As Boolean = True
     Public sExcelExpDir As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), IO.Path.GetFileNameWithoutExtension(Application.ExecutablePath))
+    Public bUseExcel As Boolean = True
 
     ' deklarace promennych cisel sloupcu gridu 
 
@@ -44,6 +52,7 @@ Public Class MForm3
     Dim iColFgPozn As Integer ' [g:7]
     Dim iColFgMnozstvi As Integer ' [g:8]
     Dim iColFgCena As Integer ' [g:8]
+    Dim iColFgCena2 As Integer ' [g:8]
     Dim iColFgPocO As Integer ' [g:8]
     Dim iColFgPocP As Integer ' [g:8]
     Dim iColFgTree As Integer ' [g:8]
@@ -56,7 +65,7 @@ Public Class MForm3
         End If
     End Sub
 
-    Public Sub InitGrid(Fg As XC1Flexgrid, Nazev1 As String, oColor As ColorPair, Optional bSetColors As Boolean = True, Optional bFaktMode As Boolean = False)
+    Public Sub InitGrid(Fg As XC1Flexgrid, Nazev1 As String, oColor As ColorPair, Optional bSetColors As Boolean = True)
         InitGrid(Fg, oColor, bSetColors)
         FlexgridSet(Fg) '' [CorrectForm 17.4.2019 22:43]' [CorrectForm 21.6.2023 23:48]
         iColFg0 = FlexgridSetCol(">")
@@ -71,11 +80,8 @@ Public Class MForm3
         iColFgPocP = FlexgridSetCol("poč.,40,RI^", "položky")
         iColFgText = FlexgridSetCol("text,80,R<", "*")
         iColFgMnozstvi = FlexgridSetCol("množ.,80,RID>,#####0", "*")
-        If bFaktMode Then
-            iColFgCena = FlexgridSetCol("cena,80,RID>,### ##0,00", "*")
-        Else
-            iColFgCena = FlexgridSetCol("@")
-        End If
+        iColFgCena = FlexgridSetCol("cena Kč,80,RID>,### ##0,00", "*")
+        iColFgCena2 = FlexgridSetCol("cena,80,R>", "*")
         iColFgPozn = FlexgridSetCol("pozn.,80,R<")
         FlexgridSetExec() ' [CorrectForm 21.6.2023 23:48]
 
@@ -111,37 +117,41 @@ Public Class MForm3
     Public Function LoadData() As Boolean
         bLoading = True
         a_excel.Enabled = False
-        FgO.ClearDataRows(True, True)
+        FgOP.ClearDataRows(True, True)
         FgN.ClearDataRows(True, True)
-        FgFP.ClearDataRows(True, True)
         FgFV.ClearDataRows(True, True)
+        FgOV.ClearDataRows(True, True)
+        FgFP.ClearDataRows(True, True)
         Application.DoEvents()
 
         Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Načítám data z archivu """ & AData.CurrentFile & """")
             If AData.LoadXMLData(AData.ValidFileVersion) Then
                 RefreshStb()
                 With AData.oAdata
-                    LoadObjList(FgO, .aoFirmyObj)
-                    LoadObjList(FgN, .aoFirmyNab)
+                    LoadObjList(FgOP, .aoFirmyObjPrij)
+                    LoadObjList(FgOV, .aoFirmyObjVyd)
                     LoadFakList(FgFV, .aoFirmyFVyd)
                     LoadFakList(FgFP, .aoFirmyFPrij)
                 End With
                 a_excel.Enabled = True
                 Dim Fg As XC1Flexgrid
-                If tbcMain.SelectedTab Is pgObj Then
-                    Fg = FgO
+                If tbcMain.SelectedTab Is pgObjPrij Then
+                    Fg = FgOP
                 ElseIf tbcMain.SelectedTab Is pgNab Then
                     Fg = FgN
                 ElseIf tbcMain.SelectedTab Is pgFaktVyd Then
                     Fg = FgFV
+                ElseIf tbcMain.SelectedTab Is pgObjVyd Then
+                    Fg = FgOV
                 ElseIf tbcMain.SelectedTab Is pgFaktPrij Then
                     Fg = FgFP
                 Else
                     Return False
                 End If
-                SetTreeCol(FgO)
+                SetTreeCol(FgOP)
                 SetTreeCol(FgN)
                 SetTreeCol(FgFP)
+                SetTreeCol(FgOV)
                 SetTreeCol(FgFV)
                 Fg.Col = iColFgFirma
                 Fg.Redraw = True
@@ -249,7 +259,7 @@ Public Class MForm3
     Public Sub LoadDataRow(Fg As XC1Flexgrid, ByRef iRow As Integer, Optional oFrm As AData.AFirma = Nothing, Optional oObj As AData.AObjNab = Nothing, Optional oObjP As AData.AObjNabPol = Nothing)
         iRow = Fg.Rows.Add.Index
         If oFrm IsNot Nothing Then
-            Fg(iRow, iColFgFirma) = oFrm.DisplayName
+            Fg(iRow, iColFgFirma) = oFrm.GetDisplayName
             If oFrm.ICO > 0 Then Fg(iRow, iColFgICO) = oFrm.ICO
             If Not String.IsNullOrWhiteSpace(oFrm.Email) AndAlso oObj Is Nothing Then
                 Fg(iRow, iColFgPozn) = oFrm.Email
@@ -267,16 +277,39 @@ Public Class MForm3
             Fg(iRow, iColFgCislo) = oObj.Cislo
             Fg(iRow, iColFgPocP) = oObj.aoObjPol.Count
             Fg(iRow, iColFgNazevFirmy) = oObj.Name
+            Fg(iRow, iColFgText) = oObj.Text
+            Fg.SetStyleToCell(iRow, iColFgText,,, New Font(txFontNarrow, Me.Font.Size))
+            If oObjP Is Nothing Then
+                If oObj.JeCena Then
+                    Fg(iRow, iColFgCena) = oObj.Kc
+                End If
+                If oObj.JeCiziMena Then
+                    Fg(iRow, iColFgCena2) = oObj.CiziMena
+                End If
+            End If
             Fg.Rows(iRow).IsNode = True
             Fg.Rows(iRow).Node.Level = 1
             Fg.Rows(iRow).UserData = oObj
         End If
         If oObjP IsNot Nothing Then
+            If oFrm.GetDisplayName.Contains("Ease Camp") Then
+                Debug.WriteLine("tady")
+            End If
             'iRow = Fg.Rows.Add.Index
             Fg(iRow, iColFgText) = Trim(oObjP.Text)
             Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Bold)
             Fg(iRow, iColFgPozn) = Trim(oObjP.Pozn)
-            If oObjP.Mnoz > 0 Then Fg(iRow, iColFgMnozstvi) = oObjP.Mnoz
+            If oObjP.JeMnozstvi Then Fg(iRow, iColFgMnozstvi) = oObjP.Mnoz
+            If oObjP.JeCenaMnozstvi Then
+                Fg(iRow, iColFgCena) = oObjP.Cena
+                If oObjP.JeCiziMena(oObj) AndAlso oObjP.JeCenaMnozstvi Then
+                    Fg(iRow, iColFgCena2) = oObjP.CiziMena(oObj)
+                End If
+            Else
+                If String.IsNullOrWhiteSpace(CStr(Fg(iRow, iColFgPozn))) Then Fg(iRow, iColFgPozn) = Trim(CStr(Fg(iRow, iColFgPozn)) & txText)
+                Fg.SetStyleToCell(iRow, iColFgPozn,,, FontStyle.Italic)
+                Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Regular)
+            End If
             Fg.Rows(iRow).IsNode = True
             Fg.Rows(iRow).Node.Level = 2
             Fg.Rows(iRow).UserData = oObjP
@@ -287,7 +320,7 @@ Public Class MForm3
         iRow = Fg.Rows.Add.Index
         If oFrm IsNot Nothing Then
             'iRow = Fg.Rows.Add.Index
-            Fg(iRow, iColFgFirma) = oFrm.DisplayName
+            Fg(iRow, iColFgFirma) = oFrm.GetDisplayName
             If oFrm.ICO > 0 Then Fg(iRow, iColFgICO) = oFrm.ICO
             If Not String.IsNullOrWhiteSpace(oFrm.Email) AndAlso oFakt Is Nothing Then
                 Fg(iRow, iColFgPozn) = oFrm.Email
@@ -305,17 +338,42 @@ Public Class MForm3
             Fg(iRow, iColFgCislo) = oFakt.Cislo
             Fg(iRow, iColFgPocP) = oFakt.aoFaktPol.Count
             Fg(iRow, iColFgNazevFirmy) = oFakt.Name
+            Fg(iRow, iColFgText) = oFakt.Text
+            If oFakP Is Nothing Then
+                If oFakt.JeCena Then
+                    Fg(iRow, iColFgCena) = oFakt.Kc
+                End If
+                If oFakt.JeCiziMena Then
+                    Fg(iRow, iColFgCena2) = oFakt.CiziMena
+                End If
+            End If
+            'Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Italic)
+            Fg.SetStyleToCell(iRow, iColFgText,,, New Font(txFontNarrow, Me.Font.Size))
             Fg.Rows(iRow).IsNode = True
             Fg.Rows(iRow).Node.Level = 1
             Fg.Rows(iRow).UserData = oFakt
         End If
         If oFakP IsNot Nothing Then
             'iRow = Fg.Rows.Add.Index
+            If oFrm.GetDisplayName.Contains("Ease Camp") Then
+                Debug.WriteLine("tady")
+            End If
             Fg(iRow, iColFgText) = Trim(oFakP.Text)
             Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Bold)
             Fg(iRow, iColFgPozn) = Trim(oFakP.Pozn)
-            If oFakP.Mnoz > 0 Then Fg(iRow, iColFgMnozstvi) = oFakP.Mnoz
-            If oFakP.JednCena > 0 Then Fg(iRow, iColFgCena) = oFakP.JednCena
+            If oFakP.JeMnozstvi Then Fg(iRow, iColFgMnozstvi) = oFakP.Mnoz
+            If oFakP.JeCenaMnozstvi Then
+                Fg(iRow, iColFgCena) = oFakP.Cena
+                If oFakP.JeCiziMena(oFakt) Then
+                    Fg(iRow, iColFgCena2) = oFakP.CiziMena(oFakt)
+                End If
+            Else
+                If String.IsNullOrWhiteSpace(CStr(Fg(iRow, iColFgPozn))) Then Fg(iRow, iColFgPozn) = Trim(CStr(Fg(iRow, iColFgPozn)) & txText)
+                Fg.SetStyleToCell(iRow, iColFgPozn,,, FontStyle.Italic)
+                Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Regular)
+            End If
+            'If oFakP.je > 0 Then Fg(iRow, iColFgMnozstvi) = oFakP.Mnoz
+            'If oFakP.Kc > 0 Then Fg(iRow, iColFgCena) = oFakP.Kc
             Fg.Rows(iRow).IsNode = True
             Fg.Rows(iRow).Node.Level = 2
             Fg.Rows(iRow).UserData = oFakP
@@ -325,12 +383,12 @@ Public Class MForm3
     Private Sub MForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         If Not FormVersionChanged(Me, FormVersion, False) Then
             WindowRestore(Me)
-            FlexgridRestore(FgO,,,, False)
+            FlexgridRestore(FgOP,,,, False)
             FlexgridRestore(FgN,,,, False)
             FlexgridRestore(FgFV,,,, False)
             FlexgridRestore(FgFP,,,, False)
             LoadData()
-            FlexgridRestorePosition(FgO)
+            FlexgridRestorePosition(FgOP)
             FlexgridRestorePosition(FgN)
             FlexgridRestorePosition(FgFV)
             FlexgridRestorePosition(FgFP)
@@ -347,26 +405,30 @@ Public Class MForm3
         oConn = poConn
         RefreshStb()
         WindowRestore(Me)
-        clrFgO = ColorPairFromString(StringRestore(nmsColorFgO), True)
+        clrFgOP = ColorPairFromString(StringRestore(nmsColorFgOP), True)
         clrFgN = ColorPairFromString(StringRestore(nmsColorFgN), True)
         clrFgFV = ColorPairFromString(StringRestore(nmsColorFgFV), True)
         clrFgFP = ColorPairFromString(StringRestore(nmsColorFgFP), True)
-        If ColorPairIsEmpty(clrFgO) OrElse ColorPairIsEmpty(clrFgN) OrElse ColorPairIsEmpty(clrFgFV) OrElse ColorPairIsEmpty(clrFgFP) Then
+        clrFgOV = ColorPairFromString(StringRestore(nmsColorFgOV), True)
+        If ColorPairIsEmpty(clrFgOP) OrElse ColorPairIsEmpty(clrFgN) OrElse ColorPairIsEmpty(clrFgFV) OrElse ColorPairIsEmpty(clrFgFP) OrElse ColorPairIsEmpty(clrFgOV) Then
             Dim oOpt As New FOptions(Nothing, False)
-            If ColorPairIsEmpty(clrFgO) Then clrFgO = oOpt.clrFgO.ColorSetting
+            If ColorPairIsEmpty(clrFgOP) Then clrFgOP = oOpt.clrFgOP.ColorSetting
             If ColorPairIsEmpty(clrFgN) Then clrFgN = oOpt.clrFgN.ColorSetting
             If ColorPairIsEmpty(clrFgFV) Then clrFgFV = oOpt.clrFgFV.ColorSetting
             If ColorPairIsEmpty(clrFgFP) Then clrFgFP = oOpt.clrFgFP.ColorSetting
+            If ColorPairIsEmpty(clrFgOV) Then clrFgOV = oOpt.clrFgOV.ColorSetting
             oOpt = Nothing
         End If
         AData.CurrentFile = StringRestore(nmCurrentFile,, AData.CurrentFile)
         sExcelExpDir = StringRestore(nmsExcelExpDir,, sExcelExpDir)
+        bUseExcel = BooleanRestore(nmsExcelExpDir,, bUseExcel)
         bSimpleExcel = BooleanRestore(nmbSimpleExcel,, bSimpleExcel)
         bSetTabColors = BooleanRestore(nmbSetTabColors,, bSetTabColors)
-        InitGrid(FgO, "objednávky", clrFgO, bSetTabColors)
         InitGrid(FgN, "nabídky", clrFgN, bSetTabColors)
-        InitGrid(FgFV, "vydané faktury", clrFgFV, bSetTabColors, True)
-        InitGrid(FgFP, "přijaté faktury", clrFgFP, bSetTabColors, True)
+        InitGrid(FgOP, "objednávky", clrFgOP, bSetTabColors)
+        InitGrid(FgFV, "vydané faktury", clrFgFV, bSetTabColors)
+        InitGrid(FgOV, "objednávky", clrFgOV, bSetTabColors)
+        InitGrid(FgFP, "přijaté faktury", clrFgFP, bSetTabColors)
         FGridSearchText.RegisterForAllGrids(Me, a_searchtext, a_searchtextnext)
         lblVer.Text = GetAssemblyVersion(Assembly.GetExecutingAssembly, "") & IO.File.GetLastWriteTime(Application.ExecutablePath).ToString(" (d.M.yyyy H:mm)")
     End Sub
@@ -390,25 +452,34 @@ Public Class MForm3
         SaveForm()
     End Sub
 
-    Private Sub SaveForm()
+    Public Sub SaveForm()
         WindowSave(Me)
         TabControlSave(tbcMain)
-        FlexgridSave(FgO)
+        FlexgridSave(FgOP)
+        FlexgridSave(FgOV)
         FlexgridSave(FgN)
         FlexgridSave(FgFV)
         FlexgridSave(FgFP)
-        FlexgridSavePosition(FgO)
+        FlexgridSavePosition(FgOP)
+        FlexgridSavePosition(FgOV)
         FlexgridSavePosition(FgN)
         FlexgridSavePosition(FgFV)
         FlexgridSavePosition(FgFP)
         StringSave(nmCurrentFile, AData.CurrentFile)
         StringSave(nmsExcelExpDir, sExcelExpDir)
         BooleanSave(nmbSimpleExcel, bSimpleExcel)
+        BooleanSave(nmbUseExcel, bSimpleExcel)
         BooleanSave(nmbSetTabColors, bSetTabColors)
-        If Not ColorPairIsEmpty(clrFgO) Then StringSave(nmsColorFgO, ColorPairToString(clrFgO))
+        SaveColors()
+    End Sub
+
+    Public Sub SaveColors()
+        WindowSet(Me)
+        If Not ColorPairIsEmpty(clrFgOP) Then StringSave(nmsColorFgOP, ColorPairToString(clrFgOP))
         If Not ColorPairIsEmpty(clrFgN) Then StringSave(nmsColorFgN, ColorPairToString(clrFgN))
-        If Not ColorPairIsEmpty(clrFgFP) Then StringSave(nmsColorFgFP, ColorPairToString(clrFgFP))
         If Not ColorPairIsEmpty(clrFgFV) Then StringSave(nmsColorFgFV, ColorPairToString(clrFgFV))
+        If Not ColorPairIsEmpty(clrFgFP) Then StringSave(nmsColorFgFP, ColorPairToString(clrFgFP))
+        If Not ColorPairIsEmpty(clrFgOV) Then StringSave(nmsColorFgOV, ColorPairToString(clrFgOV))
     End Sub
 
     Private Sub a_close_Execute(sender As Object, e As EventArgs) Handles a_close.Execute
@@ -421,17 +492,20 @@ Public Class MForm3
             WindowSet(Me)
             StringSave(nmCurrentFile, AData.CurrentFile)
             AData.CurrentFile = oRetForm.txtCurrentFile.Text
-            clrFgO = oRetForm.clrFgO.ColorSetting
+            clrFgOP = oRetForm.clrFgOP.ColorSetting
             clrFgN = oRetForm.clrFgN.ColorSetting
             clrFgFV = oRetForm.clrFgFV.ColorSetting
             clrFgFP = oRetForm.clrFgFP.ColorSetting
+            clrFgOV = oRetForm.clrFgOV.ColorSetting
             bSetTabColors = oRetForm.gbColors.Checked
             bSimpleExcel = oRetForm.chkSimpleExcel.Checked
+            bUseExcel = oRetForm.chkUseExcel.Checked
             sExcelExpDir = oRetForm.txtMSExcelDir.Text
-            InitGrid(FgO, "objednávky", clrFgO, bSetTabColors)
+            InitGrid(FgOP, "objednávky", clrFgOP, bSetTabColors)
             InitGrid(FgN, "nabídky", clrFgN, bSetTabColors)
-            InitGrid(FgFV, "vydané faktury", clrFgFV, bSetTabColors, True)
-            InitGrid(FgFP, "přijaté faktury", clrFgFP, bSetTabColors, True)
+            InitGrid(FgFV, "vydané faktury", clrFgFV, bSetTabColors)
+            InitGrid(FgOV, "objednávky", clrFgOV, bSetTabColors)
+            InitGrid(FgFP, "přijaté faktury", clrFgFP, bSetTabColors)
             SaveForm()
             LoadData()
         End If
@@ -443,8 +517,10 @@ Public Class MForm3
 
     Private Function FgA() As XC1Flexgrid
         Select Case True
-            Case tbcMain.SelectedTab Is pgObj
-                Return FgO
+            Case tbcMain.SelectedTab Is pgObjPrij
+                Return FgOP
+            Case tbcMain.SelectedTab Is pgObjVyd
+                Return FgOV
             Case tbcMain.SelectedTab Is pgNab
                 Return FgN
             Case tbcMain.SelectedTab Is pgFaktVyd
@@ -522,7 +598,7 @@ Public Class MForm3
         If Fg.Rows(Fg.Row).Node.Expanded Then Fg.AutoSizeCol(iColFgText)
     End Sub
 
-    Private Sub Fg_DoubleClick(sender As Object, e As EventArgs) Handles FgO.DoubleClick, FgN.DoubleClick, FgFP.DoubleClick, FgFV.DoubleClick
+    Private Sub Fg_DoubleClick(sender As Object, e As EventArgs) Handles FgOP.DoubleClick, FgN.DoubleClick, FgFP.DoubleClick, FgFV.DoubleClick
         bLoading = True
         Dim Fg As XC1Flexgrid = FgA()
         If Fg.RowIsValid Then
@@ -605,7 +681,7 @@ Public Class MForm3
         End Using
     End Sub
 
-    Private Sub Fg_KeyPress(sender As Object, e As KeyPressEventArgs) Handles FgO.KeyPress, FgN.KeyPress, FgFP.KeyPress, FgFV.KeyPress
+    Private Sub Fg_KeyPress(sender As Object, e As KeyPressEventArgs) Handles FgOP.KeyPress, FgOV.KeyPress, FgN.KeyPress, FgFP.KeyPress, FgFV.KeyPress
         bLoading = True
         Dim Fg As XC1Flexgrid = FgA()
         If e.KeyChar = " "c OrElse e.KeyChar = vbCr Then
@@ -634,7 +710,7 @@ Public Class MForm3
         FAbout.Run(Me)
     End Sub
 
-    Private Sub Fg_KeyUp(sender As Object, e As KeyEventArgs) Handles FgO.KeyUp
+    Private Sub Fg_KeyUp(sender As Object, e As KeyEventArgs) Handles FgOP.KeyUp
         If e.KeyValue = 107 AndAlso e.Control Then
             a_sbalit_vse_Execute(a_rozbalit_vse, Nothing)
         ElseIf e.KeyValue = 109 AndAlso e.Control Then
@@ -648,8 +724,8 @@ Public Class MForm3
 
     Private Sub tbcMain_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tbcMain.SelectedIndexChanged
         Select Case True
-            Case tbcMain.SelectedTab Is pgObj
-                FgO.Select()
+            Case tbcMain.SelectedTab Is pgObjPrij
+                FgOP.Select()
                 a_najit_vlevo.Enabled = True
                 a_najit_vpravo.Enabled = True
             Case tbcMain.SelectedTab Is pgNab
@@ -660,14 +736,18 @@ Public Class MForm3
                 FgFV.Select()
                 a_najit_vlevo.Enabled = True
                 a_najit_vpravo.Enabled = False
+            Case tbcMain.SelectedTab Is pgObjVyd
+                FgOV.Select()
+                a_najit_vlevo.Enabled = False
+                a_najit_vpravo.Enabled = True
             Case tbcMain.SelectedTab Is pgFaktPrij
                 FgFP.Select()
-                a_najit_vlevo.Enabled = False
+                a_najit_vlevo.Enabled = True
                 a_najit_vpravo.Enabled = False
         End Select
     End Sub
 
-    Private Sub FgFP_OwnerDrawCell(sender As Object, e As OwnerDrawCellEventArgs) Handles FgO.OwnerDrawCell, FgN.OwnerDrawCell, FgFV.OwnerDrawCell, FgFP.OwnerDrawCell
+    Private Sub FgFP_OwnerDrawCell(sender As Object, e As OwnerDrawCellEventArgs) Handles FgOP.OwnerDrawCell, FgN.OwnerDrawCell, FgFV.OwnerDrawCell, FgFP.OwnerDrawCell
         Dim Fg As XC1Flexgrid = DirectCast(sender, XC1Flexgrid)
         If e.Col = iColFgTree AndAlso e.Row >= Fg.Row1 Then
             Try
@@ -697,23 +777,23 @@ Public Class MForm3
         End If
     End Sub
 
-    Private Sub FgFP_AfterResizeColumn(sender As Object, e As RowColEventArgs) Handles FgFP.AfterResizeColumn, FgFV.AfterResizeColumn, FgO.AfterResizeColumn, FgN.AfterResizeColumn
+    Private Sub FgFP_AfterResizeColumn(sender As Object, e As RowColEventArgs) Handles FgFP.AfterResizeColumn, FgFV.AfterResizeColumn, FgOP.AfterResizeColumn, FgN.AfterResizeColumn
         Dim Fg As XC1Flexgrid = FgA()
         SetTreeCol(Fg)
     End Sub
 
     Private Sub a_najit_vpravo_Execute(sender As Object, e As EventArgs) Handles a_najit_vpravo.Execute
         If tbcMain.SelectedTab Is pgNab Then
-            NajdiFirmu(CStr(FgN(FgN.Row, iColFgNazevFirmy)), FgO, pgObj)
-        ElseIf tbcMain.SelectedTab Is pgObj Then
-            NajdiFirmu(CStr(FgO(FgO.Row, iColFgNazevFirmy)), FgFV, pgFaktVyd)
+            NajdiFirmu(CStr(FgN(FgN.Row, iColFgNazevFirmy)), FgOP, pgObjPrij)
+        ElseIf tbcMain.SelectedTab Is pgObjPrij Then
+            NajdiFirmu(CStr(FgOP(FgOP.Row, iColFgNazevFirmy)), FgFV, pgFaktVyd)
         End If
     End Sub
 
     Private Sub a_najit_vlevo_Execute(sender As Object, e As EventArgs) Handles a_najit_vlevo.Execute
         If tbcMain.SelectedTab Is pgFaktVyd Then
-            NajdiFirmu(CStr(FgFV(FgFV.Row, iColFgNazevFirmy)), FgO, pgObj)
-        ElseIf tbcMain.SelectedTab Is pgObj Then
+            NajdiFirmu(CStr(FgFV(FgFV.Row, iColFgNazevFirmy)), FgOP, pgObjPrij)
+        ElseIf tbcMain.SelectedTab Is pgObjPrij Then
             NajdiFirmu(CStr(FgN(FgN.Row, iColFgNazevFirmy)), FgN, pgNab)
         End If
     End Sub
@@ -745,119 +825,137 @@ Public Class MForm3
 
     Private Sub a_excel_Execute(sender As Object, e As EventArgs) Handles a_excel.Execute
         Dim oEx As Excel.Application = Nothing
+        Dim oWbk As Excel.Workbook = Nothing
+        Dim oWsh As Excel.Worksheet = Nothing
+        Dim sFilename As String = sExcelExpDir
         Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Vytváří se sešit MS Excel (může trvat i několik minut).. ")
-            Dim sFilename As String = sExcelExpDir
             If Not IO.Directory.Exists(sExcelExpDir) Then
                 Try
                     IO.Directory.CreateDirectory(sExcelExpDir)
                 Catch : End Try
             End If
-            sFilename = IO.Path.Combine(IO.Path.Combine(sFilename, tbcMain.SelectedTab.Text & Now.ToString("_yyyyMMdd_Hmm") & ".xlsx"))
+            sFilename = IO.Path.Combine(IO.Path.Combine(sFilename, tbcMain.SelectedTab.Text & Now.ToString("_yyyyMMdd_HHmm") & ".xlsx"))
             'FgA.SaveExcel(sFilename, C1.Win.C1FlexGrid.FileFlags.IncludeFixedCells Or C1.Win.C1FlexGrid.FileFlags.AsDisplayed Or C1.Win.C1FlexGrid.FileFlags.VisibleOnly Or C1.Win.C1FlexGrid.FileFlags.IncludeMergedRanges Or C1.Win.C1FlexGrid.FileFlags.SaveMergedRanges)
             FgA.BaseGrid.SaveExcel(sFilename, C1.Win.C1FlexGrid.FileFlags.AsDisplayed Or FileFlags.VisibleOnly Or FileFlags.IncludeFixedCells Or FileFlags.IncludeMergedRanges Or FileFlags.LoadMergedRanges)
 
-            oEx = New Excel.Application
-            oEx.ScreenUpdating = False
-            Dim oWbk As Excel.Workbook = oEx.Workbooks.Open(sFilename)
-            oEx.WindowState = Excel.XlWindowState.xlNormal
-            Dim oWsh As Excel.Worksheet = oWbk.Sheets(1)
+            If bUseExcel Then
+                Try
+                    oEx = New Excel.Application
+                    oEx.ScreenUpdating = False
+                    oWbk = oEx.Workbooks.Open(sFilename)
+                    oEx.WindowState = Excel.XlWindowState.xlNormal
+                    oWsh = oWbk.Sheets(1)
+                Catch ex As Exception
+                    MessageBox.Show(Me, String.Format("Na této stanici zřejmě není nainstalována funkční aplikace MS Excel.{0}{0}Nelze provést žádné dodatečné úpravy exportovaného souboru.", vbCrLf, AData.CurrentFile), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    GoTo endexcel
+                End Try
 
-            'Dim iMaxCol As Integer = 0
-            'For i As Integer = 0 To FgA.ColN
-            '    If FgA.Cols(i).Visible Then iMaxCol += 1
-            'Next
-            clck.SetProgressText("Nastavuje se viditelnost jednotlivých řádků")
-            Dim iRow As Integer = 0
-            Dim iExr As Integer = FgA.Rows.Fixed
-            Dim oRg As Excel.Range = oWsh.Rows(String.Format("{0}:{1}", FgA.Rows.Fixed + 1, FgA.Rows.Count))
-            If bSimpleExcel Then oRg.Hidden = True
-            For iRow = FgA.Row1 To FgA.RowN
-                If FgA.Rows(iRow).IsNode AndAlso FgA.Rows(iRow).Node.Level = 0 Then iExr += 1
-                If FgA.Rows(iRow).IsNode AndAlso FgA.Rows(iRow).Node.Level = 0 AndAlso FgA.Rows(iRow).Node.Expanded Then
-                    oRg = oWsh.Rows(iExr)
-                    oRg.Hidden = False
-                    For Each oNd As Node In FgA.Rows(iRow).Node.Nodes
-                        iExr += 1
+                'Dim iMaxCol As Integer = 0
+                'For i As Integer = 0 To FgA.ColN
+                '    If FgA.Cols(i).Visible Then iMaxCol += 1
+                'Next
+                clck.SetProgressText("Nastavuje se viditelnost jednotlivých řádků")
+                Dim iRow As Integer = 0
+                Dim iExr As Integer = FgA.Rows.Fixed
+                Dim oRg As Excel.Range = oWsh.Rows(String.Format("{0}:{1}", FgA.Rows.Fixed + 1, FgA.Rows.Count))
+                If bSimpleExcel Then oRg.Hidden = True
+                For iRow = FgA.Row1 To FgA.RowN
+                    If FgA.Rows(iRow).IsNode AndAlso FgA.Rows(iRow).Node.Level = 0 Then iExr += 1
+                    If FgA.Rows(iRow).IsNode AndAlso FgA.Rows(iRow).Node.Level = 0 AndAlso FgA.Rows(iRow).Node.Expanded Then
                         oRg = oWsh.Rows(iExr)
                         oRg.Hidden = False
-                        If oNd.Expanded Then
-                            For Each oNd2 As Node In oNd.Nodes
-                                iExr += 1
-                                oRg = oWsh.Rows(iExr)
-                                oRg.Hidden = False
-                            Next
-                        End If
-                    Next
-                End If
-            Next
-            oRg = oWsh.Range(oWsh.Cells(1, 1), oWsh.Cells(2, FgA.Cols.Count + 1))
-            With oRg
-                .Borders(Excel.XlBordersIndex.xlDiagonalDown).LineStyle = Excel.XlLineStyle.xlLineStyleNone
-                .Borders(Excel.XlBordersIndex.xlDiagonalUp).LineStyle = Excel.XlLineStyle.xlLineStyleNone
-                .Font.Size = 7
-                .Font.Italic = True
-                With .Borders(Excel.XlBordersIndex.xlEdgeLeft)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlHairline
+                        For Each oNd As Node In FgA.Rows(iRow).Node.Nodes
+                            iExr += 1
+                            oRg = oWsh.Rows(iExr)
+                            oRg.Hidden = False
+                            If oNd.Expanded Then
+                                For Each oNd2 As Node In oNd.Nodes
+                                    iExr += 1
+                                    oRg = oWsh.Rows(iExr)
+                                    oRg.Hidden = False
+                                Next
+                            End If
+                        Next
+                    End If
+                Next
+                oRg = oWsh.Range(oWsh.Cells(1, 1), oWsh.Cells(2, FgA.Cols.Count + 1))
+                With oRg
+                    .Borders(Excel.XlBordersIndex.xlDiagonalDown).LineStyle = Excel.XlLineStyle.xlLineStyleNone
+                    .Borders(Excel.XlBordersIndex.xlDiagonalUp).LineStyle = Excel.XlLineStyle.xlLineStyleNone
+                    .Font.Size = 7
+                    .Font.Italic = True
+                    With .Borders(Excel.XlBordersIndex.xlEdgeLeft)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlHairline
+                    End With
+                    With .Borders(Excel.XlBordersIndex.xlEdgeTop)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlHairline
+                    End With
+                    With .Borders(Excel.XlBordersIndex.xlEdgeRight)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlHairline
+                    End With
+                    With .Borders(Excel.XlBordersIndex.xlInsideVertical)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlHairline
+                    End With
+                    With .Borders(Excel.XlBordersIndex.xlInsideHorizontal)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlHairline
+                    End With
                 End With
-                With .Borders(Excel.XlBordersIndex.xlEdgeTop)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlHairline
+                oRg = oWsh.Range(oWsh.Cells(FgA.Rows.Fixed + 1, 1), oWsh.Cells(iExr, FgA.Cols.Count + 1))
+                With oRg
+                    .Borders(Excel.XlBordersIndex.xlDiagonalDown).LineStyle = Excel.XlLineStyle.xlLineStyleNone
+                    .Borders(Excel.XlBordersIndex.xlDiagonalUp).LineStyle = Excel.XlLineStyle.xlLineStyleNone
+                    With .Borders(Excel.XlBordersIndex.xlEdgeLeft)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlThin
+                    End With
+                    With .Borders(Excel.XlBordersIndex.xlEdgeTop)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlThin
+                    End With
+                    With .Borders(Excel.XlBordersIndex.xlEdgeBottom)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlThin
+                    End With
+                    With .Borders(Excel.XlBordersIndex.xlEdgeRight)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlThin
+                    End With
+                    With .Borders(Excel.XlBordersIndex.xlInsideVertical)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlThin
+                    End With
+                    With .Borders(Excel.XlBordersIndex.xlInsideHorizontal)
+                        .LineStyle = Excel.XlLineStyle.xlContinuous
+                        .Weight = Excel.XlBorderWeight.xlThin
+                    End With
                 End With
-                With .Borders(Excel.XlBordersIndex.xlEdgeRight)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlHairline
-                End With
-                With .Borders(Excel.XlBordersIndex.xlInsideVertical)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlHairline
-                End With
-                With .Borders(Excel.XlBordersIndex.xlInsideHorizontal)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlHairline
-                End With
-            End With
-            oRg = oWsh.Range(oWsh.Cells(FgA.Rows.Fixed + 1, 1), oWsh.Cells(iExr, FgA.Cols.Count + 1))
-            With oRg
-                .Borders(Excel.XlBordersIndex.xlDiagonalDown).LineStyle = Excel.XlLineStyle.xlLineStyleNone
-                .Borders(Excel.XlBordersIndex.xlDiagonalUp).LineStyle = Excel.XlLineStyle.xlLineStyleNone
-                With .Borders(Excel.XlBordersIndex.xlEdgeLeft)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlThin
-                End With
-                With .Borders(Excel.XlBordersIndex.xlEdgeTop)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlThin
-                End With
-                With .Borders(Excel.XlBordersIndex.xlEdgeBottom)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlThin
-                End With
-                With .Borders(Excel.XlBordersIndex.xlEdgeRight)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlThin
-                End With
-                With .Borders(Excel.XlBordersIndex.xlInsideVertical)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlThin
-                End With
-                With .Borders(Excel.XlBordersIndex.xlInsideHorizontal)
-                    .LineStyle = Excel.XlLineStyle.xlContinuous
-                    .Weight = Excel.XlBorderWeight.xlThin
-                End With
-            End With
-            oRg = oWsh.Range(oWsh.Cells(FgA.Rows.Fixed + 1, 1), oWsh.Cells(iExr, 2))
-            oRg.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft
-            oRg.VerticalAlignment = Excel.XlVAlign.xlVAlignTop
+                oRg = oWsh.Range(oWsh.Cells(FgA.Rows.Fixed + 1, 1), oWsh.Cells(iExr, 2))
+                oRg.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft
+                oRg.VerticalAlignment = Excel.XlVAlign.xlVAlignTop
+            End If
+endexcel:
         End Using
-        If oEx IsNot Nothing Then
+        If oEx Is Nothing Then
+            If MessageBox.Show(Me, String.Format("Export do formátu MS Excel byl uložen do souboru{0}{0}{1}{0}{0}{0}Chceš tento soubor nyní otevřít?", vbCrLf, sFilename), txtAppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                Dim oPr As New Process
+                oPr.StartInfo.FileName = sFilename
+                oPr.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(sFilename)
+                oPr.StartInfo.UseShellExecute = True
+                oPr.Start()
+            End If
+        Else
             oEx.ScreenUpdating = True
             oEx.Visible = True
         End If
 
     End Sub
 
-    Private Sub FgO_AfterCollapse(sender As Object, e As RowColEventArgs) Handles FgO.AfterCollapse, FgN.AfterCollapse, FgFP.AfterCollapse, FgFV.AfterCollapse
+    Private Sub FgO_AfterCollapse(sender As Object, e As RowColEventArgs) Handles FgOP.AfterCollapse, FgN.AfterCollapse, FgFP.AfterCollapse, FgFV.AfterCollapse
         If Not bLoading Then
             Dim Fg As XC1Flexgrid = DirectCast(sender, XC1Flexgrid)
             If Fg.Rows(e.Row).IsNode AndAlso Fg.Rows(e.Row).Node.Expanded Then
@@ -868,11 +966,13 @@ Public Class MForm3
 
     Private Sub a_statistika_polozek_v_databazi_Execute(sender As Object, e As EventArgs) Handles a_statistika_polozek_v_databazi.Execute
         Dim iPolN As Integer = 0
-        Dim iPolO As Integer = 0
+        Dim iPolOP As Integer = 0
         Dim iPolFV As Integer = 0
         Dim iPolFP As Integer = 0
+        Dim iPolOV As Integer = 0
         Dim iPolNi As Integer = 0
-        Dim iPolOi As Integer = 0
+        Dim iPolOPi As Integer = 0
+        Dim iPolOVi As Integer = 0
         Dim iPolFVi As Integer = 0
         Dim iPolFPi As Integer = 0
         If AData.LoadXMLData(AData.ValidFileVersion) Then
@@ -882,10 +982,16 @@ Public Class MForm3
                     iPolNi += o2.aoObjPol.Count
                 Next
             Next
-            For Each o As AData.AFirma In AData.oAdata.aoFirmyObj
-                iPolO += o.aoDoc.Count
+            For Each o As AData.AFirma In AData.oAdata.aoFirmyObjPrij
+                iPolOP += o.aoDoc.Count
                 For Each o2 In o.aoDoc
-                    iPolOi += o2.aoObjPol.Count
+                    iPolOPi += o2.aoObjPol.Count
+                Next
+            Next
+            For Each o As AData.AFirma In AData.oAdata.aoFirmyObjVyd
+                iPolOV += o.aoDoc.Count
+                For Each o2 In o.aoDoc
+                    iPolOVi += o2.aoObjPol.Count
                 Next
             Next
             For Each o As AData.AFirma In AData.oAdata.aoFirmyFVyd
@@ -902,12 +1008,14 @@ Public Class MForm3
             Next
         End If
         Dim s1 As String = "Nabídky: {2}{0} firem, {2}{1} položek"
-        Dim s2 As String = "Objednávky: {2}{0} firem, {2}{1} položek"
+        Dim s2 As String = "Objednávky přij.: {2}{0} firem, {2}{1} položek"
         Dim s3 As String = "Faktury vydané: {2}{0} firem, {2}{1} položek"
-        Dim s4 As String = "Faktury přijaté: {2}{0} firem, {2}{1} položek"
-        Dim s5 As String = "Celkem: {1}{0} položek"
-        Dim s As String = String.Format(s1, iPolN, iPolNi, vbTab) & vbCrLf & String.Format(s2, iPolO, iPolOi, vbTab) & vbCrLf & String.Format(s3, iPolFV, iPolFVi, vbTab) &
-                          vbCrLf & String.Format(s4, iPolFP, iPolFPi, vbTab) & vbCrLf & vbCrLf & String.Format(s5, iPolNi + iPolOi + iPolFVi + iPolFPi, vbTab)
+        Dim s4 As String = "Objednávky vyd.: {2}{0} firem, {2}{1} položek"
+        Dim s5 As String = "Faktury přijaté: {2}{0} firem, {2}{1} položek"
+        Dim s6 As String = "Celkem: {1}{0} položek"
+        Dim s As String = String.Format(s1, iPolN, iPolNi, vbTab) & vbCrLf & String.Format(s2, iPolOP, iPolOPi, vbTab) & vbCrLf & String.Format(s3, iPolFV, iPolFVi, vbTab) &
+                          vbCrLf & String.Format(s4, iPolOV, iPolOVi, vbTab) & vbCrLf & String.Format(s5, iPolFP, iPolFPi, vbTab) & vbCrLf & vbCrLf &
+                          String.Format(s6, iPolNi + iPolOPi + iPolOVi + iPolFVi + iPolFPi, vbTab)
         MessageBox.Show(Me, String.Format("Statistika počtů položek archivu ""{2}"":{0}{0}{1}", vbCrLf, s, AData.CurrentFile), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 End Class

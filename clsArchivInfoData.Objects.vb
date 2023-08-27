@@ -14,6 +14,10 @@ Partial Public Class AData
         MyBase.New
     End Sub
 
+    Public Shared Function ConvertMena(sMena As String) As String
+        Return Replace(Replace(sMena, "EUR", "€"), "USD", "$")
+    End Function
+
     Public Sub AddMdbFile(sMdbFilename As String, sPassword As String, iNewFileID As Integer, Optional ByRef iRemoved As Integer = 0)
         Dim oFile As New AFile(sMdbFilename, sPassword, iNewFileID)
         RemoveDataMdbFile(sMdbFilename, iRemoved)
@@ -25,14 +29,23 @@ Partial Public Class AData
         iRemoved = 0
         For i As Integer = aoFiles.Count - 1 To 0 Step -1
             If String.Compare(aoFiles(i).PureFileName, oFile.PureFileName, True) = 0 Then
-                For i2 As Integer = aoFirmyObj.Count - 1 To 0 Step -1
-                    For i3 As Integer = aoFirmyObj(i2).aoDoc.Count - 1 To 0 Step -1
-                        If aoFirmyObj(i2).aoDoc(i3).FileID = aoFiles(i).Id Then
-                            iRemoved += aoFirmyObj(i2).aoDoc(i3).aoObjPol.Count
-                            aoFirmyObj(i2).aoDoc.RemoveAt(i3)
+                For i2 As Integer = aoFirmyObjPrij.Count - 1 To 0 Step -1
+                    For i3 As Integer = aoFirmyObjPrij(i2).aoDoc.Count - 1 To 0 Step -1
+                        If aoFirmyObjPrij(i2).aoDoc(i3).FileID = aoFiles(i).Id Then
+                            iRemoved += aoFirmyObjPrij(i2).aoDoc(i3).aoObjPol.Count
+                            aoFirmyObjPrij(i2).aoDoc.RemoveAt(i3)
                         End If
                     Next
-                    If aoFirmyObj(i2).aoDoc.Count = 0 Then aoFirmyObj.RemoveAt(i2)
+                    If aoFirmyObjPrij(i2).aoDoc.Count = 0 Then aoFirmyObjPrij.RemoveAt(i2)
+                Next
+                For i2 As Integer = aoFirmyObjVyd.Count - 1 To 0 Step -1
+                    For i3 As Integer = aoFirmyObjVyd(i2).aoDoc.Count - 1 To 0 Step -1
+                        If aoFirmyObjVyd(i2).aoDoc(i3).FileID = aoFiles(i).Id Then
+                            iRemoved += aoFirmyObjVyd(i2).aoDoc(i3).aoObjPol.Count
+                            aoFirmyObjVyd(i2).aoDoc.RemoveAt(i3)
+                        End If
+                    Next
+                    If aoFirmyObjVyd(i2).aoDoc.Count = 0 Then aoFirmyObjVyd.RemoveAt(i2)
                 Next
                 For i2 As Integer = aoFirmyNab.Count - 1 To 0 Step -1
                     For i3 As Integer = aoFirmyNab(i2).aoDoc.Count - 1 To 0 Step -1
@@ -90,17 +103,20 @@ Partial Public Class AData
     <XmlElement("fil")>
     Public aoFiles As New List(Of AFile)
 
-    <XmlElement("p")>
-    Public aoFirmyObj As New List(Of AFirma)
-
     <XmlElement("v")>
     Public aoFirmyNab As New List(Of AFirma)
+
+    <XmlElement("o")>
+    Public aoFirmyObjPrij As New List(Of AFirma)
 
     <XmlElement("f")>
     Public aoFirmyFVyd As New List(Of AFirma)
 
     <XmlElement("fp")>
     Public aoFirmyFPrij As New List(Of AFirma)
+
+    <XmlElement("ov")>
+    Public aoFirmyObjVyd As New List(Of AFirma)
 
     Public Function GetMaxFileID() As Integer
         Dim iRet As Integer = 0
@@ -111,8 +127,8 @@ Partial Public Class AData
     End Function
 
 
-    Public Function AddFirmaObjNab(JmenoFirmy As String, ICO As Decimal, Email As String, iFId As Integer, aoFirmy As List(Of AFirma)) As AFirma
-        Dim oFrm As New AFirma(JmenoFirmy, ICO, Email, iFId)
+    Public Function AddFirmaObjNab(JmenoFirmy As String, ICO As Decimal, Email As String, Zeme As String, iFId As Integer, aoFirmy As List(Of AFirma)) As AFirma
+        Dim oFrm As New AFirma(JmenoFirmy, ICO, Email, Zeme, iFId)
         Dim iIdx As Integer = -1
         Dim o As AFirma = Nothing
         For i As Integer = 0 To aoFirmy.Count - 1
@@ -173,7 +189,7 @@ Partial Public Class AData
         Public Sub New()
             MyBase.New
         End Sub
-        Public Sub New(JmenoFirmy As String, dcICO As Decimal, sEmail As String, iFileId As Integer)
+        Public Sub New(JmenoFirmy As String, dcICO As Decimal, sEmail As String, sZeme As String, iFileId As Integer)
             MyBase.New
             KeyName = Trim(XControls.CutDiacritic(UCase(JmenoFirmy)))
             While KeyName.Contains(". ")
@@ -190,20 +206,30 @@ Partial Public Class AData
             End While
             ICO = dcICO
             Email = sEmail
-            'Typ = iTypRec
+            Zeme = sZeme
         End Sub
         <XmlAttribute("k")>
         Public KeyName As String = ""
-        <XmlAttribute("i")>
+        <XmlAttribute("o")>
         Public ICO As Decimal = 0
-        <XmlAttribute("e")>
+        <XmlAttribute("e"), DefaultValue("")>
         Public Email As String = ""
+        <XmlAttribute("z"), DefaultValue("")>
+        Public Zeme As String = ""
         <XmlElement("d")>
         Public aoDoc As New List(Of AObjNab)
         <XmlElement("f")>
         Public aoDocF As New List(Of AFakt)
         <XmlIgnore>
-        Public DisplayName As String = KeyName
+        Public DisplayName As String = ""
+        Public ReadOnly Property GetDisplayName(Optional FullText As Boolean = True) As String
+            Get
+                If String.IsNullOrEmpty(DisplayName) Then Return "(neuvedeno)"
+                Dim sRet As String = DisplayName
+                If Not String.IsNullOrEmpty(Zeme) Then sRet &= " [" & Zeme & "]"
+                Return sRet
+            End Get
+        End Property
 
         Public Overrides Function ToString() As String
             Return String.Format("{0}; {1}; {2}; {3}; {4};", DisplayName, Email, aoDoc.Count, aoDocF.Count, KeyName)
@@ -272,26 +298,65 @@ Partial Public Class AData
             MyBase.New
         End Sub
 
-        Public Sub New(iRecID As Integer, iFileId As Integer, sName As String, lCislo As Long, dtDatum As Date)
+        Public Const sOpt1 As String = "OBJEDNAVAMEUVAS"
+        Public Const sOpt2 As String = "OBJEDNAVAME"
+        Public Const sOpt3 As String = "OBJEDNAVAMEDODANI"
+        Public Sub New(iRecID As Integer, iFileId As Integer, sName As String, lCislo As Long, dtDatum As Date, sText As String, dcKc As Decimal, sMena As String, dcKurs As Decimal)
             MyBase.New
             RecID = iRecID
             FileID = iFileId
             Name = sName
             Datum = dtDatum.ToString("ddMMyy")
             Cislo = lCislo
+            Kc = dcKc
+            Mena = Replace(sMena, "EUR", "€")
+            Kurs = dcKurs
+            Dim sOpt As String = XControls.CutDiacritic(Replace(Replace(UCase(sText), ":", ""), " ", ""))
+            Select Case sOpt
+                Case sOpt1, sOpt2, sOpt3
+                Case Else
+                    Text = sText
+            End Select
         End Sub
         <XmlAttribute("r")>
         Public RecID As Integer = 0
         <XmlAttribute("f")>
         Public FileID As Integer = 0
-        <XmlAttribute("t")>
+        <XmlAttribute("n")>
         Public Name As String = ""
+        <XmlAttribute("t"), DefaultValue("")>
+        Public Text As String = ""
         <XmlAttribute("c")>
         Public Cislo As Long = 0L
         <XmlAttribute("d")>
         Public Datum As String = ""
-        <XmlElement("p")>
+        <XmlAttribute("p"), DefaultValue(GetType(Decimal), "0.0000")>
+        Public Kc As Decimal = 0
+        <XmlAttribute("k"), DefaultValue(GetType(Decimal), "0.0000")>
+        Public Kurs As Decimal = 0
+        <XmlAttribute("m"), DefaultValue("")>
+        Public Mena As String
+        <XmlElement("l")>
         Public aoObjPol As New List(Of AObjNabPol)
+        Public ReadOnly Property JeCena As Boolean
+            Get
+                Return Kc > 0
+            End Get
+        End Property
+        Public ReadOnly Property JeCiziMena As Boolean
+            Get
+                Return Kurs > 0
+            End Get
+        End Property
+        Public ReadOnly Property CiziMena As String
+            Get
+                Dim sRet As String = ""
+                If JeCiziMena AndAlso JeCena Then
+                    sRet = Mena & " " & (Kc / Kurs).ToString("0.00")
+                End If
+                Return sRet
+            End Get
+        End Property
         Public ReadOnly Property dtDatum As Date
             Get
                 If IsNumeric(Datum) AndAlso Datum.Length = 6 Then
@@ -313,27 +378,70 @@ Partial Public Class AData
 
     End Class
 
-    ''' <summary> Polozka prijate objednavky </summary>
+    ''' <summary> Polozka nabidky/objednavky </summary>
     Public Class AObjNabPol
         Public Sub New()
             MyBase.New
         End Sub
 
-        Public Sub New(iID As Integer, sText As String, sPozn As String, dcMnoz As Decimal)
+        Public Sub New(iID As Integer, sText As String, sPozn As String, dcMnoz As Decimal, dcKc As Decimal)
             MyBase.New
             ID = iID
             Text = sText
             Pozn = sPozn
             Mnoz = dcMnoz
+            Kc = dcKc
         End Sub
         <XmlAttribute("x")>
         Public ID As Integer = 0
-        <XmlAttribute("t")>
+        <XmlAttribute("t"), DefaultValue("")>
         Public Text As String = ""
-        <XmlAttribute("p")>
+        <XmlAttribute("n"), DefaultValue("")>
         Public Pozn As String = ""
-        <XmlAttribute("m")>
-        Public Mnoz As Decimal
+        <XmlAttribute("a"), DefaultValue(GetType(Decimal), "0.0000")>
+        Public Mnoz As Decimal = -1
+        <XmlAttribute("p"), DefaultValue(GetType(Decimal), "0.0000")>
+        Public Kc As Decimal = -1
+
+        Public ReadOnly Property JeMnozstvi As Boolean
+            Get
+                Return Mnoz > 0
+            End Get
+        End Property
+        Public ReadOnly Property JeCena As Boolean
+            Get
+                Return Kc > 0
+            End Get
+        End Property
+        Public ReadOnly Property JeCenaMnozstvi As Boolean
+            Get
+                Return JeCena AndAlso JeMnozstvi
+            End Get
+        End Property
+        Public ReadOnly Property JeCiziMena(oRoot As AObjNab) As Boolean
+            Get
+                Return oRoot.Kurs > 0
+            End Get
+        End Property
+        Public ReadOnly Property CiziMena(oRoot As AObjNab) As String
+            Get
+                Dim sRet As String = ""
+                If JeCiziMena(oRoot) AndAlso JeCenaMnozstvi Then
+                    sRet = oRoot.Mena & " " & ((Kc * Mnoz) / oRoot.Kurs).ToString("0.00")
+                End If
+                Return sRet
+            End Get
+        End Property
+        Public ReadOnly Property Cena() As String
+            Get
+                Dim sRet As String = ""
+                If JeCenaMnozstvi Then
+                    sRet = (Kc * Mnoz).ToString("0.00")
+                End If
+                Return sRet
+            End Get
+        End Property
+
     End Class
 
     Public Class APolozka
@@ -354,25 +462,66 @@ Partial Public Class AData
             MyBase.New
         End Sub
 
-        Public Sub New(iRecID As Integer, iFileId As Integer, sName As String, lCislo As Long, dtDatum As Date)
+        Public Const sOpt1 As String = "FAKTURUJEMEVAM"
+
+        Public Sub New(iRecID As Integer, iFileId As Integer, sName As String, lCislo As Long, dtDatum As Date, sText As String, dcKc As Decimal, sMena As String, dcKurs As Decimal)
             MyBase.New
             RecID = iRecID
             FileID = iFileId
             Name = sName
             Datum = dtDatum.ToString("ddMMyy")
             Cislo = lCislo
+            Kc = dcKc
+            Mena = sMena
+            Kurs = dcKurs
+            'If Kurs > 0 Then
+            '    Debug.WriteLine("zxzz")
+            'End If
+            Dim sOpt As String = XControls.CutDiacritic(Replace(Replace(UCase(sText), ":", ""), " ", ""))
+            Select Case sOpt
+                Case sOpt1
+                Case Else
+                    Text = sText
+            End Select
         End Sub
         <XmlAttribute("r")>
         Public RecID As Integer = 0
         <XmlAttribute("f")>
         Public FileID As Integer = 0
-        <XmlAttribute("t")>
+        <XmlAttribute("n")>
         Public Name As String = ""
+        <XmlAttribute("t"), DefaultValue("")>
+        Public Text As String = ""
         <XmlAttribute("c")>
         Public Cislo As Long = 0L
         <XmlAttribute("d")>
         Public Datum As String = ""
-        <XmlElement("p")>
+        <XmlAttribute("p"), DefaultValue(GetType(Decimal), "0.0000")>
+        Public Kc As Decimal = -1
+        <XmlAttribute("k"), DefaultValue(GetType(Decimal), "0.0000")>
+        Public Kurs As Decimal = -1
+        <XmlAttribute("m"), DefaultValue("")>
+        Public Mena As String = ""
+        Public ReadOnly Property JeCena As Boolean
+            Get
+                Return Kc > 0
+            End Get
+        End Property
+        Public ReadOnly Property JeCiziMena As Boolean
+            Get
+                Return Kurs > 0
+            End Get
+        End Property
+        Public ReadOnly Property CiziMena As String
+            Get
+                Dim sRet As String = ""
+                If JeCiziMena AndAlso JeCena Then
+                    sRet = Mena & " " & (Kc / Kurs).ToString("0.00")
+                End If
+                Return sRet
+            End Get
+        End Property
+        <XmlElement("l")>
         Public aoFaktPol As New List(Of AFaktPol)
         Public ReadOnly Property dtDatum As Date
             Get
@@ -401,34 +550,73 @@ Partial Public Class AData
             MyBase.New
         End Sub
 
-        Public Sub New(iID As Integer, sText As String, sPozn As String, dcMnoz As Decimal, dcCena As Decimal)
+        Public Sub New(iID As Integer, sText As String, sPozn As String, dcMnoz As Decimal, dcKc As Decimal)
             MyBase.New
             ID = iID
             Text = sText
             Pozn = sPozn
             Mnoz = dcMnoz
-            JednCena = dcCena
+            Kc = dcKc
         End Sub
         <XmlAttribute("x")>
         Public ID As Integer = 0
         <XmlAttribute("t")>
         Public Text As String = ""
-        <XmlAttribute("p")>
+        <XmlAttribute("n"), DefaultValue("")>
         Public Pozn As String = ""
-        <XmlAttribute("m")>
-        Public Mnoz As Decimal
-        <XmlAttribute("c")>
-        Public JednCena As Decimal
+        <XmlAttribute("a"), DefaultValue(GetType(Decimal), "0.0000")>
+        Public Mnoz As Decimal = -1
+        <XmlAttribute("p"), DefaultValue(GetType(Decimal), "0.0000")>
+        Public Kc As Decimal = -1
+        Public ReadOnly Property JeMnozstvi As Boolean
+            Get
+                Return Mnoz > 0
+            End Get
+        End Property
+        Public ReadOnly Property JeCena As Boolean
+            Get
+                Return Kc > 0
+            End Get
+        End Property
+        Public ReadOnly Property JeCenaMnozstvi As Boolean
+            Get
+                Return JeCena AndAlso JeMnozstvi
+            End Get
+        End Property
+        Public ReadOnly Property JeCiziMena(oRoot As AFakt) As Boolean
+            Get
+                Return oRoot.Kurs > 0
+            End Get
+        End Property
+        Public ReadOnly Property CiziMena(oRoot As AFakt) As String
+            Get
+                Dim sRet As String = ""
+                If JeCiziMena(oRoot) AndAlso JeCenaMnozstvi Then
+                    sRet = oRoot.Mena & " " & ((Kc * Mnoz) / oRoot.Kurs).ToString("0.00")
+                End If
+                Return sRet
+            End Get
+        End Property
+        Public ReadOnly Property Cena() As String
+            Get
+                Dim sRet As String = ""
+                If JeCenaMnozstvi Then
+                    sRet = (Kc * Mnoz).ToString("0.00")
+                End If
+                Return sRet
+            End Get
+        End Property
+
     End Class
 
-    Public Class APolozkaF
-        Public Sub New(oFirma As AFirma, oFPol As AFaktPol)
-            MyBase.New
-            Firma = oFirma
-            FPol = oFPol
-        End Sub
-        Public Firma As AFirma = Nothing
-        Public FPol As AFaktPol = Nothing
-    End Class
+    'Public Class APolozkaF
+    '    Public Sub New(oFirma As AFirma, oFPol As AFaktPol)
+    '        MyBase.New
+    '        Firma = oFirma
+    '        FPol = oFPol
+    '    End Sub
+    '    Public Firma As AFirma = Nothing
+    '    Public FPol As AFaktPol = Nothing
+    'End Class
 
 End Class

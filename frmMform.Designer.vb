@@ -29,12 +29,15 @@ Partial Class MForm3
         Me.pgNab = New System.Windows.Forms.TabPage()
         Me.pnNab = New System.Windows.Forms.Panel()
         Me.FgN = New XForms.XC1Flexgrid()
-        Me.pgObj = New System.Windows.Forms.TabPage()
-        Me.pnObj = New System.Windows.Forms.Panel()
-        Me.FgO = New XForms.XC1Flexgrid()
+        Me.pgObjPrij = New System.Windows.Forms.TabPage()
+        Me.pnObjP = New System.Windows.Forms.Panel()
+        Me.FgOP = New XForms.XC1Flexgrid()
         Me.pgFaktVyd = New System.Windows.Forms.TabPage()
         Me.pnVydFakt = New System.Windows.Forms.Panel()
         Me.FgFV = New XForms.XC1Flexgrid()
+        Me.pgObjVyd = New System.Windows.Forms.TabPage()
+        Me.pnObjV = New System.Windows.Forms.Panel()
+        Me.FgOV = New XForms.XC1Flexgrid()
         Me.pgFaktPrij = New System.Windows.Forms.TabPage()
         Me.pnFgP = New System.Windows.Forms.Panel()
         Me.FgFP = New XForms.XC1Flexgrid()
@@ -98,6 +101,8 @@ Partial Class MForm3
         Me.a_sprava_aplikace = New ActionListLib.Action(Me.components)
         Me.m_o_aplikaci = New ActionListLib.Menu(Me.components)
         Me.a_o_aplikaci = New ActionListLib.Action(Me.components)
+        Me.m_statistika_polozek_v_databazi = New ActionListLib.Menu(Me.components)
+        Me.a_statistika_polozek_v_databazi = New ActionListLib.Action(Me.components)
         Me.ActionListConn = New ActionListLib.ActionListConn(Me.components)
         Me.m_main = New ActionListLib.Menu(Me.components)
         Me.m_file = New ActionListLib.Menu(Me.components)
@@ -108,18 +113,19 @@ Partial Class MForm3
         Me.m_window = New ActionListLib.Menu(Me.components)
         Me.m_help = New ActionListLib.Menu(Me.components)
         Me.a_nastaveni = New ActionListLib.Action(Me.components)
-        Me.m_statistika_polozek_v_databazi = New ActionListLib.Menu(Me.components)
-        Me.a_statistika_polozek_v_databazi = New ActionListLib.Action(Me.components)
         Me.tbcMain.SuspendLayout()
         Me.pgNab.SuspendLayout()
         Me.pnNab.SuspendLayout()
         CType(Me.FgN, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pgObj.SuspendLayout()
-        Me.pnObj.SuspendLayout()
-        CType(Me.FgO, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pgObjPrij.SuspendLayout()
+        Me.pnObjP.SuspendLayout()
+        CType(Me.FgOP, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pgFaktVyd.SuspendLayout()
         Me.pnVydFakt.SuspendLayout()
         CType(Me.FgFV, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pgObjVyd.SuspendLayout()
+        Me.pnObjV.SuspendLayout()
+        CType(Me.FgOV, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pgFaktPrij.SuspendLayout()
         Me.pnFgP.SuspendLayout()
         CType(Me.FgFP, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -139,12 +145,13 @@ Partial Class MForm3
         'tbcMain
         '
         Me.tbcMain.Controls.Add(Me.pgNab)
-        Me.tbcMain.Controls.Add(Me.pgObj)
+        Me.tbcMain.Controls.Add(Me.pgObjPrij)
         Me.tbcMain.Controls.Add(Me.pgFaktVyd)
+        Me.tbcMain.Controls.Add(Me.pgObjVyd)
         Me.tbcMain.Controls.Add(Me.pgFaktPrij)
         Me.tbcMain.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbcMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed
-        Me.tbcMain.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.tbcMain.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Bold)
         Me.tbcMain.Location = New System.Drawing.Point(0, 41)
         Me.tbcMain.Name = "tbcMain"
         Me.tbcMain.SelectedIndex = 0
@@ -154,10 +161,10 @@ Partial Class MForm3
         'pgNab
         '
         Me.pgNab.Controls.Add(Me.pnNab)
-        Me.pgNab.Location = New System.Drawing.Point(4, 22)
+        Me.pgNab.Location = New System.Drawing.Point(4, 23)
         Me.pgNab.Name = "pgNab"
         Me.pgNab.Padding = New System.Windows.Forms.Padding(3)
-        Me.pgNab.Size = New System.Drawing.Size(982, 472)
+        Me.pgNab.Size = New System.Drawing.Size(982, 471)
         Me.pgNab.TabIndex = 1
         Me.pgNab.Text = "Archiv vydaných nabídek"
         Me.pgNab.UseVisualStyleBackColor = True
@@ -170,7 +177,7 @@ Partial Class MForm3
         Me.pnNab.Font = New System.Drawing.Font("Tahoma", 8.25!)
         Me.pnNab.Location = New System.Drawing.Point(3, 3)
         Me.pnNab.Name = "pnNab"
-        Me.pnNab.Size = New System.Drawing.Size(976, 466)
+        Me.pnNab.Size = New System.Drawing.Size(976, 465)
         Me.pnNab.TabIndex = 8
         '
         'FgN
@@ -191,7 +198,7 @@ Partial Class MForm3
         Me.ActionList0.SetPopupMenu(Me.FgN, Me.m_popup1)
         Me.FgN.Rows.DefaultSize = 20
         Me.FgN.ShowCursor = True
-        Me.FgN.Size = New System.Drawing.Size(976, 466)
+        Me.FgN.Size = New System.Drawing.Size(976, 465)
         Me.FgN.StyleInfo = resources.GetString("FgN.StyleInfo")
         Me.FgN.TabIndex = 7
         Me.FgN.Tree.Column = 1
@@ -199,61 +206,61 @@ Partial Class MForm3
         Me.FgN.UseCompatibleTextRendering = False
         Me.FgN.XSearchTextMode = XForms.XC1Flexgrid.XSearchTextModes.[Default]
         '
-        'pgObj
+        'pgObjPrij
         '
-        Me.pgObj.Controls.Add(Me.pnObj)
-        Me.pgObj.Location = New System.Drawing.Point(4, 22)
-        Me.pgObj.Name = "pgObj"
-        Me.pgObj.Padding = New System.Windows.Forms.Padding(3)
-        Me.pgObj.Size = New System.Drawing.Size(982, 472)
-        Me.pgObj.TabIndex = 0
-        Me.pgObj.Text = "Archiv přijatých objednávek"
-        Me.pgObj.UseVisualStyleBackColor = True
+        Me.pgObjPrij.Controls.Add(Me.pnObjP)
+        Me.pgObjPrij.Location = New System.Drawing.Point(4, 23)
+        Me.pgObjPrij.Name = "pgObjPrij"
+        Me.pgObjPrij.Padding = New System.Windows.Forms.Padding(3)
+        Me.pgObjPrij.Size = New System.Drawing.Size(982, 471)
+        Me.pgObjPrij.TabIndex = 0
+        Me.pgObjPrij.Text = "Archiv přijatých objednávek"
+        Me.pgObjPrij.UseVisualStyleBackColor = True
         '
-        'pnObj
+        'pnObjP
         '
-        Me.pnObj.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.pnObj.Controls.Add(Me.FgO)
-        Me.pnObj.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pnObj.Font = New System.Drawing.Font("Tahoma", 8.25!)
-        Me.pnObj.Location = New System.Drawing.Point(3, 3)
-        Me.pnObj.Name = "pnObj"
-        Me.pnObj.Size = New System.Drawing.Size(976, 466)
-        Me.pnObj.TabIndex = 7
+        Me.pnObjP.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.pnObjP.Controls.Add(Me.FgOP)
+        Me.pnObjP.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnObjP.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.pnObjP.Location = New System.Drawing.Point(3, 3)
+        Me.pnObjP.Name = "pnObjP"
+        Me.pnObjP.Size = New System.Drawing.Size(976, 465)
+        Me.pnObjP.TabIndex = 7
         '
-        'FgO
+        'FgOP
         '
-        Me.FgO.AllowEditing = False
-        Me.FgO.BackColor = System.Drawing.Color.MediumSpringGreen
-        Me.FgO.ColumnInfo = "10,1,0,0,0,100,Columns:"
-        Me.FgO.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FgO.DrawMode = C1.Win.C1FlexGrid.DrawModeEnum.OwnerDraw
-        Me.FgO.FillStandardContextMenu = False
-        Me.FgO.FocusRect = C1.Win.C1FlexGrid.FocusRectEnum.Heavy
-        Me.FgO.Font = New System.Drawing.Font("Tahoma", 8.25!)
-        Me.FgO.KeyActionEnter = C1.Win.C1FlexGrid.KeyActionEnum.None
-        Me.FgO.KeyActionTab = C1.Win.C1FlexGrid.KeyActionEnum.MoveAcross
-        Me.FgO.Location = New System.Drawing.Point(0, 0)
-        Me.FgO.MinimumSize = New System.Drawing.Size(250, 4)
-        Me.FgO.Name = "FgO"
-        Me.ActionList0.SetPopupMenu(Me.FgO, Me.m_popup1)
-        Me.FgO.Rows.DefaultSize = 20
-        Me.FgO.ShowCursor = True
-        Me.FgO.Size = New System.Drawing.Size(976, 466)
-        Me.FgO.StyleInfo = resources.GetString("FgO.StyleInfo")
-        Me.FgO.TabIndex = 6
-        Me.FgO.Tree.Column = 1
-        Me.FgO.Tree.LineColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.FgO.UseCompatibleTextRendering = False
-        Me.FgO.XSearchTextMode = XForms.XC1Flexgrid.XSearchTextModes.[Default]
+        Me.FgOP.AllowEditing = False
+        Me.FgOP.BackColor = System.Drawing.Color.MediumSpringGreen
+        Me.FgOP.ColumnInfo = "10,1,0,0,0,100,Columns:"
+        Me.FgOP.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FgOP.DrawMode = C1.Win.C1FlexGrid.DrawModeEnum.OwnerDraw
+        Me.FgOP.FillStandardContextMenu = False
+        Me.FgOP.FocusRect = C1.Win.C1FlexGrid.FocusRectEnum.Heavy
+        Me.FgOP.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.FgOP.KeyActionEnter = C1.Win.C1FlexGrid.KeyActionEnum.None
+        Me.FgOP.KeyActionTab = C1.Win.C1FlexGrid.KeyActionEnum.MoveAcross
+        Me.FgOP.Location = New System.Drawing.Point(0, 0)
+        Me.FgOP.MinimumSize = New System.Drawing.Size(250, 4)
+        Me.FgOP.Name = "FgOP"
+        Me.ActionList0.SetPopupMenu(Me.FgOP, Me.m_popup1)
+        Me.FgOP.Rows.DefaultSize = 20
+        Me.FgOP.ShowCursor = True
+        Me.FgOP.Size = New System.Drawing.Size(976, 465)
+        Me.FgOP.StyleInfo = resources.GetString("FgOP.StyleInfo")
+        Me.FgOP.TabIndex = 6
+        Me.FgOP.Tree.Column = 1
+        Me.FgOP.Tree.LineColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.FgOP.UseCompatibleTextRendering = False
+        Me.FgOP.XSearchTextMode = XForms.XC1Flexgrid.XSearchTextModes.[Default]
         '
         'pgFaktVyd
         '
         Me.pgFaktVyd.Controls.Add(Me.pnVydFakt)
-        Me.pgFaktVyd.Location = New System.Drawing.Point(4, 22)
+        Me.pgFaktVyd.Location = New System.Drawing.Point(4, 23)
         Me.pgFaktVyd.Name = "pgFaktVyd"
         Me.pgFaktVyd.Padding = New System.Windows.Forms.Padding(3)
-        Me.pgFaktVyd.Size = New System.Drawing.Size(982, 472)
+        Me.pgFaktVyd.Size = New System.Drawing.Size(982, 471)
         Me.pgFaktVyd.TabIndex = 2
         Me.pgFaktVyd.Text = "Archiv vydaných faktur"
         Me.pgFaktVyd.UseVisualStyleBackColor = True
@@ -266,7 +273,7 @@ Partial Class MForm3
         Me.pnVydFakt.Font = New System.Drawing.Font("Tahoma", 8.25!)
         Me.pnVydFakt.Location = New System.Drawing.Point(3, 3)
         Me.pnVydFakt.Name = "pnVydFakt"
-        Me.pnVydFakt.Size = New System.Drawing.Size(976, 466)
+        Me.pnVydFakt.Size = New System.Drawing.Size(976, 465)
         Me.pnVydFakt.TabIndex = 9
         '
         'FgFV
@@ -287,7 +294,7 @@ Partial Class MForm3
         Me.ActionList0.SetPopupMenu(Me.FgFV, Me.m_popup1)
         Me.FgFV.Rows.DefaultSize = 20
         Me.FgFV.ShowCursor = True
-        Me.FgFV.Size = New System.Drawing.Size(976, 466)
+        Me.FgFV.Size = New System.Drawing.Size(976, 465)
         Me.FgFV.StyleInfo = resources.GetString("FgFV.StyleInfo")
         Me.FgFV.TabIndex = 7
         Me.FgFV.Tree.Column = 1
@@ -295,13 +302,61 @@ Partial Class MForm3
         Me.FgFV.UseCompatibleTextRendering = False
         Me.FgFV.XSearchTextMode = XForms.XC1Flexgrid.XSearchTextModes.[Default]
         '
+        'pgObjVyd
+        '
+        Me.pgObjVyd.Controls.Add(Me.pnObjV)
+        Me.pgObjVyd.Location = New System.Drawing.Point(4, 23)
+        Me.pgObjVyd.Name = "pgObjVyd"
+        Me.pgObjVyd.Padding = New System.Windows.Forms.Padding(3)
+        Me.pgObjVyd.Size = New System.Drawing.Size(982, 471)
+        Me.pgObjVyd.TabIndex = 4
+        Me.pgObjVyd.Text = "Archiv vydaných objednávek"
+        Me.pgObjVyd.UseVisualStyleBackColor = True
+        '
+        'pnObjV
+        '
+        Me.pnObjV.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.pnObjV.Controls.Add(Me.FgOV)
+        Me.pnObjV.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnObjV.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.pnObjV.Location = New System.Drawing.Point(3, 3)
+        Me.pnObjV.Name = "pnObjV"
+        Me.pnObjV.Size = New System.Drawing.Size(976, 465)
+        Me.pnObjV.TabIndex = 11
+        '
+        'FgOV
+        '
+        Me.FgOV.AllowEditing = False
+        Me.FgOV.BackColor = System.Drawing.Color.Wheat
+        Me.FgOV.ColumnInfo = "10,1,0,0,0,100,Columns:"
+        Me.FgOV.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FgOV.DrawMode = C1.Win.C1FlexGrid.DrawModeEnum.OwnerDraw
+        Me.FgOV.FillStandardContextMenu = False
+        Me.FgOV.FocusRect = C1.Win.C1FlexGrid.FocusRectEnum.Heavy
+        Me.FgOV.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.FgOV.KeyActionEnter = C1.Win.C1FlexGrid.KeyActionEnum.None
+        Me.FgOV.KeyActionTab = C1.Win.C1FlexGrid.KeyActionEnum.MoveAcross
+        Me.FgOV.Location = New System.Drawing.Point(0, 0)
+        Me.FgOV.MinimumSize = New System.Drawing.Size(250, 4)
+        Me.FgOV.Name = "FgOV"
+        Me.ActionList0.SetPopupMenu(Me.FgOV, Me.m_popup1)
+        Me.FgOV.Rows.DefaultSize = 20
+        Me.FgOV.ShowCursor = True
+        Me.FgOV.Size = New System.Drawing.Size(976, 465)
+        Me.FgOV.StyleInfo = resources.GetString("FgOV.StyleInfo")
+        Me.FgOV.TabIndex = 7
+        Me.FgOV.Tree.Column = 1
+        Me.FgOV.Tree.LineColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.FgOV.UseCompatibleTextRendering = False
+        Me.FgOV.XSearchTextMode = XForms.XC1Flexgrid.XSearchTextModes.[Default]
+        '
         'pgFaktPrij
         '
         Me.pgFaktPrij.Controls.Add(Me.pnFgP)
-        Me.pgFaktPrij.Location = New System.Drawing.Point(4, 22)
+        Me.pgFaktPrij.Location = New System.Drawing.Point(4, 23)
         Me.pgFaktPrij.Name = "pgFaktPrij"
         Me.pgFaktPrij.Padding = New System.Windows.Forms.Padding(3)
-        Me.pgFaktPrij.Size = New System.Drawing.Size(982, 472)
+        Me.pgFaktPrij.Size = New System.Drawing.Size(982, 471)
         Me.pgFaktPrij.TabIndex = 3
         Me.pgFaktPrij.Text = "Archiv přijatých faktur"
         Me.pgFaktPrij.UseVisualStyleBackColor = True
@@ -314,7 +369,7 @@ Partial Class MForm3
         Me.pnFgP.Font = New System.Drawing.Font("Tahoma", 8.25!)
         Me.pnFgP.Location = New System.Drawing.Point(3, 3)
         Me.pnFgP.Name = "pnFgP"
-        Me.pnFgP.Size = New System.Drawing.Size(976, 466)
+        Me.pnFgP.Size = New System.Drawing.Size(976, 465)
         Me.pnFgP.TabIndex = 10
         '
         'FgFP
@@ -335,7 +390,7 @@ Partial Class MForm3
         Me.ActionList0.SetPopupMenu(Me.FgFP, Me.m_popup1)
         Me.FgFP.Rows.DefaultSize = 20
         Me.FgFP.ShowCursor = True
-        Me.FgFP.Size = New System.Drawing.Size(976, 466)
+        Me.FgFP.Size = New System.Drawing.Size(976, 465)
         Me.FgFP.StyleInfo = resources.GetString("FgFP.StyleInfo")
         Me.FgFP.TabIndex = 7
         Me.FgFP.Tree.Column = 1
@@ -876,6 +931,20 @@ Partial Class MForm3
         Me.a_o_aplikaci.Parent = Me.ActionList0
         Me.a_o_aplikaci.Text = "O aplikaci"
         '
+        'm_statistika_polozek_v_databazi
+        '
+        Me.ActionList0.SetAction(Me.m_statistika_polozek_v_databazi, Me.a_statistika_polozek_v_databazi)
+        Me.m_statistika_polozek_v_databazi.Name = "m_statistika_polozek_v_databazi"
+        Me.m_statistika_polozek_v_databazi.Parent = Me.ActionList0
+        Me.m_statistika_polozek_v_databazi.Text = Nothing
+        '
+        'a_statistika_polozek_v_databazi
+        '
+        Me.a_statistika_polozek_v_databazi.AltText = "Stat. polož. v datab."
+        Me.a_statistika_polozek_v_databazi.Name = "a_statistika_polozek_v_databazi"
+        Me.a_statistika_polozek_v_databazi.Parent = Me.ActionList0
+        Me.a_statistika_polozek_v_databazi.Text = "Statistika položek v databázi"
+        '
         'ActionListConn
         '
         Me.ActionListConn.ActionList = Me.ActionList0
@@ -969,20 +1038,6 @@ Partial Class MForm3
         Me.a_nastaveni.Parent = Me.ActionList0
         Me.a_nastaveni.Text = "Nastavení"
         '
-        'm_statistika_polozek_v_databazi
-        '
-        Me.ActionList0.SetAction(Me.m_statistika_polozek_v_databazi, Me.a_statistika_polozek_v_databazi)
-        Me.m_statistika_polozek_v_databazi.Name = "m_statistika_polozek_v_databazi"
-        Me.m_statistika_polozek_v_databazi.Parent = Me.ActionList0
-        Me.m_statistika_polozek_v_databazi.Text = Nothing
-        '
-        'a_statistika_polozek_v_databazi
-        '
-        Me.a_statistika_polozek_v_databazi.AltText = "Stat. polož. v datab."
-        Me.a_statistika_polozek_v_databazi.Name = "a_statistika_polozek_v_databazi"
-        Me.a_statistika_polozek_v_databazi.Parent = Me.ActionList0
-        Me.a_statistika_polozek_v_databazi.Text = "Statistika položek v databázi"
-        '
         'MForm3
         '
         Me.ActionListConn.SetActionListConn(Me, Me.ActionList0)
@@ -1001,12 +1056,15 @@ Partial Class MForm3
         Me.pgNab.ResumeLayout(False)
         Me.pnNab.ResumeLayout(False)
         CType(Me.FgN, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pgObj.ResumeLayout(False)
-        Me.pnObj.ResumeLayout(False)
-        CType(Me.FgO, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pgObjPrij.ResumeLayout(False)
+        Me.pnObjP.ResumeLayout(False)
+        CType(Me.FgOP, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pgFaktVyd.ResumeLayout(False)
         Me.pnVydFakt.ResumeLayout(False)
         CType(Me.FgFV, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pgObjVyd.ResumeLayout(False)
+        Me.pnObjV.ResumeLayout(False)
+        CType(Me.FgOV, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pgFaktPrij.ResumeLayout(False)
         Me.pnFgP.ResumeLayout(False)
         CType(Me.FgFP, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1027,10 +1085,10 @@ Partial Class MForm3
     End Sub
     Friend WithEvents poConn As OleDb.OleDbConnection
     Friend WithEvents tbcMain As XControls.XTabControl
-    Friend WithEvents pgObj As TabPage
+    Friend WithEvents pgObjPrij As TabPage
     Friend WithEvents Panel1 As Panel
     Friend WithEvents StatusStrip1 As StatusStrip
-    Friend WithEvents FgO As XC1Flexgrid
+    Friend WithEvents FgOP As XC1Flexgrid
     Friend WithEvents ActionList0 As ActionListLib.ActionList
     Friend WithEvents ActionListConn As ActionListLib.ActionListConn
     Friend WithEvents m_main As ActionListLib.Menu
@@ -1052,7 +1110,7 @@ Partial Class MForm3
     Friend WithEvents lblArchiveFile As ToolStripStatusLabel
     Friend WithEvents m_znovunacist_data As ActionListLib.Menu
     Friend WithEvents a_znovunacist_data As ActionListLib.Action
-    Friend WithEvents pnObj As Panel
+    Friend WithEvents pnObjP As Panel
     Friend WithEvents m_popup1 As ActionListLib.Menu
     Friend WithEvents m_cols As ActionListLib.Menu
     Friend WithEvents a_cols As ActionListLib.Action
@@ -1111,4 +1169,7 @@ Partial Class MForm3
     Friend WithEvents lblVer As ToolStripStatusLabel
     Friend WithEvents m_statistika_polozek_v_databazi As ActionListLib.Menu
     Friend WithEvents a_statistika_polozek_v_databazi As ActionListLib.Action
+    Friend WithEvents pgObjVyd As TabPage
+    Friend WithEvents pnObjV As Panel
+    Friend WithEvents FgOV As XC1Flexgrid
 End Class

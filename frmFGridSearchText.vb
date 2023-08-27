@@ -40,6 +40,7 @@ Public Class FGridSearchText
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents itmCols As ToolStripMenuItem
     Friend WithEvents PřizpůsobitŠířkySloupcůToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents chkFindAndHide As CheckBox
 
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
@@ -72,6 +73,7 @@ Public Class FGridSearchText
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.itmCols = New System.Windows.Forms.ToolStripMenuItem()
         Me.PřizpůsobitŠířkySloupcůToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.chkFindAndHide = New System.Windows.Forms.CheckBox()
         Me.ButtonPanel1.SuspendLayout()
         Me.pnMain.SuspendLayout()
         Me.pnBoxes.SuspendLayout()
@@ -128,6 +130,7 @@ Public Class FGridSearchText
         '
         'pnBoxes
         '
+        Me.pnBoxes.Controls.Add(Me.chkFindAndHide)
         Me.pnBoxes.Controls.Add(Me.pnColumn)
         Me.pnBoxes.Controls.Add(Me.chkRespectAccents)
         Me.pnBoxes.Controls.Add(Me.chkCaseSensitive)
@@ -288,6 +291,18 @@ Public Class FGridSearchText
         Me.PřizpůsobitŠířkySloupcůToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
         Me.PřizpůsobitŠířkySloupcůToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
         Me.PřizpůsobitŠířkySloupcůToolStripMenuItem.Text = "Přizpůsobit šířky sloupců"
+        '
+        'chkFindAndHide
+        '
+        Me.chkFindAndHide.AutoSize = True
+        Me.chkFindAndHide.Dock = System.Windows.Forms.DockStyle.Top
+        Me.chkFindAndHide.Location = New System.Drawing.Point(5, 120)
+        Me.chkFindAndHide.Name = "chkFindAndHide"
+        Me.chkFindAndHide.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
+        Me.chkFindAndHide.Size = New System.Drawing.Size(360, 22)
+        Me.chkFindAndHide.TabIndex = 6
+        Me.chkFindAndHide.Text = "vyhledat a zobrazit vše, skrýt ostatní"
+        Me.chkFindAndHide.UseVisualStyleBackColor = True
         '
         'FGridSearchText
         '
@@ -755,26 +770,52 @@ Public Class FGridSearchText
                 Next
                 If Me.chkSearchFromTop.Checked Then oFg.Row = oFg.Rows.Fixed
                 Dim iOff As Integer = If(NoDialog, 1, 0)
-                For iRow As Integer = If(chkBackward.Checked, oFg.Row - iOff, oFg.Row + iOff) To If(chkBackward.Checked, oFg.Rows.Fixed, oFg.Rows.Count - 1) Step If(chkBackward.Checked, -1, 1)
-                    If oFg.Rows(iRow).Visible Then
-                        For Each iCol As Integer In aiCols
-                            Dim sFgValue As String = CStr(oFg(iRow, iCol))
-                            If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
-                            If (Not oFg(iRow, iCol) Is Nothing) Then
-                                If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
-                                    'nalezeno
-                                    FlexgridSelectAndShowRow(oFg, iRow)
-                                    oFg.Select(iRow, iCol, True)
-                                    chkSearchFromTop.Checked = False
-                                    oFg.EnsureVisibleSelectedRow()
-                                    bRet = True
-                                    Exit For
+                If chkFindAndHide.Checked Then
+                    'rezim vyber a skryj ostatni
+                    Dim aiShowRows As New List(Of Integer) 'ktere radky zobrazim
+                    'doladit, odladit
+                    For iRow As Integer = If(chkBackward.Checked, oFg.Row - iOff, oFg.Row + iOff) To If(chkBackward.Checked, oFg.Rows.Fixed, oFg.Rows.Count - 1) Step If(chkBackward.Checked, -1, 1)
+                        If oFg.Rows(iRow).Visible Then
+                            For Each iCol As Integer In aiCols
+                                Dim sFgValue As String = CStr(oFg(iRow, iCol))
+                                If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
+                                If (Not oFg(iRow, iCol) Is Nothing) Then
+                                    If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
+                                        'nalezeno
+                                        FlexgridSelectAndShowRow(oFg, iRow)
+                                        oFg.Select(iRow, iCol, True)
+                                        chkSearchFromTop.Checked = False
+                                        oFg.EnsureVisibleSelectedRow()
+                                        bRet = True
+                                        Exit For
+                                    End If
                                 End If
-                            End If
-                        Next
-                    End If
-                    If bRet Then Exit For
-                Next
+                            Next
+                        End If
+                        If bRet Then Exit For
+                    Next
+                Else
+                    For iRow As Integer = If(chkBackward.Checked, oFg.Row - iOff, oFg.Row + iOff) To If(chkBackward.Checked, oFg.Rows.Fixed, oFg.Rows.Count - 1) Step If(chkBackward.Checked, -1, 1)
+                        If oFg.Rows(iRow).Visible Then
+                            For Each iCol As Integer In aiCols
+                                Dim sFgValue As String = CStr(oFg(iRow, iCol))
+                                If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
+                                If (Not oFg(iRow, iCol) Is Nothing) Then
+                                    If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
+                                        'nalezeno
+                                        FlexgridSelectAndShowRow(oFg, iRow)
+                                        oFg.Select(iRow, iCol, True)
+                                        chkSearchFromTop.Checked = False
+                                        oFg.EnsureVisibleSelectedRow()
+                                        bRet = True
+                                        Exit For
+                                    End If
+                                End If
+                            Next
+                        End If
+                        If bRet Then Exit For
+                    Next
+                End If
                 SaveState()
                 If ShowNotFind AndAlso Not bRet Then
                     MessageBox.Show(Me.Owner, String.Format("Text ""{0}"" nebyl nalezen", Trim(txtValue.Text)), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)

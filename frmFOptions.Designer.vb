@@ -71,12 +71,14 @@ Partial Class FOptions
         Me.btnDefaultExcDir = New System.Windows.Forms.Button()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.chkSimpleExcel = New System.Windows.Forms.CheckBox()
+        Me.chkUseExcel = New System.Windows.Forms.CheckBox()
         Me.gbColors = New XControls.CheckedGroupBox()
+        Me.clrFgFP = New XControls.ColorSettingBox()
+        Me.clrFgOV = New XControls.ColorSettingBox()
         Me.ButtonPanel2 = New XControls.ButtonPanel()
         Me.btnDefaultFgColors = New System.Windows.Forms.Button()
-        Me.clrFgFP = New XControls.ColorSettingBox()
         Me.clrFgFV = New XControls.ColorSettingBox()
-        Me.clrFgO = New XControls.ColorSettingBox()
+        Me.clrFgOP = New XControls.ColorSettingBox()
         Me.clrFgN = New XControls.ColorSettingBox()
         Me.pgData = New System.Windows.Forms.TabPage()
         Me.pnData = New System.Windows.Forms.Panel()
@@ -506,11 +508,11 @@ Partial Class FOptions
         'GroupBox2
         '
         Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox2.Location = New System.Drawing.Point(0, 234)
+        Me.GroupBox2.Location = New System.Drawing.Point(0, 295)
         Me.GroupBox2.MaximumSize = New System.Drawing.Size(800, 9999)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Padding = New System.Windows.Forms.Padding(20, 3, 10, 3)
-        Me.GroupBox2.Size = New System.Drawing.Size(800, 101)
+        Me.GroupBox2.Size = New System.Drawing.Size(800, 40)
         Me.GroupBox2.TabIndex = 2
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Ostatní nastavení"
@@ -519,12 +521,13 @@ Partial Class FOptions
         '
         Me.gbExcel.Controls.Add(Me.FlexPanel1)
         Me.gbExcel.Controls.Add(Me.chkSimpleExcel)
+        Me.gbExcel.Controls.Add(Me.chkUseExcel)
         Me.gbExcel.Dock = System.Windows.Forms.DockStyle.Top
-        Me.gbExcel.Location = New System.Drawing.Point(0, 168)
+        Me.gbExcel.Location = New System.Drawing.Point(0, 196)
         Me.gbExcel.MaximumSize = New System.Drawing.Size(800, 9999)
         Me.gbExcel.Name = "gbExcel"
         Me.gbExcel.Padding = New System.Windows.Forms.Padding(20, 3, 10, 3)
-        Me.gbExcel.Size = New System.Drawing.Size(800, 66)
+        Me.gbExcel.Size = New System.Drawing.Size(800, 99)
         Me.gbExcel.TabIndex = 1
         Me.gbExcel.TabStop = False
         Me.gbExcel.Text = "Export do MS Excel"
@@ -537,7 +540,7 @@ Partial Class FOptions
         Me.FlexPanel1.Controls.Add(Me.Label5)
         Me.FlexPanel1.DependingPanels = Nothing
         Me.FlexPanel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.FlexPanel1.Location = New System.Drawing.Point(20, 34)
+        Me.FlexPanel1.Location = New System.Drawing.Point(20, 63)
         Me.FlexPanel1.Name = "FlexPanel1"
         Me.FlexPanel1.Padding = New System.Windows.Forms.Padding(0, 2, 0, 2)
         Me.FlexPanel1.Processing = False
@@ -584,46 +587,84 @@ Partial Class FOptions
         '
         'chkSimpleExcel
         '
-        Me.chkSimpleExcel.AutoSize = True
         Me.chkSimpleExcel.Checked = True
         Me.chkSimpleExcel.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkSimpleExcel.Dock = System.Windows.Forms.DockStyle.Top
-        Me.chkSimpleExcel.Location = New System.Drawing.Point(20, 17)
+        Me.chkSimpleExcel.Location = New System.Drawing.Point(20, 40)
         Me.chkSimpleExcel.Name = "chkSimpleExcel"
-        Me.chkSimpleExcel.Size = New System.Drawing.Size(770, 17)
+        Me.chkSimpleExcel.Size = New System.Drawing.Size(770, 23)
         Me.chkSimpleExcel.TabIndex = 0
         Me.chkSimpleExcel.Text = "Zjednodušený export do MS Excel"
         Me.chkSimpleExcel.UseVisualStyleBackColor = True
+        '
+        'chkUseExcel
+        '
+        Me.chkUseExcel.Checked = True
+        Me.chkUseExcel.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkUseExcel.Dock = System.Windows.Forms.DockStyle.Top
+        Me.chkUseExcel.Location = New System.Drawing.Point(20, 17)
+        Me.chkUseExcel.Name = "chkUseExcel"
+        Me.chkUseExcel.Size = New System.Drawing.Size(770, 23)
+        Me.chkUseExcel.TabIndex = 2
+        Me.chkUseExcel.Text = "Pro zobrazení použít  MS Excel"
+        Me.chkUseExcel.UseVisualStyleBackColor = True
         '
         'gbColors
         '
         Me.gbColors.Caption = "Barevné rozlišení záložek"
         Me.gbColors.Checked = True
-        Me.gbColors.Controls.Add(Me.ButtonPanel2)
         Me.gbColors.Controls.Add(Me.clrFgFP)
+        Me.gbColors.Controls.Add(Me.clrFgOV)
+        Me.gbColors.Controls.Add(Me.ButtonPanel2)
         Me.gbColors.Controls.Add(Me.clrFgFV)
-        Me.gbColors.Controls.Add(Me.clrFgO)
+        Me.gbColors.Controls.Add(Me.clrFgOP)
         Me.gbColors.Controls.Add(Me.clrFgN)
         Me.gbColors.Dock = System.Windows.Forms.DockStyle.Top
         Me.gbColors.Location = New System.Drawing.Point(0, 0)
         Me.gbColors.MaximumSize = New System.Drawing.Size(450, 9999)
         Me.gbColors.Name = "gbColors"
-        Me.gbColors.Size = New System.Drawing.Size(450, 168)
+        Me.gbColors.Size = New System.Drawing.Size(450, 196)
         Me.gbColors.TabIndex = 0
         Me.gbColors.TabStop = False
+        '
+        'clrFgFP
+        '
+        Me.clrFgFP.BackColorSetting = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(210, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.clrFgFP.Caption = "Faktury přijaté :"
+        Me.clrFgFP.Dock = System.Windows.Forms.DockStyle.Top
+        Me.clrFgFP.ForeColorSetting = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.clrFgFP.Location = New System.Drawing.Point(3, 117)
+        Me.clrFgFP.LogicalName = "Vydané nabídky"
+        Me.clrFgFP.Name = "clrFgFP"
+        Me.clrFgFP.Padding = New System.Windows.Forms.Padding(3)
+        Me.clrFgFP.Size = New System.Drawing.Size(444, 25)
+        Me.clrFgFP.TabIndex = 5
+        '
+        'clrFgOV
+        '
+        Me.clrFgOV.BackColorSetting = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(210, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.clrFgOV.Caption = "Vydané objednávky :"
+        Me.clrFgOV.Dock = System.Windows.Forms.DockStyle.Top
+        Me.clrFgOV.ForeColorSetting = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(128, Byte), Integer))
+        Me.clrFgOV.Location = New System.Drawing.Point(3, 92)
+        Me.clrFgOV.LogicalName = "Vydané objednavky"
+        Me.clrFgOV.Name = "clrFgOV"
+        Me.clrFgOV.Padding = New System.Windows.Forms.Padding(3)
+        Me.clrFgOV.Size = New System.Drawing.Size(444, 25)
+        Me.clrFgOV.TabIndex = 4
         '
         'ButtonPanel2
         '
         Me.ButtonPanel2.AutoButtonSpaceControl = Me.ButtonPanel2
         Me.ButtonPanel2.Controls.Add(Me.btnDefaultFgColors)
         Me.ButtonPanel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ButtonPanel2.Location = New System.Drawing.Point(3, 125)
+        Me.ButtonPanel2.Location = New System.Drawing.Point(3, 153)
         Me.ButtonPanel2.Name = "ButtonPanel2"
         Me.ButtonPanel2.Padding = New System.Windows.Forms.Padding(8, 8, 8, 9)
         Me.ButtonPanel2.PaddingAutomaticCoef = New System.Drawing.SizeF(0.2!, 0.08!)
         Me.ButtonPanel2.ShowSizingGrip = False
         Me.ButtonPanel2.Size = New System.Drawing.Size(444, 40)
-        Me.ButtonPanel2.TabIndex = 5
+        Me.ButtonPanel2.TabIndex = 10
         '
         'btnDefaultFgColors
         '
@@ -634,19 +675,6 @@ Partial Class FOptions
         Me.btnDefaultFgColors.TabIndex = 6
         Me.btnDefaultFgColors.Text = "Výchozí"
         Me.btnDefaultFgColors.UseVisualStyleBackColor = True
-        '
-        'clrFgFP
-        '
-        Me.clrFgFP.BackColorSetting = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(210, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.clrFgFP.Caption = "Faktury přijaté :"
-        Me.clrFgFP.Dock = System.Windows.Forms.DockStyle.Top
-        Me.clrFgFP.ForeColorSetting = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.clrFgFP.Location = New System.Drawing.Point(3, 92)
-        Me.clrFgFP.LogicalName = "Vydané nabídky"
-        Me.clrFgFP.Name = "clrFgFP"
-        Me.clrFgFP.Padding = New System.Windows.Forms.Padding(3)
-        Me.clrFgFP.Size = New System.Drawing.Size(444, 25)
-        Me.clrFgFP.TabIndex = 4
         '
         'clrFgFV
         '
@@ -661,18 +689,18 @@ Partial Class FOptions
         Me.clrFgFV.Size = New System.Drawing.Size(444, 25)
         Me.clrFgFV.TabIndex = 3
         '
-        'clrFgO
+        'clrFgOP
         '
-        Me.clrFgO.BackColorSetting = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.clrFgO.Caption = "Přijaté objednávky :"
-        Me.clrFgO.Dock = System.Windows.Forms.DockStyle.Top
-        Me.clrFgO.ForeColorSetting = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.clrFgO.Location = New System.Drawing.Point(3, 42)
-        Me.clrFgO.LogicalName = "Vydané nabídky"
-        Me.clrFgO.Name = "clrFgO"
-        Me.clrFgO.Padding = New System.Windows.Forms.Padding(3)
-        Me.clrFgO.Size = New System.Drawing.Size(444, 25)
-        Me.clrFgO.TabIndex = 2
+        Me.clrFgOP.BackColorSetting = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(230, Byte), Integer))
+        Me.clrFgOP.Caption = "Přijaté objednávky :"
+        Me.clrFgOP.Dock = System.Windows.Forms.DockStyle.Top
+        Me.clrFgOP.ForeColorSetting = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.clrFgOP.Location = New System.Drawing.Point(3, 42)
+        Me.clrFgOP.LogicalName = "Vydané nabídky"
+        Me.clrFgOP.Name = "clrFgOP"
+        Me.clrFgOP.Padding = New System.Windows.Forms.Padding(3)
+        Me.clrFgOP.Size = New System.Drawing.Size(444, 25)
+        Me.clrFgOP.TabIndex = 2
         '
         'clrFgN
         '
@@ -759,7 +787,6 @@ Partial Class FOptions
         Me.pgVolby.ResumeLayout(False)
         Me.pnVolby.ResumeLayout(False)
         Me.gbExcel.ResumeLayout(False)
-        Me.gbExcel.PerformLayout()
         Me.FlexPanel1.ResumeLayout(False)
         Me.FlexPanel1.PerformLayout()
         Me.gbColors.ResumeLayout(False)
@@ -818,7 +845,7 @@ Partial Class FOptions
     Friend WithEvents gbColors As CheckedGroupBox
     Friend WithEvents clrFgFP As ColorSettingBox
     Friend WithEvents clrFgFV As ColorSettingBox
-    Friend WithEvents clrFgO As ColorSettingBox
+    Friend WithEvents clrFgOP As ColorSettingBox
     Friend WithEvents clrFgN As ColorSettingBox
     Friend WithEvents btnOK As Button
     Friend WithEvents FlexPanel1 As FlexPanel
@@ -830,4 +857,6 @@ Partial Class FOptions
     Friend WithEvents Panel14 As Panel
     Friend WithEvents btnDefaultExcDir As Button
     Friend WithEvents ImageList1 As ImageList
+    Friend WithEvents clrFgOV As ColorSettingBox
+    Friend WithEvents chkUseExcel As CheckBox
 End Class

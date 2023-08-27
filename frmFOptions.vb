@@ -19,7 +19,8 @@ Public Class FOptions
     Dim iColFgFDel As Integer ' [g:3]
     Dim iColFgFId As Integer ' [g:4]
 
-    Dim dfFgO As ColorPair
+    Dim dfFgOP As ColorPair
+    Dim dfFgOV As ColorPair
     Dim dfFgN As ColorPair
     Dim dfFgFV As ColorPair
     Dim dfFgFP As ColorPair
@@ -30,18 +31,22 @@ Public Class FOptions
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        dfFgO = clrFgO.ColorSetting
+        dfFgOP = clrFgOP.ColorSetting
+        dfFgOV = clrFgOV.ColorSetting
         dfFgN = clrFgN.ColorSetting
         dfFgFV = clrFgFV.ColorSetting
         dfFgFP = clrFgFP.ColorSetting
         If RestoreMain Then
             clrFgN.ColorSetting = oOwner.clrFgN
-            clrFgO.ColorSetting = oOwner.clrFgO
+            clrFgOP.ColorSetting = oOwner.clrFgOp
             clrFgFV.ColorSetting = oOwner.clrFgFV
             clrFgFP.ColorSetting = oOwner.clrFgFP
+            clrFgOV.ColorSetting = oOwner.clrFgOv
             gbColors.Checked = oOwner.bSetTabColors
+            chkUseExcel.Checked = oOwner.bUseExcel
             chkSimpleExcel.Checked = oOwner.bSimpleExcel
             txtMSExcelDir.Text = oOwner.sExcelExpDir
+            SetSimpleExcel()
         End If
         If oOwner IsNot Nothing Then
             oMainForm = oOwner
@@ -274,10 +279,15 @@ Public Class FOptions
         End Try
     End Sub
 
-    Private Sub txtCurrentFile_TextChanged(sender As Object, e As EventArgs) Handles txtCurrentFile.TextChanged, txtMdbFile.TextChanged, txtMdbPassword.TextChanged,
-                                                                                     clrFgO.ColorChange, clrFgN.ColorChange, clrFgFP.ColorChange, clrFgFV.ColorChange,
-                                                                                     chkSimpleExcel.CheckedChanged, gbColors.CheckedChanged, chkSimpleExcel.CheckedChanged, txtMSExcelDir.TextChanged
+    Private Sub txtCurrentFile_TextChanged(sender As Object, e As EventArgs) Handles txtCurrentFile.TextChanged, txtMdbFile.TextChanged, txtMdbPassword.TextChanged, txtMSExcelDir.TextChanged,
+                                                                                     clrFgOP.ColorChange, clrFgOV.ColorChange, clrFgN.ColorChange, clrFgFP.ColorChange, clrFgFV.ColorChange,
+                                                                                     chkSimpleExcel.CheckedChanged, gbColors.CheckedChanged, chkSimpleExcel.CheckedChanged, chkUseExcel.CheckedChanged
         If Not bLoading Then btnOK.Visible = True
+        If sender Is chkUseExcel Then SetSimpleExcel()
+    End Sub
+
+    Private Sub SetSimpleExcel()
+        chkSimpleExcel.Enabled = chkUseExcel.Checked
     End Sub
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
@@ -285,10 +295,11 @@ Public Class FOptions
     End Sub
 
     Private Sub btnDefaultFgColors_Click(sender As Object, e As EventArgs) Handles btnDefaultFgColors.Click
-        clrFgO.ColorSetting = dfFgO
+        clrFgOP.ColorSetting = dfFgOP
         clrFgN.ColorSetting = dfFgN
         clrFgFV.ColorSetting = dfFgFV
         clrFgFP.ColorSetting = dfFgFP
+        clrFgOV.ColorSetting = dfFgOV
         btnOK.Visible = True
     End Sub
 
@@ -305,5 +316,9 @@ Public Class FOptions
                 btnClose.DialogResult = DialogResult.OK
             End If
         End If
+    End Sub
+
+    Private Sub btnOK_VisibleChanged(sender As Object, e As EventArgs) Handles btnOK.VisibleChanged
+        Debug.WriteLine("visChanged")
     End Sub
 End Class

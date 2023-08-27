@@ -22,10 +22,14 @@ Public Class AData
     Friend Const constXMLNS1 As String = "xsi:"
     Friend Const constXMLNS2 As String = "xsd:"
 
-    Friend Const txSQL1 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpObj from OBJ order by firma, datum desc"
-    Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi from OBJpol where RefAg in (SELECT ID from OBJ)"
-    Friend Const txSQL3 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,RelTpFak from FA where RelTpFak in (1,11) order by firma, datum desc"
+    Friend Const txSQL1 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,SText,RelTpObj,RefZeme,KcCelkem,RefCM,CMKurs from OBJ order by firma, datum desc"
+    Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi,KcJedn from OBJpol where RefAg in (SELECT ID from OBJ)"
+    Friend Const txSQL3 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,SText,RelTpFak,RefZeme,KcCelkem,RefCM,CMKurs from FA where RelTpFak in (1,11) order by firma, datum desc"
     Friend Const txSQL4 As String = "SELECT RefAg,SText,Pozn,Mnozstvi,KcJedn from FApol where RefAg in (SELECT ID from FA where RelTpFak in (1,11))"
+    Friend Const txSQL5 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,SText,RelTpNab from NAB order by firma, datum desc"
+    Friend Const txSQL6 As String = "SELECT RefAg,SText,Pozn,Mnozstvi,KcJedn from NABpol where RefAg in (SELECT ID from NAB)"
+    Friend Const txSQL11 As String = "SELECT Kod,ID from sZeme"
+    Friend Const txSQL12 As String = "SELECT ID,Kod from sCMeny"
 
     Friend Const ObjPrij As Integer = 1
     Friend Const Nabidky As Integer = 2
@@ -90,7 +94,12 @@ Public Class AData
                 Return oData
             End If
         End If
-        Dim iNewID As Integer = oData.GetMaxFileID
+        Dim iNewID As Integer = 1
+        If oData Is Nothing Then
+            oData = New AData
+        Else
+            iNewID = oData.GetMaxFileID
+        End If
         oData.AddMdbFile(sMdbFileName, sPassword, iNewID, iRemoved)
 
         oConn.ConnectionString = String.Format(txConnStr, sMdbFileName, sPassword)
@@ -99,8 +108,32 @@ Public Class AData
         Try
             Dim aoDocs As New Dictionary(Of Integer, AObjNab)
             Dim aoDocsF As New Dictionary(Of Integer, AFakt)
+            Dim aoZeme As New Dictionary(Of Integer, String)
+            Dim aoMeny As New Dictionary(Of Integer, String)
             oConn.Open()
             oCmd = oConn.CreateCommand()
+
+            'ciselnik zemi 
+            oCmd.CommandText = txSQL11
+            Debug.WriteLine(oCmd.CommandText)
+            oRdr = oCmd.ExecuteReader
+            While oRdr.Read
+                Dim ID As Integer = GetInt(1)
+                Dim s As String = GetStr(0)
+                If ID > 0 AndAlso s <> "CZ" Then aoZeme(ID) = s
+                'Debug.WriteLine(ID & vbTab & GetStr(0)) Then
+            End While
+            oRdr.Close()
+
+            'ciselnik men
+            oCmd.CommandText = txSQL12
+            Debug.WriteLine(oCmd.CommandText)
+            oRdr = oCmd.ExecuteReader
+            While oRdr.Read
+                aoMeny(GetInt(0)) = GetStr(1)
+                'Debug.WriteLine(GetInt(0) & vbTab & GetStr(1))
+            End While
+            oRdr.Close()
 
             ' hlavicky objednavek/nabidek
             oCmd.CommandText = txSQL1
@@ -109,8 +142,10 @@ Public Class AData
             While oRdr.Read
                 Try
                     Dim sName As String = GetStr(0)
-                    Dim aoFirmy As List(Of AFirma) = If(GetInt(6) = TypObj.Prij, oData.aoFirmyObj, oData.aoFirmyNab)
-                    Dim oFirma As AFirma = oData.AddFirmaObjNab(sName, GetDec(1), GetStr(5), iNewID, aoFirmy)
+                    Dim aoFirmy As List(Of AFirma) = If(GetInt(7) = TypObj.Prij, oData.aoFirmyObjPrij, oData.aoFirmyObjVyd)
+                    Dim sZeme As String = ""
+                    If aoZeme.ContainsKey(GetInt(8)) Then sZeme = aoZeme(GetInt(8))
+                    Dim oFirma As AFirma = oData.AddFirmaObjNab(sName, GetDec(1), GetStr(5), sZeme, iNewID, aoFirmy)
                     Dim iRecId As Integer = GetInt(2)
                     Dim iIdx As Integer = -1
                     For i As Integer = 0 To aoFirmy.Count - 1
@@ -123,22 +158,28 @@ Public Class AData
                         aoFirmy.Add(oFirma)
                         iIdx = aoFirmy.Count - 1
                     End If
-                    Dim oObj As New AObjNab(iRecId, iNewID, sName, GetLong(3), GetDate(4))
+                    Dim sMen As String = ConvertMena(If(aoMeny.ContainsKey(GetInt(10)), aoMeny(GetInt(10)), ""))
+                    Dim oObj As New AObjNab(iRecId, iNewID, sName, GetLong(3), GetDate(4), GetStr(6), GetDec(9), sMen, GetDec(11))
+                    If oObj.Kurs > 0 Then
+                        Debug.WriteLine(oObj.Kurs & " " & sMen)
+                    End If
                     aoFirmy(iIdx).aoDoc.Add(oObj)
                     aoDocs(oObj.RecID) = oObj
                     'aoFirmy(iRecId) = oObj
                 Catch ex As Exception
+                    MsgBox(ex.Message, MsgBoxStyle.Critical)
                     Debug.WriteLine(ex.Message)
+                    Exit While
                 End Try
             End While
             oRdr.Close()
-            ' polozky objednavek/nabidek
+            ' polozky prijatych/vydanych objednavek
             oCmd.CommandText = txSQL2
             Debug.WriteLine(oCmd.CommandText)
             oRdr = Nothing
             oRdr = oCmd.ExecuteReader
             While oRdr.Read
-                Dim oObjP = New AObjNabPol(GetInt(0), GetStr(1), GetStr(2), GetDec(3))
+                Dim oObjP = New AObjNabPol(GetInt(0), GetStr(1), GetStr(2), GetDec(3), GetDec(4))
                 If aoDocs.ContainsKey(oObjP.ID) Then
                     aoDocs(oObjP.ID).aoObjPol.Add(oObjP)
                     iAdded += 1
@@ -154,8 +195,10 @@ Public Class AData
             While oRdr.Read
                 Try
                     Dim sName As String = GetStr(0)
-                    Dim aoFirmy As List(Of AFirma) = If(GetInt(6) = TypObj.FakV, oData.aoFirmyFVyd, oData.aoFirmyFPrij)
-                    Dim oFirma As AFirma = oData.AddFirmaObjNab(sName, GetDec(1), GetStr(5), iNewID, aoFirmy)
+                    Dim aoFirmy As List(Of AFirma) = If(GetInt(7) = TypObj.FakV, oData.aoFirmyFVyd, oData.aoFirmyFPrij)
+                    Dim sZeme As String = ""
+                    If aoZeme.ContainsKey(GetInt(8)) Then sZeme = aoZeme(GetInt(8))
+                    Dim oFirma As AFirma = oData.AddFirmaObjNab(sName, GetDec(1), GetStr(5), sZeme, iNewID, aoFirmy)
                     Dim iRecId As Integer = GetInt(2)
                     Dim iIdx As Integer = -1
                     For i As Integer = 0 To aoFirmy.Count - 1
@@ -168,12 +211,15 @@ Public Class AData
                         aoFirmy.Add(oFirma)
                         iIdx = aoFirmy.Count - 1
                     End If
-                    Dim oFak As New AFakt(iRecId, iNewID, sName, GetLong(3), GetDate(4))
+                    Dim sMen As String = ConvertMena(If(aoMeny.ContainsKey(GetInt(10)), aoMeny(GetInt(10)), ""))
+                    Dim oFak As New AFakt(iRecId, iNewID, sName, GetLong(3), GetDate(4), GetStr(6), GetDec(9), sMen, GetDec(11))
                     aoFirmy(iIdx).aoDocF.Add(oFak)
                     aoDocsF(oFak.RecID) = oFak
                     'aoFirmy(iRecId) = oObj
                 Catch ex As Exception
+                    MsgBox(ex.Message, MsgBoxStyle.Critical)
                     Debug.WriteLine(ex.Message)
+                    Exit While
                 End Try
             End While
             oRdr.Close()
@@ -270,8 +316,11 @@ Public Class AData
             Dim oReader As New XmlTextReader(oStringReader)
             Dim oRes As AData = DirectCast(oSer.Deserialize(oReader), AData)
             If SetDisplayNames Then
-                For i As Integer = 0 To oRes.aoFirmyObj.Count - 1
-                    oRes.aoFirmyObj(i).SetDisplayName()
+                For i As Integer = 0 To oRes.aoFirmyObjPrij.Count - 1
+                    oRes.aoFirmyObjPrij(i).SetDisplayName()
+                Next
+                For i As Integer = 0 To oRes.aoFirmyObjVyd.Count - 1
+                    oRes.aoFirmyObjVyd(i).SetDisplayName()
                 Next
                 For i As Integer = 0 To oRes.aoFirmyNab.Count - 1
                     oRes.aoFirmyNab(i).SetDisplayName()
@@ -284,9 +333,9 @@ Public Class AData
                 Next
             End If
             If SortData Then
-                oRes.aoFirmyObj.Sort(New AFirma.Sorter)
-                For i As Integer = 0 To oRes.aoFirmyObj.Count - 1
-                    oRes.aoFirmyObj(i).aoDoc.Sort(New AObjNab.Sorter)
+                oRes.aoFirmyObjPrij.Sort(New AFirma.Sorter)
+                For i As Integer = 0 To oRes.aoFirmyObjPrij.Count - 1
+                    oRes.aoFirmyObjPrij(i).aoDoc.Sort(New AObjNab.Sorter)
                 Next
                 oRes.aoFirmyNab.Sort(New AFirma.Sorter)
                 For i As Integer = 0 To oRes.aoFirmyNab.Count - 1
