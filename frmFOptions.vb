@@ -74,9 +74,12 @@ Public Class FOptions
                     AData.oAdata.FileVersion = AData.ValidFileVersion
                     IO.File.WriteAllText(txtCurrentFile.Text, AData.oAdata.ToXml)
                     LoadFgData(txtCurrentFile.Text)
+                Else
+                    MessageBox.Show(Me, String.Format("{0}.{1}{1}Existující soubor je zřejmě potřeba nejprve vymazat a vytvořit nový (např. použitím buttonu ""{2}"").", AData.sError, vbCrLf, btnCreateA.Text), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Exit Sub
                 End If
                 If bLoaded Then btnClose.DialogResult = DialogResult.OK
-                LoadFgData(txtCurrentFile.Text)
+                'LoadFgData(txtCurrentFile.Text)
             End Using
             MessageBox.Show(Me, String.Format("Import dat z databáze ""{0}"" do archivu ""{1}"" byl úspěšně dokončen.{2}{2}Počet položek: odstraněných: {3}, přidaných: {4}.",
                                               txtMdbFile.Text, txtCurrentFile.Text, vbCrLf, iRemoved, iAdded), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)

@@ -75,7 +75,7 @@ Public Class MForm3
         iColFgTree = FlexgridSetCol(",30,R,")
         iColFgPocO = FlexgridSetCol("poč.,40,RI^", Nazev1)
         iColFgDatum = FlexgridSetCol("datum,80,RMd>", "*")
-        iColFgCislo = FlexgridSetCol("číslo,80,RIM>", "*")
+        iColFgCislo = FlexgridSetCol("číslo,80,R>", "*")
         iColFgNazevFirmy = FlexgridSetCol("název firmy,80,R<", "*")
         iColFgPocP = FlexgridSetCol("poč.,40,RI^", "položky")
         iColFgText = FlexgridSetCol("text,80,R<", "*")
@@ -128,6 +128,7 @@ Public Class MForm3
             If AData.LoadXMLData(AData.ValidFileVersion) Then
                 RefreshStb()
                 With AData.oAdata
+                    LoadObjList(FgN, .aoFirmyNab)
                     LoadObjList(FgOP, .aoFirmyObjPrij)
                     LoadObjList(FgOV, .aoFirmyObjVyd)
                     LoadFakList(FgFV, .aoFirmyFVyd)
@@ -302,8 +303,11 @@ Public Class MForm3
             If oObjP.JeMnozstvi Then Fg(iRow, iColFgMnozstvi) = oObjP.Mnoz
             If oObjP.JeCenaMnozstvi Then
                 Fg(iRow, iColFgCena) = oObjP.Cena
+                Fg.SetStyleToCell(iRow, iColFgCena,,, FontStyle.Bold, TextAlignEnum.RightCenter)
+                Fg.SetStyleToCell(iRow, iColFgMnozstvi,,, FontStyle.Bold, TextAlignEnum.RightCenter)
                 If oObjP.JeCiziMena(oObj) AndAlso oObjP.JeCenaMnozstvi Then
                     Fg(iRow, iColFgCena2) = oObjP.CiziMena(oObj)
+                    Fg.SetStyleToCell(iRow, iColFgCena2,,, FontStyle.Bold, TextAlignEnum.RightCenter)
                 End If
             Else
                 If String.IsNullOrWhiteSpace(CStr(Fg(iRow, iColFgPozn))) Then Fg(iRow, iColFgPozn) = Trim(CStr(Fg(iRow, iColFgPozn)) & txText)
@@ -364,8 +368,11 @@ Public Class MForm3
             If oFakP.JeMnozstvi Then Fg(iRow, iColFgMnozstvi) = oFakP.Mnoz
             If oFakP.JeCenaMnozstvi Then
                 Fg(iRow, iColFgCena) = oFakP.Cena
+                Fg.SetStyleToCell(iRow, iColFgCena,,, FontStyle.Bold, TextAlignEnum.RightCenter)
+                Fg.SetStyleToCell(iRow, iColFgMnozstvi,,, FontStyle.Bold, TextAlignEnum.RightCenter)
                 If oFakP.JeCiziMena(oFakt) Then
                     Fg(iRow, iColFgCena2) = oFakP.CiziMena(oFakt)
+                    Fg.SetStyleToCell(iRow, iColFgCena2,,, FontStyle.Bold, TextAlignEnum.RightCenter)
                 End If
             Else
                 If String.IsNullOrWhiteSpace(CStr(Fg(iRow, iColFgPozn))) Then Fg(iRow, iColFgPozn) = Trim(CStr(Fg(iRow, iColFgPozn)) & txText)

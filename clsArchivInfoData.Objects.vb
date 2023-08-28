@@ -210,7 +210,7 @@ Partial Public Class AData
         End Sub
         <XmlAttribute("k")>
         Public KeyName As String = ""
-        <XmlAttribute("o")>
+        <XmlAttribute("o"), DefaultValue(GetType(Decimal), "0.0000")>
         Public ICO As Decimal = 0
         <XmlAttribute("e"), DefaultValue("")>
         Public Email As String = ""
@@ -301,7 +301,7 @@ Partial Public Class AData
         Public Const sOpt1 As String = "OBJEDNAVAMEUVAS"
         Public Const sOpt2 As String = "OBJEDNAVAME"
         Public Const sOpt3 As String = "OBJEDNAVAMEDODANI"
-        Public Sub New(iRecID As Integer, iFileId As Integer, sName As String, lCislo As Long, dtDatum As Date, sText As String, dcKc As Decimal, sMena As String, dcKurs As Decimal)
+        Public Sub New(iRecID As Integer, iFileId As Integer, sName As String, lCislo As String, dtDatum As Date, sText As String, dcKc As Decimal, sMena As String, dcKurs As Decimal)
             MyBase.New
             RecID = iRecID
             FileID = iFileId
@@ -326,8 +326,8 @@ Partial Public Class AData
         Public Name As String = ""
         <XmlAttribute("t"), DefaultValue("")>
         Public Text As String = ""
-        <XmlAttribute("c")>
-        Public Cislo As Long = 0L
+        <XmlAttribute("c"), DefaultValue("")>
+        Public Cislo As String = ""
         <XmlAttribute("d")>
         Public Datum As String = ""
         <XmlAttribute("p"), DefaultValue(GetType(Decimal), "0.0000")>
@@ -370,7 +370,7 @@ Partial Public Class AData
             Implements IComparer(Of AObjNab)
             Public Function Compare(x As AObjNab, y As AObjNab) As Integer Implements IComparer(Of AObjNab).Compare
                 Dim iRet As Integer = Date.Compare(x.dtDatum, y.dtDatum)
-                If iRet = 0 Then iRet = CompareLong(x.Cislo, y.Cislo)
+                If iRet = 0 Then iRet = String.Compare(x.Cislo, y.Cislo, True)
                 If iRet = 0 Then iRet = String.Compare(x.Name, y.Name, True)
                 Return -iRet
             End Function
@@ -464,7 +464,7 @@ Partial Public Class AData
 
         Public Const sOpt1 As String = "FAKTURUJEMEVAM"
 
-        Public Sub New(iRecID As Integer, iFileId As Integer, sName As String, lCislo As Long, dtDatum As Date, sText As String, dcKc As Decimal, sMena As String, dcKurs As Decimal)
+        Public Sub New(iRecID As Integer, iFileId As Integer, sName As String, lCislo As String, dtDatum As Date, sText As String, dcKc As Decimal, sMena As String, dcKurs As Decimal)
             MyBase.New
             RecID = iRecID
             FileID = iFileId
@@ -492,8 +492,8 @@ Partial Public Class AData
         Public Name As String = ""
         <XmlAttribute("t"), DefaultValue("")>
         Public Text As String = ""
-        <XmlAttribute("c")>
-        Public Cislo As Long = 0L
+        <XmlAttribute("c"), DefaultValue("")>
+        Public Cislo As String = ""
         <XmlAttribute("d")>
         Public Datum As String = ""
         <XmlAttribute("p"), DefaultValue(GetType(Decimal), "0.0000")>
@@ -536,7 +536,7 @@ Partial Public Class AData
             Implements IComparer(Of AFakt)
             Public Function Compare(x As AFakt, y As AFakt) As Integer Implements IComparer(Of AFakt).Compare
                 Dim iRet As Integer = Date.Compare(x.dtDatum, y.dtDatum)
-                If iRet = 0 Then iRet = CompareLong(x.Cislo, y.Cislo)
+                If iRet = 0 Then iRet = String.Compare(x.Cislo, y.Cislo, True)
                 If iRet = 0 Then iRet = String.Compare(x.Name, y.Name, True)
                 Return -iRet
             End Function

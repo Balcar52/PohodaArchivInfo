@@ -7,7 +7,7 @@ Imports System.IO
 
 Public Class AData
 
-    Public Const ValidFileVersion As String = "4.8.2023"
+    Public Const ValidFileVersion As String = "29. 8. 2023"
 
     Public Shared CurrentFile As String = ""
     Public Shared CurrentPsw As String = txDefaultPassword
@@ -26,7 +26,7 @@ Public Class AData
     Friend Const txSQL2 As String = "SELECT RefAg,SText,Pozn,Mnozstvi,KcJedn from OBJpol where RefAg in (SELECT ID from OBJ)"
     Friend Const txSQL3 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,SText,RelTpFak,RefZeme,KcCelkem,RefCM,CMKurs from FA where RelTpFak in (1,11) order by firma, datum desc"
     Friend Const txSQL4 As String = "SELECT RefAg,SText,Pozn,Mnozstvi,KcJedn from FApol where RefAg in (SELECT ID from FA where RelTpFak in (1,11))"
-    Friend Const txSQL5 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,SText,RelTpNab from NAB order by firma, datum desc"
+    Friend Const txSQL5 As String = "SELECT firma,ICO,ID,Cislo,Datum,Email,SText,RelTpNab,RefZeme,KcCelkem,RefCM,CMKurs from NAB order by firma, datum desc"
     Friend Const txSQL6 As String = "SELECT RefAg,SText,Pozn,Mnozstvi,KcJedn from NABpol where RefAg in (SELECT ID from NAB)"
     Friend Const txSQL11 As String = "SELECT Kod,ID from sZeme"
     Friend Const txSQL12 As String = "SELECT ID,Kod from sCMeny"
@@ -38,7 +38,7 @@ Public Class AData
 
     Public Const txLoadNotFound As String = "Soubor archivu ""{0}"" nebyl nalezen, nebo není dostupný"
     Public Const txLoadBadFormat As String = "Soubor archivu ""{0}"" má vadný formát, nebo je poškozen"
-    Public Const txLoadBadVersion As String = "Verze souboru archivu ""{0}"" ({1}) není kompatibilní s požadovanou aktuální verzí této aplikace ({2})"
+    Public Const txLoadBadVersion As String = "Verze existujícího souboru archivu ""{0}"" ({1}) není kompatibilní s požadovanou aktuální verzí této aplikace ({2})"
 
     Public Shared Function LoadXMLData(RequiredFileversion As String) As Boolean
         sError = ""
@@ -89,8 +89,8 @@ Public Class AData
         If IO.File.Exists(sXMLFileName) Then
             oData = AData.FromXML(IO.File.ReadAllText(sXMLFileName))
             If oData IsNot Nothing AndAlso oData.aoFiles.Count > 0 AndAlso oData.FileVersion <> AData.ValidFileVersion Then
-                oData = Nothing
                 sError = String.Format(txLoadBadVersion, sXMLFileName, oData.GetFileVersion, ValidFileVersion)
+                oData = Nothing
                 Return oData
             End If
         End If
@@ -135,7 +135,7 @@ Public Class AData
             End While
             oRdr.Close()
 
-            ' hlavicky objednavek/nabidek
+            ' hlavicky objednavek
             oCmd.CommandText = txSQL1
             Debug.WriteLine(oCmd.CommandText)
             oRdr = oCmd.ExecuteReader
@@ -159,7 +159,7 @@ Public Class AData
                         iIdx = aoFirmy.Count - 1
                     End If
                     Dim sMen As String = ConvertMena(If(aoMeny.ContainsKey(GetInt(10)), aoMeny(GetInt(10)), ""))
-                    Dim oObj As New AObjNab(iRecId, iNewID, sName, GetLong(3), GetDate(4), GetStr(6), GetDec(9), sMen, GetDec(11))
+                    Dim oObj As New AObjNab(iRecId, iNewID, sName, GetStr(3), GetDate(4), GetStr(6), GetDec(9), sMen, GetDec(11))
                     If oObj.Kurs > 0 Then
                         Debug.WriteLine(oObj.Kurs & " " & sMen)
                     End If
@@ -173,6 +173,7 @@ Public Class AData
                 End Try
             End While
             oRdr.Close()
+
             ' polozky prijatych/vydanych objednavek
             oCmd.CommandText = txSQL2
             Debug.WriteLine(oCmd.CommandText)
@@ -212,7 +213,7 @@ Public Class AData
                         iIdx = aoFirmy.Count - 1
                     End If
                     Dim sMen As String = ConvertMena(If(aoMeny.ContainsKey(GetInt(10)), aoMeny(GetInt(10)), ""))
-                    Dim oFak As New AFakt(iRecId, iNewID, sName, GetLong(3), GetDate(4), GetStr(6), GetDec(9), sMen, GetDec(11))
+                    Dim oFak As New AFakt(iRecId, iNewID, sName, GetStr(3), GetDate(4), GetStr(6), GetDec(9), sMen, GetDec(11))
                     aoFirmy(iIdx).aoDocF.Add(oFak)
                     aoDocsF(oFak.RecID) = oFak
                     'aoFirmy(iRecId) = oObj
@@ -223,6 +224,7 @@ Public Class AData
                 End Try
             End While
             oRdr.Close()
+
             ' polozky faktur
             oCmd.CommandText = txSQL4
             Debug.WriteLine(oCmd.CommandText)
@@ -240,6 +242,61 @@ Public Class AData
                 'End If
             End While
             oRdr.Close()
+
+            ' hlavicky nabidek
+            oCmd.CommandText = txSQL5
+            Debug.WriteLine(oCmd.CommandText)
+            oRdr = oCmd.ExecuteReader
+            While oRdr.Read
+                Try
+                    Dim sName As String = GetStr(0)
+                    Dim aoFirmy As List(Of AFirma) = If(GetInt(7) = TypObj.Vyd, oData.aoFirmyNab, Nothing)
+                    Dim sZeme As String = ""
+                    If aoZeme.ContainsKey(GetInt(8)) Then sZeme = aoZeme(GetInt(8))
+                    Dim oFirma As AFirma = oData.AddFirmaObjNab(sName, GetDec(1), GetStr(5), sZeme, iNewID, aoFirmy)
+                    Dim iRecId As Integer = GetInt(2)
+                    Dim iIdx As Integer = -1
+                    For i As Integer = 0 To aoFirmy.Count - 1
+                        If aoFirmy(i).KeyName = oFirma.KeyName Then
+                            iIdx = i
+                            Exit For
+                        End If
+                    Next
+                    If iIdx < 0 Then
+                        aoFirmy.Add(oFirma)
+                        iIdx = aoFirmy.Count - 1
+                    End If
+                    Dim sMen As String = ConvertMena(If(aoMeny.ContainsKey(GetInt(10)), aoMeny(GetInt(10)), ""))
+                    Dim oObj As New AObjNab(iRecId, iNewID, sName, GetStr(3), GetDate(4), GetStr(6), GetDec(9), sMen, GetDec(11))
+                    If oObj.Kurs > 0 Then
+                        Debug.WriteLine(oObj.Kurs & " " & sMen)
+                    End If
+                    aoFirmy(iIdx).aoDoc.Add(oObj)
+                    aoDocs(oObj.RecID) = oObj
+                    'aoFirmy(iRecId) = oObj
+                Catch ex As Exception
+                    MsgBox(ex.Message, MsgBoxStyle.Critical)
+                    Debug.WriteLine(ex.Message)
+                    Exit While
+                End Try
+            End While
+            oRdr.Close()
+
+            ' polozky nabidek
+            oCmd.CommandText = txSQL6
+            Debug.WriteLine(oCmd.CommandText)
+            oRdr = Nothing
+            oRdr = oCmd.ExecuteReader
+            While oRdr.Read
+                Dim oObjP = New AObjNabPol(GetInt(0), GetStr(1), GetStr(2), GetDec(3), GetDec(4))
+                If aoDocs.ContainsKey(oObjP.ID) Then
+                    aoDocs(oObjP.ID).aoObjPol.Add(oObjP)
+                    iAdded += 1
+                End If
+            End While
+            oRdr.Close()
+            aoDocs.Clear()
+
 
             Return oData
         Catch ex As Exception
@@ -333,17 +390,21 @@ Public Class AData
                 Next
             End If
             If SortData Then
-                oRes.aoFirmyObjPrij.Sort(New AFirma.Sorter)
-                For i As Integer = 0 To oRes.aoFirmyObjPrij.Count - 1
-                    oRes.aoFirmyObjPrij(i).aoDoc.Sort(New AObjNab.Sorter)
-                Next
                 oRes.aoFirmyNab.Sort(New AFirma.Sorter)
                 For i As Integer = 0 To oRes.aoFirmyNab.Count - 1
                     oRes.aoFirmyNab(i).aoDoc.Sort(New AObjNab.Sorter)
                 Next
+                oRes.aoFirmyObjPrij.Sort(New AFirma.Sorter)
+                For i As Integer = 0 To oRes.aoFirmyObjPrij.Count - 1
+                    oRes.aoFirmyObjPrij(i).aoDoc.Sort(New AObjNab.Sorter)
+                Next
                 oRes.aoFirmyFVyd.Sort(New AFirma.Sorter)
                 For i As Integer = 0 To oRes.aoFirmyFVyd.Count - 1
                     oRes.aoFirmyFVyd(i).aoDocF.Sort(New AFakt.Sorter)
+                Next
+                oRes.aoFirmyObjVyd.Sort(New AFirma.Sorter)
+                For i As Integer = 0 To oRes.aoFirmyObjVyd.Count - 1
+                    oRes.aoFirmyObjVyd(i).aoDoc.Sort(New AObjNab.Sorter)
                 Next
                 oRes.aoFirmyFPrij.Sort(New AFirma.Sorter)
                 For i As Integer = 0 To oRes.aoFirmyFPrij.Count - 1
