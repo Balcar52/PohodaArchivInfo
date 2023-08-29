@@ -57,6 +57,7 @@ Public Class FGridSearchText
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.pnMain = New System.Windows.Forms.Panel()
         Me.pnBoxes = New System.Windows.Forms.Panel()
+        Me.chkFindAndHide = New System.Windows.Forms.CheckBox()
         Me.pnColumn = New System.Windows.Forms.Panel()
         Me.cmbColumn = New System.Windows.Forms.ComboBox()
         Me.chkFindInColumn = New System.Windows.Forms.CheckBox()
@@ -73,7 +74,6 @@ Public Class FGridSearchText
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.itmCols = New System.Windows.Forms.ToolStripMenuItem()
         Me.PřizpůsobitŠířkySloupcůToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.chkFindAndHide = New System.Windows.Forms.CheckBox()
         Me.ButtonPanel1.SuspendLayout()
         Me.pnMain.SuspendLayout()
         Me.pnBoxes.SuspendLayout()
@@ -142,6 +142,18 @@ Public Class FGridSearchText
         Me.pnBoxes.Padding = New System.Windows.Forms.Padding(5)
         Me.pnBoxes.Size = New System.Drawing.Size(370, 152)
         Me.pnBoxes.TabIndex = 1
+        '
+        'chkFindAndHide
+        '
+        Me.chkFindAndHide.AutoSize = True
+        Me.chkFindAndHide.Dock = System.Windows.Forms.DockStyle.Top
+        Me.chkFindAndHide.Location = New System.Drawing.Point(5, 120)
+        Me.chkFindAndHide.Name = "chkFindAndHide"
+        Me.chkFindAndHide.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
+        Me.chkFindAndHide.Size = New System.Drawing.Size(360, 22)
+        Me.chkFindAndHide.TabIndex = 6
+        Me.chkFindAndHide.Text = "vyhledat a rozbalit nalezené, sbalit ostatní"
+        Me.chkFindAndHide.UseVisualStyleBackColor = True
         '
         'pnColumn
         '
@@ -291,18 +303,6 @@ Public Class FGridSearchText
         Me.PřizpůsobitŠířkySloupcůToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.W), System.Windows.Forms.Keys)
         Me.PřizpůsobitŠířkySloupcůToolStripMenuItem.Size = New System.Drawing.Size(250, 22)
         Me.PřizpůsobitŠířkySloupcůToolStripMenuItem.Text = "Přizpůsobit šířky sloupců"
-        '
-        'chkFindAndHide
-        '
-        Me.chkFindAndHide.AutoSize = True
-        Me.chkFindAndHide.Dock = System.Windows.Forms.DockStyle.Top
-        Me.chkFindAndHide.Location = New System.Drawing.Point(5, 120)
-        Me.chkFindAndHide.Name = "chkFindAndHide"
-        Me.chkFindAndHide.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
-        Me.chkFindAndHide.Size = New System.Drawing.Size(360, 22)
-        Me.chkFindAndHide.TabIndex = 6
-        Me.chkFindAndHide.Text = "vyhledat a zobrazit vše, skrýt ostatní"
-        Me.chkFindAndHide.UseVisualStyleBackColor = True
         '
         'FGridSearchText
         '

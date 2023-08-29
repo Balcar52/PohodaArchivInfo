@@ -76,7 +76,6 @@ Partial Class MForm3
         Me.m_sbalit_vse = New ActionListLib.Menu(Me.components)
         Me.m_sbalitrozbalit_polozku_na_radku = New ActionListLib.Menu(Me.components)
         Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_ = New ActionListLib.Menu(Me.components)
-        Me.m_zobrazit_skryte_polozky = New ActionListLib.Menu(Me.components)
         Me.m_delimiter3 = New ActionListLib.Menu(Me.components)
         Me.m_najit_vlevo = New ActionListLib.Menu(Me.components)
         Me.m_najit_vpravo = New ActionListLib.Menu(Me.components)
@@ -104,7 +103,6 @@ Partial Class MForm3
         Me.a_o_aplikaci = New ActionListLib.Action(Me.components)
         Me.m_statistika_polozek_v_databazi = New ActionListLib.Menu(Me.components)
         Me.a_statistika_polozek_v_databazi = New ActionListLib.Action(Me.components)
-        Me.a_zobrazit_skryte_polozky = New ActionListLib.Action(Me.components)
         Me.ActionListConn = New ActionListLib.ActionListConn(Me.components)
         Me.m_main = New ActionListLib.Menu(Me.components)
         Me.m_file = New ActionListLib.Menu(Me.components)
@@ -115,6 +113,8 @@ Partial Class MForm3
         Me.m_window = New ActionListLib.Menu(Me.components)
         Me.m_help = New ActionListLib.Menu(Me.components)
         Me.a_nastaveni = New ActionListLib.Action(Me.components)
+        Me.m_automaticky_upravovat_sirku_sloupce_textu = New ActionListLib.Menu(Me.components)
+        Me.a_automaticky_upravovat_sirku_sloupce_textu = New ActionListLib.Action(Me.components)
         Me.tbcMain.SuspendLayout()
         Me.pgNab.SuspendLayout()
         Me.pnNab.SuspendLayout()
@@ -625,7 +625,7 @@ Partial Class MForm3
         'SpringPanel
         '
         Me.SpringPanel.Name = "SpringPanel"
-        Me.SpringPanel.Size = New System.Drawing.Size(710, 17)
+        Me.SpringPanel.Size = New System.Drawing.Size(741, 17)
         Me.SpringPanel.Spring = True
         '
         'ToolStripStatusLabel2
@@ -663,7 +663,6 @@ Partial Class MForm3
         Me.m_popup1.MenuList.Add(Me.m_sbalit_vse)
         Me.m_popup1.MenuList.Add(Me.m_sbalitrozbalit_polozku_na_radku)
         Me.m_popup1.MenuList.Add(Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_)
-        Me.m_popup1.MenuList.Add(Me.m_zobrazit_skryte_polozky)
         Me.m_popup1.MenuList.Add(Me.m_delimiter3)
         Me.m_popup1.MenuList.Add(Me.m_najit_vlevo)
         Me.m_popup1.MenuList.Add(Me.m_najit_vpravo)
@@ -735,13 +734,6 @@ Partial Class MForm3
         Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Name = "m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_"
         Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Parent = Me.ActionList0
         Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Text = Nothing
-        '
-        'm_zobrazit_skryte_polozky
-        '
-        Me.ActionList0.SetAction(Me.m_zobrazit_skryte_polozky, Me.a_zobrazit_skryte_polozky)
-        Me.m_zobrazit_skryte_polozky.Name = "m_zobrazit_skryte_polozky"
-        Me.m_zobrazit_skryte_polozky.Parent = Me.ActionList0
-        Me.m_zobrazit_skryte_polozky.Text = Nothing
         '
         'm_delimiter3
         '
@@ -955,13 +947,6 @@ Partial Class MForm3
         Me.a_statistika_polozek_v_databazi.Parent = Me.ActionList0
         Me.a_statistika_polozek_v_databazi.Text = "Statistika položek v databázi"
         '
-        'a_zobrazit_skryte_polozky
-        '
-        Me.a_zobrazit_skryte_polozky.AltText = "Zobr. skryté polož."
-        Me.a_zobrazit_skryte_polozky.Name = "a_zobrazit_skryte_polozky"
-        Me.a_zobrazit_skryte_polozky.Parent = Me.ActionList0
-        Me.a_zobrazit_skryte_polozky.Text = "Zobrazit skryté položky"
-        '
         'ActionListConn
         '
         Me.ActionListConn.ActionList = Me.ActionList0
@@ -1008,10 +993,10 @@ Partial Class MForm3
         Me.m_view.MenuList.Add(Me.m_rozbalit_vse)
         Me.m_view.MenuList.Add(Me.m_sbalitrozbalit_polozku_na_radku)
         Me.m_view.MenuList.Add(Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_)
-        Me.m_view.MenuList.Add(Me.m_zobrazit_skryte_polozky)
         Me.m_view.MenuList.Add(Me.m_delimiter2)
         Me.m_view.MenuList.Add(Me.m_najit_vpravo)
         Me.m_view.MenuList.Add(Me.m_najit_vlevo)
+        Me.m_view.MenuList.Add(Me.m_automaticky_upravovat_sirku_sloupce_textu)
         Me.m_view.MergeNode = 300
         Me.m_view.Name = "m_view"
         Me.m_view.Parent = Me.ActionList0
@@ -1055,6 +1040,22 @@ Partial Class MForm3
         Me.a_nastaveni.Name = "a_nastaveni"
         Me.a_nastaveni.Parent = Me.ActionList0
         Me.a_nastaveni.Text = "Nastavení"
+        '
+        'm_automaticky_upravovat_sirku_sloupce_textu
+        '
+        Me.ActionList0.SetAction(Me.m_automaticky_upravovat_sirku_sloupce_textu, Me.a_automaticky_upravovat_sirku_sloupce_textu)
+        Me.m_automaticky_upravovat_sirku_sloupce_textu.Name = "m_automaticky_upravovat_sirku_sloupce_textu"
+        Me.m_automaticky_upravovat_sirku_sloupce_textu.Parent = Me.ActionList0
+        Me.m_automaticky_upravovat_sirku_sloupce_textu.Text = Nothing
+        '
+        'a_automaticky_upravovat_sirku_sloupce_textu
+        '
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.AltText = "Autom. uprav. šířku sloup. textu"
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.AutoCheck = True
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.Checked = True
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.Name = "a_automaticky_upravovat_sirku_sloupce_textu"
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.Parent = Me.ActionList0
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.Text = "Automaticky upravovat šířku sloupce textu"
         '
         'MForm3
         '
@@ -1190,6 +1191,6 @@ Partial Class MForm3
     Friend WithEvents pgObjVyd As TabPage
     Friend WithEvents pnObjV As Panel
     Friend WithEvents FgOV As XC1Flexgrid
-    Friend WithEvents m_zobrazit_skryte_polozky As ActionListLib.Menu
-    Friend WithEvents a_zobrazit_skryte_polozky As ActionListLib.Action
+    Friend WithEvents m_automaticky_upravovat_sirku_sloupce_textu As ActionListLib.Menu
+    Friend WithEvents a_automaticky_upravovat_sirku_sloupce_textu As ActionListLib.Action
 End Class

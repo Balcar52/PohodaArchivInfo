@@ -17,6 +17,7 @@ Public Class MForm3
     Public Const nmbSimpleExcel As String = "SimpleExcel"
     Public Const nmbUseExcel As String = "UseExcel"
     Public Const nmsExcelExpDir As String = "ExcelDir"
+    Public Const nmsAutoSizeText As String = "AutoSizeText"
     Public Const nmsColorFgOP As String = "ColorsFgOP"
     Public Const nmsColorFgOV As String = "ColorsFgOV"
     Public Const nmsColorFgN As String = "ColorsFgN"
@@ -431,6 +432,7 @@ Public Class MForm3
         bUseExcel = BooleanRestore(nmsExcelExpDir,, bUseExcel)
         bSimpleExcel = BooleanRestore(nmbSimpleExcel,, bSimpleExcel)
         bSetTabColors = BooleanRestore(nmbSetTabColors,, bSetTabColors)
+        a_automaticky_upravovat_sirku_sloupce_textu.Checked = BooleanRestore(nmsAutoSizeText,, True)
         InitGrid(FgN, "nabídky", clrFgN, bSetTabColors)
         InitGrid(FgOP, "objednávky", clrFgOP, bSetTabColors)
         InitGrid(FgFV, "vydané faktury", clrFgFV, bSetTabColors)
@@ -477,6 +479,7 @@ Public Class MForm3
         BooleanSave(nmbSimpleExcel, bSimpleExcel)
         BooleanSave(nmbUseExcel, bSimpleExcel)
         BooleanSave(nmbSetTabColors, bSetTabColors)
+        BooleanSave(nmsAutoSizeText, a_automaticky_upravovat_sirku_sloupce_textu.Checked)
         SaveColors()
     End Sub
 
@@ -602,7 +605,7 @@ Public Class MForm3
     Private Sub a_sbalitrozbalit_polozku_na_radku_Execute(sender As Object, e As EventArgs) Handles a_sbalitrozbalit_polozku_na_radku.Execute
         Dim Fg As XC1Flexgrid = FgA()
         If Fg.Rows(Fg.Row).IsNode Then Fg.Rows(Fg.Row).Node.Expanded = Not Fg.Rows(Fg.Row).Node.Expanded
-        If Fg.Rows(Fg.Row).Node.Expanded Then Fg.AutoSizeCol(iColFgText)
+        If Fg.Rows(Fg.Row).Node.Expanded Then AutoSizeText(Fg) 'Fg.AutoSizeCol(iColFgText)
     End Sub
 
     Private Sub Fg_DoubleClick(sender As Object, e As EventArgs) Handles FgOP.DoubleClick, FgN.DoubleClick, FgFP.DoubleClick, FgFV.DoubleClick
@@ -633,7 +636,7 @@ Public Class MForm3
                 End If
             Catch ex As Exception
             Finally
-                Fg.AutoSizeCol(iColFgText)
+                AutoSizeText(Fg)
                 Fg.EndInit()
                 bLoading = False
             End Try
@@ -670,7 +673,7 @@ Public Class MForm3
                             Next
                         Next
                         If Not bNewState Then Fg.Row = iRow
-                        If bNewState Then Fg.AutoSizeCol(iColFgText)
+                        If bNewState Then AutoSizeText(Fg)
                         Fg.Refresh()
                         Fg.EnsureVisibleSelectedRow()
                         'MsgBox("Node " & iRow)
@@ -681,7 +684,7 @@ Public Class MForm3
                 Next
             Catch
             Finally
-                Fg.AutoSizeCol(iColFgText)
+                AutoSizeText(Fg)
                 Fg.EndUpdate()
                 bLoading = False
             End Try
@@ -970,8 +973,22 @@ endexcel:
         If Not bLoading Then
             Dim Fg As XC1Flexgrid = DirectCast(sender, XC1Flexgrid)
             If e Is Nothing OrElse (Fg.Rows(e.Row).IsNode AndAlso Fg.Rows(e.Row).Node.Expanded) Then
-                Fg.AutoSizeCol(iColFgText)
+                'Fg.AutoSizeCol(iColFgText)
+                AutoSizeText(sender)
             End If
+        End If
+    End Sub
+
+    Public Sub AutoSizeText(sender As Object)
+        If TypeOf (sender) Is XC1Flexgrid AndAlso a_automaticky_upravovat_sirku_sloupce_textu.Checked Then
+            With CType(sender, XC1Flexgrid)
+                Dim oSize As Size = .ClientSize
+                .AutoSizeCol(iColFgText)
+                If .Cols(.ColN).Right > .ClientSize.Width Then
+                    Dim iWid = .Cols(iColFgText).Width - (.ClientSize.Width - .Cols(.ColN).Right) - (.Width - .ClientSize.Width)
+                    If iWid > 100 Then .Cols(iColFgText).Width = iWid
+                End If
+            End With
         End If
     End Sub
 
@@ -1030,7 +1047,7 @@ endexcel:
         MessageBox.Show(Me, String.Format("Statistika počtů položek archivu ""{2}"":{0}{0}{1}", vbCrLf, s, AData.CurrentFile), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
-    Private Sub a_zobrazit_skryte_polozky_Execute(sender As Object, e As EventArgs) Handles a_zobrazit_skryte_polozky.Execute
+    Private Sub a_zobrazit_skryte_polozky_Execute(sender As Object, e As EventArgs)
         For iRow As Integer = FgA.Row1 To FgA.RowN
             FgA.Rows(iRow).Visible = True
         Next
