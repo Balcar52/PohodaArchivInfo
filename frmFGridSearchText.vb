@@ -378,6 +378,7 @@ Public Class FGridSearchText
         CheckBoxRestore(Me.chkRespectAccents)
         CheckBoxRestore(Me.chkSearchFromTop)
         CheckBoxRestore(Me.chkFindInColumn)
+        CheckBoxRestore(Me.chkFindAndHide)
         If TypeOf oOwner Is XC1Flexgrid OrElse oOwner.GetType.IsSubclassOf(GetType(XC1Flexgrid)) Then
             With DirectCast(oOwner, XC1Flexgrid)
                 Sloupec.CreateItem(DirectCast(oOwner, XC1Flexgrid), -1, aoSloupce)
@@ -773,27 +774,52 @@ Public Class FGridSearchText
                 If chkFindAndHide.Checked Then
                     'rezim vyber a skryj ostatni
                     Dim aiShowRows As New List(Of Integer) 'ktere radky zobrazim
-                    'doladit, odladit
+                    Dim iSel As Integer = -1
                     For iRow As Integer = If(chkBackward.Checked, oFg.Row - iOff, oFg.Row + iOff) To If(chkBackward.Checked, oFg.Rows.Fixed, oFg.Rows.Count - 1) Step If(chkBackward.Checked, -1, 1)
-                        If oFg.Rows(iRow).Visible Then
-                            For Each iCol As Integer In aiCols
-                                Dim sFgValue As String = CStr(oFg(iRow, iCol))
-                                If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
-                                If (Not oFg(iRow, iCol) Is Nothing) Then
-                                    If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
-                                        'nalezeno
-                                        FlexgridSelectAndShowRow(oFg, iRow)
-                                        oFg.Select(iRow, iCol, True)
-                                        chkSearchFromTop.Checked = False
-                                        oFg.EnsureVisibleSelectedRow()
-                                        bRet = True
-                                        Exit For
+                        For Each iCol As Integer In aiCols
+                            Dim sFgValue As String = CStr(oFg(iRow, iCol))
+                            If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
+                            If (Not oFg(iRow, iCol) Is Nothing) Then
+                                If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
+                                    'nalezeno
+                                    bRet = True
+                                    If iSel < 0 Then iSel = iRow
+                                    If Not aiShowRows.Contains(iRow) Then aiShowRows.Add(iRow)
+                                End If
+                            End If
+                        Next
+                    Next
+                    If bRet Then
+                        CType(Me.Owner, MForm3).bLoading = True
+                        oFg.BeginInit()
+                        ' ted nastavim viditelnost radku
+                        For iRow As Integer = oFg.Row1 To oFg.RowN
+                            If oFg.Rows(iRow).IsNode Then oFg.Rows(iRow).Node.Expanded = False
+                            'oFg.Rows(iRow).Visible = aiShowRows.Contains(iRow)
+                        Next
+                        For Each iRow As Integer In aiShowRows
+                            If oFg.Rows(iRow).IsNode Then
+                                oFg.Rows(iRow).Node.Expanded = True
+                                If oFg.Rows(iRow).Node.Parent IsNot Nothing Then
+                                    oFg.Rows(iRow).Node.Parent.Expanded = True
+                                    'oFg.Rows(oFg.Rows(iRow).Node.Parent.Row.Index).Visible = True
+                                    If oFg.Rows(iRow).Node.Parent.Parent IsNot Nothing Then
+                                        oFg.Rows(iRow).Node.Parent.Parent.Expanded = True
+                                        'oFg.Rows(oFg.Rows(iRow).Node.Parent.Parent.Row.Index).Visible = True
                                     End If
                                 End If
-                            Next
-                        End If
-                        If bRet Then Exit For
-                    Next
+                            End If
+                        Next
+                        oFg.EndInit()
+                        oFg.Row = iSel
+                        oFg.EnsureVisibleSelectedRow()
+                        CType(Me.Owner, MForm3).bLoading = False
+                        CType(Me.Owner, MForm3).FgO_AfterCollapse(oFg, Nothing)
+                        'With CType(Me.Owner, MForm3)
+                        '    .bHiddenBySearch = True
+                        '    .lblHidden.Text = "POLOŽKY NEVYHOVUJÍCÍ VYHLEDÁVACÍ PODMÍNCE BYLY SKRYTY"
+                        'End With
+                    End If
                 Else
                     For iRow As Integer = If(chkBackward.Checked, oFg.Row - iOff, oFg.Row + iOff) To If(chkBackward.Checked, oFg.Rows.Fixed, oFg.Rows.Count - 1) Step If(chkBackward.Checked, -1, 1)
                         If oFg.Rows(iRow).Visible Then
@@ -871,6 +897,7 @@ Public Class FGridSearchText
         CheckBoxSave(Me.chkCaseSensitive)
         CheckBoxSave(Me.chkSearchFromTop)
         CheckBoxSave(Me.chkFindInColumn)
+        CheckBoxSave(Me.chkFindAndHide)
         ComboBoxSave(Me.cmbColumn)
     End Sub
 

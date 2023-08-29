@@ -26,7 +26,7 @@ Public Class MForm3
     Public Const txText As String = " (text)"
     Public Const txFontNarrow As String = "Arial Narrow"
 
-    Dim bLoading As Boolean = True
+    Public bLoading As Boolean = True
 
     Public clrFgOP As New ColorPair(SystemColors.WindowText, SystemColors.Window)
     Public clrFgN As New ColorPair(SystemColors.WindowText, SystemColors.Window)
@@ -794,6 +794,8 @@ Public Class MForm3
             NajdiFirmu(CStr(FgN(FgN.Row, iColFgNazevFirmy)), FgOP, pgObjPrij)
         ElseIf tbcMain.SelectedTab Is pgObjPrij Then
             NajdiFirmu(CStr(FgOP(FgOP.Row, iColFgNazevFirmy)), FgFV, pgFaktVyd)
+        ElseIf tbcMain.SelectedTab Is pgObjVyd Then
+            NajdiFirmu(CStr(FgOV(FgOV.Row, iColFgNazevFirmy)), FgFP, pgFaktPrij)
         End If
     End Sub
 
@@ -802,6 +804,8 @@ Public Class MForm3
             NajdiFirmu(CStr(FgFV(FgFV.Row, iColFgNazevFirmy)), FgOP, pgObjPrij)
         ElseIf tbcMain.SelectedTab Is pgObjPrij Then
             NajdiFirmu(CStr(FgN(FgN.Row, iColFgNazevFirmy)), FgN, pgNab)
+        ElseIf tbcMain.SelectedTab Is pgFaktPrij Then
+            NajdiFirmu(CStr(FgFP(FgFP.Row, iColFgNazevFirmy)), FgOV, pgObjVyd)
         End If
     End Sub
 
@@ -962,10 +966,10 @@ endexcel:
 
     End Sub
 
-    Private Sub FgO_AfterCollapse(sender As Object, e As RowColEventArgs) Handles FgOP.AfterCollapse, FgN.AfterCollapse, FgFP.AfterCollapse, FgFV.AfterCollapse
+    Public Sub FgO_AfterCollapse(sender As Object, e As RowColEventArgs) Handles FgOP.AfterCollapse, FgN.AfterCollapse, FgFP.AfterCollapse, FgFV.AfterCollapse, FgOV.AfterCollapse
         If Not bLoading Then
             Dim Fg As XC1Flexgrid = DirectCast(sender, XC1Flexgrid)
-            If Fg.Rows(e.Row).IsNode AndAlso Fg.Rows(e.Row).Node.Expanded Then
+            If e Is Nothing OrElse (Fg.Rows(e.Row).IsNode AndAlso Fg.Rows(e.Row).Node.Expanded) Then
                 Fg.AutoSizeCol(iColFgText)
             End If
         End If
@@ -1024,5 +1028,12 @@ endexcel:
                           vbCrLf & String.Format(s4, iPolOV, iPolOVi, vbTab) & vbCrLf & String.Format(s5, iPolFP, iPolFPi, vbTab) & vbCrLf & vbCrLf &
                           String.Format(s6, iPolNi + iPolOPi + iPolOVi + iPolFVi + iPolFPi, vbTab)
         MessageBox.Show(Me, String.Format("Statistika počtů položek archivu ""{2}"":{0}{0}{1}", vbCrLf, s, AData.CurrentFile), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub a_zobrazit_skryte_polozky_Execute(sender As Object, e As EventArgs) Handles a_zobrazit_skryte_polozky.Execute
+        For iRow As Integer = FgA.Row1 To FgA.RowN
+            FgA.Rows(iRow).Visible = True
+        Next
+        FgA.EnsureVisibleSelectedRow()
     End Sub
 End Class

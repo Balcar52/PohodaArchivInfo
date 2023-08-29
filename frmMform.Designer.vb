@@ -62,7 +62,7 @@ Partial Class MForm3
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lblArchiveFile = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lblArchiveFileTimeSize = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ToolStripStatusLabel3 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.SpringPanel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lblVer = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ActionList0 = New ActionListLib.ActionList(Me.components)
@@ -76,6 +76,7 @@ Partial Class MForm3
         Me.m_sbalit_vse = New ActionListLib.Menu(Me.components)
         Me.m_sbalitrozbalit_polozku_na_radku = New ActionListLib.Menu(Me.components)
         Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_ = New ActionListLib.Menu(Me.components)
+        Me.m_zobrazit_skryte_polozky = New ActionListLib.Menu(Me.components)
         Me.m_delimiter3 = New ActionListLib.Menu(Me.components)
         Me.m_najit_vlevo = New ActionListLib.Menu(Me.components)
         Me.m_najit_vpravo = New ActionListLib.Menu(Me.components)
@@ -103,6 +104,7 @@ Partial Class MForm3
         Me.a_o_aplikaci = New ActionListLib.Action(Me.components)
         Me.m_statistika_polozek_v_databazi = New ActionListLib.Menu(Me.components)
         Me.a_statistika_polozek_v_databazi = New ActionListLib.Action(Me.components)
+        Me.a_zobrazit_skryte_polozky = New ActionListLib.Action(Me.components)
         Me.ActionListConn = New ActionListLib.ActionListConn(Me.components)
         Me.m_main = New ActionListLib.Menu(Me.components)
         Me.m_file = New ActionListLib.Menu(Me.components)
@@ -592,7 +594,7 @@ Partial Class MForm3
         'StatusStrip1
         '
         Me.StatusStrip1.Font = New System.Drawing.Font("Segoe UI", 8.5!)
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.lblArchiveFile, Me.lblArchiveFileTimeSize, Me.ToolStripStatusLabel3, Me.ToolStripStatusLabel2, Me.lblVer})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.lblArchiveFile, Me.lblArchiveFileTimeSize, Me.SpringPanel, Me.ToolStripStatusLabel2, Me.lblVer})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 539)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(990, 22)
@@ -620,11 +622,11 @@ Partial Class MForm3
         Me.lblArchiveFileTimeSize.Size = New System.Drawing.Size(19, 17)
         Me.lblArchiveFileTimeSize.Text = "    "
         '
-        'ToolStripStatusLabel3
+        'SpringPanel
         '
-        Me.ToolStripStatusLabel3.Name = "ToolStripStatusLabel3"
-        Me.ToolStripStatusLabel3.Size = New System.Drawing.Size(741, 17)
-        Me.ToolStripStatusLabel3.Spring = True
+        Me.SpringPanel.Name = "SpringPanel"
+        Me.SpringPanel.Size = New System.Drawing.Size(710, 17)
+        Me.SpringPanel.Spring = True
         '
         'ToolStripStatusLabel2
         '
@@ -661,6 +663,7 @@ Partial Class MForm3
         Me.m_popup1.MenuList.Add(Me.m_sbalit_vse)
         Me.m_popup1.MenuList.Add(Me.m_sbalitrozbalit_polozku_na_radku)
         Me.m_popup1.MenuList.Add(Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_)
+        Me.m_popup1.MenuList.Add(Me.m_zobrazit_skryte_polozky)
         Me.m_popup1.MenuList.Add(Me.m_delimiter3)
         Me.m_popup1.MenuList.Add(Me.m_najit_vlevo)
         Me.m_popup1.MenuList.Add(Me.m_najit_vpravo)
@@ -732,6 +735,13 @@ Partial Class MForm3
         Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Name = "m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_"
         Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Parent = Me.ActionList0
         Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Text = Nothing
+        '
+        'm_zobrazit_skryte_polozky
+        '
+        Me.ActionList0.SetAction(Me.m_zobrazit_skryte_polozky, Me.a_zobrazit_skryte_polozky)
+        Me.m_zobrazit_skryte_polozky.Name = "m_zobrazit_skryte_polozky"
+        Me.m_zobrazit_skryte_polozky.Parent = Me.ActionList0
+        Me.m_zobrazit_skryte_polozky.Text = Nothing
         '
         'm_delimiter3
         '
@@ -945,6 +955,13 @@ Partial Class MForm3
         Me.a_statistika_polozek_v_databazi.Parent = Me.ActionList0
         Me.a_statistika_polozek_v_databazi.Text = "Statistika položek v databázi"
         '
+        'a_zobrazit_skryte_polozky
+        '
+        Me.a_zobrazit_skryte_polozky.AltText = "Zobr. skryté polož."
+        Me.a_zobrazit_skryte_polozky.Name = "a_zobrazit_skryte_polozky"
+        Me.a_zobrazit_skryte_polozky.Parent = Me.ActionList0
+        Me.a_zobrazit_skryte_polozky.Text = "Zobrazit skryté položky"
+        '
         'ActionListConn
         '
         Me.ActionListConn.ActionList = Me.ActionList0
@@ -991,6 +1008,7 @@ Partial Class MForm3
         Me.m_view.MenuList.Add(Me.m_rozbalit_vse)
         Me.m_view.MenuList.Add(Me.m_sbalitrozbalit_polozku_na_radku)
         Me.m_view.MenuList.Add(Me.m_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_)
+        Me.m_view.MenuList.Add(Me.m_zobrazit_skryte_polozky)
         Me.m_view.MenuList.Add(Me.m_delimiter2)
         Me.m_view.MenuList.Add(Me.m_najit_vpravo)
         Me.m_view.MenuList.Add(Me.m_najit_vlevo)
@@ -1164,7 +1182,7 @@ Partial Class MForm3
     Friend WithEvents ToolStripButton9 As ToolStripButton
     Friend WithEvents ToolStripButton8 As ToolStripButton
     Friend WithEvents ToolStripButton11 As ToolStripButton
-    Friend WithEvents ToolStripStatusLabel3 As ToolStripStatusLabel
+    Friend WithEvents SpringPanel As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
     Friend WithEvents lblVer As ToolStripStatusLabel
     Friend WithEvents m_statistika_polozek_v_databazi As ActionListLib.Menu
@@ -1172,4 +1190,6 @@ Partial Class MForm3
     Friend WithEvents pgObjVyd As TabPage
     Friend WithEvents pnObjV As Panel
     Friend WithEvents FgOV As XC1Flexgrid
+    Friend WithEvents m_zobrazit_skryte_polozky As ActionListLib.Menu
+    Friend WithEvents a_zobrazit_skryte_polozky As ActionListLib.Action
 End Class
