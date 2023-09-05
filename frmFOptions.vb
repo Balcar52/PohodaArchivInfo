@@ -18,6 +18,7 @@ Public Class FOptions
     Dim iColFgFImportovano As Integer ' [g:3]
     Dim iColFgFDel As Integer ' [g:3]
     Dim iColFgFId As Integer ' [g:4]
+    Dim iColFgFUpd As Integer ' [g:4]
 
     Dim dfFgOP As ColorPair
     Dim dfFgOV As ColorPair
@@ -38,10 +39,10 @@ Public Class FOptions
         dfFgFP = clrFgFP.ColorSetting
         If RestoreMain Then
             clrFgN.ColorSetting = oOwner.clrFgN
-            clrFgOP.ColorSetting = oOwner.clrFgOp
+            clrFgOP.ColorSetting = oOwner.clrFgOP
             clrFgFV.ColorSetting = oOwner.clrFgFV
             clrFgFP.ColorSetting = oOwner.clrFgFP
-            clrFgOV.ColorSetting = oOwner.clrFgOv
+            clrFgOV.ColorSetting = oOwner.clrFgOV
             gbColors.Checked = oOwner.bSetTabColors
             chkUseExcel.Checked = oOwner.bUseExcel
             chkSimpleExcel.Checked = oOwner.bSimpleExcel
@@ -68,8 +69,10 @@ Public Class FOptions
         Try
             Dim iRemoved As Integer = 0
             Dim iAdded As Integer = 0
-            Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Načítám data z databáze Pohoda")
-                AData.oAdata = AData.LoadMdbData(txtMdbFile.Text, txtMdbPassword.Text, txtCurrentFile.Text, iRemoved, iAdded)
+            Dim bCancel As Boolean = False
+            Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Načítám data z databáze Pohoda (může trvat několik vteřin)..")
+                AData.oAdata = AData.LoadMdbData(txtMdbFile.Text, txtMdbPassword.Text, txtCurrentFile.Text, iRemoved, iAdded, bCancel)
+                If bCancel Then Exit Sub
                 If AData.oAdata IsNot Nothing Then
                     AData.oAdata.FileVersion = AData.ValidFileVersion
                     IO.File.WriteAllText(txtCurrentFile.Text, AData.oAdata.ToXml)
@@ -88,6 +91,43 @@ Public Class FOptions
         End Try
     End Sub
 
+
+
+    Private Sub btnUpdateAll_Click(sender As Object, e As EventArgs) Handles btnUpdateAll.Click
+        Dim oSb As New Text.StringBuilder
+        If AData.oAdata IsNot Nothing Then
+            Dim maoFiles As New List(Of AData.AFile)
+            Dim bUpd As Boolean = False
+            maoFiles.AddRange(AData.oAdata.aoFiles)
+            For Each o In maoFiles
+                Try
+                    If IO.File.Exists(o.UsedFileName) Then
+                        If IO.File.GetLastWriteTime(o.UsedFileName) = o.FileDate Then
+                            oSb.AppendLine(String.Format("{0}{1}{2}- soubor nezměněn.", o.UsedFileName, vbCrLf, vbTab))
+                        Else
+                            Dim iRemoved As Integer = 0
+                            Dim iAdded As Integer = 0
+                            Dim bCancel As Boolean = False
+                            AData.oAdata = AData.LoadMdbData(o.UsedFileName, PwDecode(o.Pw), txtCurrentFile.Text, iRemoved, iAdded, bCancel)
+                            AData.oAdata.FileVersion = AData.ValidFileVersion
+                            IO.File.WriteAllText(txtCurrentFile.Text, AData.oAdata.ToXml)
+                            bUpd = True
+                            oSb.AppendLine(String.Format("{0}{1}{2}- SOUBOR AKTUALIZOVÁN.", o.UsedFileName, vbCrLf, vbTab))
+                        End If
+                    Else
+                        oSb.AppendLine(String.Format("{0}{1}{2}- ** soubor není dostupný.", o.UsedFileName, vbCrLf, vbTab))
+                    End If
+                Catch ex As Exception
+                    MessageBox.Show(Me, ex.Message, txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Exit Sub
+                End Try
+            Next
+            If bUpd Then btnClose.DialogResult = DialogResult.OK
+            LoadFgData(txtCurrentFile.Text)
+            MessageBox.Show(Me, String.Format("Aktualizace archivu:{0}{0}{1}", vbCrLf, oSb.ToString), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+    End Sub
+
     Private Sub FOptions_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         LoadFgData(txtCurrentFile.Text)
         bLoaded = True
@@ -99,8 +139,9 @@ Public Class FOptions
         iColFgF0 = FlexgridSetCol(">")
         iColFgFKlicoveJmeno = FlexgridSetCol("klíčové jméno,100,RS<", "databáze")
         iColFgFCesta = FlexgridSetCol("cesta,100,RS<", "*")
-        iColFgFDatum = FlexgridSetCol("datum,80,Rd>", "*")
+        iColFgFDatum = FlexgridSetCol("verze z,100,RDT>", "*")
         iColFgFImportovano = FlexgridSetCol("importováno,100,RDT>", "*")
+        iColFgFUpd = FlexgridSetCol("aut.\naktualizace,50,BE^", "*")
         iColFgFDel = FlexgridSetCol(",50,^", "*")
         iColFgFId = FlexgridSetCol("ID,80,RI>", "*")
         FlexgridSetExec() ' [CorrectForm 22.6.2023 3:58]
@@ -110,6 +151,7 @@ Public Class FOptions
         FgF.Styles.Highlight.BackColor = FgF.Styles.Normal.BackColor
         FgF.Styles.Highlight.ForeColor = FgF.Styles.Normal.ForeColor
         FgF.SelectionMode = SelectionModeEnum.Cell
+        FgF.AllowEditing = False
 
         ShowDelImages()
 
@@ -130,6 +172,7 @@ Public Class FOptions
                     FgF(iRow, iColFgFKlicoveJmeno) = o.PureFileName
                     FgF(iRow, iColFgFCesta) = o.UsedFileName
                     FgF(iRow, iColFgFDatum) = o.FileDate
+                    FgF(iRow, iColFgFUpd) = (o.Attr And AData.AFile.Attributes.AutoUpdate) <> 0
                     FgF.SetCellImage(iRow, iColFgFDel, ImageList1.Images(0))
                     If ValidDate(o.DateImported) Then FgF(iRow, iColFgFImportovano) = o.DateImported
                     FgF(iRow, iColFgFId) = o.Id
@@ -152,6 +195,7 @@ Public Class FOptions
         TextBoxSave(txtMdbFile)
         TextBoxSave(txtMdbPassword)
         TabControlSave(tbcMain)
+        CheckBoxSave(chkUNC)
     End Sub
 
     Public Sub RestoreFrm()
@@ -161,6 +205,7 @@ Public Class FOptions
         TabControlRestore(tbcMain)
         If String.IsNullOrEmpty(txtCurrentFile.Text) Then txtCurrentFile.Text = AData.CurrentFile
         If String.IsNullOrEmpty(txtMdbPassword.Text) Then txtMdbPassword.Text = AData.txDefaultPassword
+        CheckBoxRestore(chkUNC)
         'If String.IsNullOrEmpty(txtMSExcelDir.Text) Then txtMSExcelDir.Text = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), IO.Path.GetFileNameWithoutExtension(Application.ExecutablePath))
     End Sub
 
@@ -181,6 +226,7 @@ Public Class FOptions
             If .ShowDialog = DialogResult.OK AndAlso IO.File.Exists(.FileName) Then
                 If IO.File.Exists(.FileName) Then
                     txtMdbFile.Text = .FileName
+                    If chkUNC.Checked Then txtMdbFile.Text = DriveInfo.GetUNCPath(txtMdbFile.Text)
                     WindowSet(Me)
                     TextBoxSave(txtMdbFile)
                 Else
@@ -197,7 +243,8 @@ Public Class FOptions
             End If
             If .ShowDialog = DialogResult.OK AndAlso IO.File.Exists(.FileName) Then
                 If IO.File.Exists(.FileName) Then
-                    Dim sName As String = DriveInfo.GetUNCPath(.FileName)
+                    Dim sName As String = .FileName
+                    If chkUNC.Checked Then sName = DriveInfo.GetUNCPath(sName)
                     AData.CurrentFile = sName
                     oMainForm.SaveCurrentFileName()
                     txtCurrentFile.Text = sName
@@ -258,8 +305,10 @@ Public Class FOptions
             End If
         End If
         ShowDelImages()
+        FgF.AllowEditing = chkAllowImport.Checked
         gbImport.Enabled = chkAllowImport.Checked
         btnCreateA.Enabled = chkAllowImport.Checked
+        btnUpdateAll.Enabled = chkAllowImport.Checked
     End Sub
 
     Private Sub txtCurrentFile_Validated(sender As Object, e As EventArgs)
@@ -315,7 +364,7 @@ Public Class FOptions
                     IO.File.WriteAllText(txtCurrentFile.Text, AData.oAdata.ToXml)
                     LoadFgData(txtCurrentFile.Text)
                 End Using
-                MessageBox.Show(Me, String.Format("Odstranění dat z archivu databáze ""{0}"" z archivu ""{1}"" bylo úspěšně dokončeno.{2}{2}Bylo celkem odstraněno {3} položek.", txtMdbFile.Text, txtCurrentFile.Text, vbCrLf, iremoved), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                MessageBox.Show(Me, String.Format("Odstranění dat z archivu databáze ""{0}"" z archivu ""{1}"" bylo úspěšně dokončeno.{2}{2}Bylo celkem odstraněno {3} položek.", txtMdbFile.Text, txtCurrentFile.Text, vbCrLf, iRemoved), txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
                 btnClose.DialogResult = DialogResult.OK
             End If
         End If
@@ -323,5 +372,17 @@ Public Class FOptions
 
     Private Sub btnOK_VisibleChanged(sender As Object, e As EventArgs) Handles btnOK.VisibleChanged
         Debug.WriteLine("visChanged")
+    End Sub
+
+    Private Sub FgF_AfterEdit(sender As Object, e As RowColEventArgs) Handles FgF.AfterEdit
+        If e.Col = iColFgFUpd Then
+            Dim iAttr As Integer = AData.oAdata.aoFiles(e.Row - FgF.Rows.Fixed).Attr
+            iAttr = iAttr Xor (AData.AFile.Attributes.AutoUpdate)
+            AData.oAdata.aoFiles(e.Row - FgF.Rows.Fixed).Attr = iAttr
+            IO.File.WriteAllText(txtCurrentFile.Text, AData.oAdata.ToXml)
+            btnClose.DialogResult = DialogResult.OK
+            btnOK.Visible = True
+            LoadFgData(txtCurrentFile.Text)
+        End If
     End Sub
 End Class

@@ -40,7 +40,8 @@ Public Class FGridSearchText
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents itmCols As ToolStripMenuItem
     Friend WithEvents PřizpůsobitŠířkySloupcůToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents chkFindAndHide As CheckBox
+    Friend WithEvents btnSearchAll As Button
+    Friend WithEvents ToolTip1 As ToolTip
 
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
@@ -53,11 +54,11 @@ Public Class FGridSearchText
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FGridSearchText))
         Me.ButtonPanel1 = New XControls.ButtonPanel()
+        Me.btnSearchAll = New System.Windows.Forms.Button()
         Me.btnOK = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.pnMain = New System.Windows.Forms.Panel()
         Me.pnBoxes = New System.Windows.Forms.Panel()
-        Me.chkFindAndHide = New System.Windows.Forms.CheckBox()
         Me.pnColumn = New System.Windows.Forms.Panel()
         Me.cmbColumn = New System.Windows.Forms.ComboBox()
         Me.chkFindInColumn = New System.Windows.Forms.CheckBox()
@@ -74,6 +75,7 @@ Public Class FGridSearchText
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.itmCols = New System.Windows.Forms.ToolStripMenuItem()
         Me.PřizpůsobitŠířkySloupcůToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.ButtonPanel1.SuspendLayout()
         Me.pnMain.SuspendLayout()
         Me.pnBoxes.SuspendLayout()
@@ -85,15 +87,28 @@ Public Class FGridSearchText
         'ButtonPanel1
         '
         Me.ButtonPanel1.AutoButtonSpaceControl = Me.ButtonPanel1
+        Me.ButtonPanel1.Controls.Add(Me.btnSearchAll)
         Me.ButtonPanel1.Controls.Add(Me.btnOK)
         Me.ButtonPanel1.Controls.Add(Me.btnCancel)
         Me.ButtonPanel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ButtonPanel1.Location = New System.Drawing.Point(0, 198)
+        Me.ButtonPanel1.Location = New System.Drawing.Point(0, 169)
         Me.ButtonPanel1.Name = "ButtonPanel1"
         Me.ButtonPanel1.Padding = New System.Windows.Forms.Padding(9, 8, 9, 13)
         Me.ButtonPanel1.PaddingAutomaticCoef = New System.Drawing.SizeF(0.2!, 0.08!)
         Me.ButtonPanel1.Size = New System.Drawing.Size(390, 44)
         Me.ButtonPanel1.TabIndex = 1
+        '
+        'btnSearchAll
+        '
+        Me.btnSearchAll.DialogResult = System.Windows.Forms.DialogResult.Yes
+        Me.btnSearchAll.Dock = System.Windows.Forms.DockStyle.Right
+        Me.btnSearchAll.Location = New System.Drawing.Point(77, 8)
+        Me.btnSearchAll.Name = "btnSearchAll"
+        Me.btnSearchAll.Size = New System.Drawing.Size(166, 23)
+        Me.btnSearchAll.TabIndex = 2
+        Me.btnSearchAll.Text = "Hromadné vyhledávání (F3)"
+        Me.ToolTip1.SetToolTip(Me.btnSearchAll, "Vyhledá všechny řádky s hledaným textem a rozbalí, ostatří řádky se sbalí")
+        Me.btnSearchAll.UseVisualStyleBackColor = True
         '
         'btnOK
         '
@@ -125,12 +140,11 @@ Public Class FGridSearchText
         Me.pnMain.Location = New System.Drawing.Point(0, 0)
         Me.pnMain.Name = "pnMain"
         Me.pnMain.Padding = New System.Windows.Forms.Padding(10, 10, 10, 5)
-        Me.pnMain.Size = New System.Drawing.Size(390, 198)
+        Me.pnMain.Size = New System.Drawing.Size(390, 169)
         Me.pnMain.TabIndex = 0
         '
         'pnBoxes
         '
-        Me.pnBoxes.Controls.Add(Me.chkFindAndHide)
         Me.pnBoxes.Controls.Add(Me.pnColumn)
         Me.pnBoxes.Controls.Add(Me.chkRespectAccents)
         Me.pnBoxes.Controls.Add(Me.chkCaseSensitive)
@@ -140,20 +154,8 @@ Public Class FGridSearchText
         Me.pnBoxes.Location = New System.Drawing.Point(10, 41)
         Me.pnBoxes.Name = "pnBoxes"
         Me.pnBoxes.Padding = New System.Windows.Forms.Padding(5)
-        Me.pnBoxes.Size = New System.Drawing.Size(370, 152)
+        Me.pnBoxes.Size = New System.Drawing.Size(370, 123)
         Me.pnBoxes.TabIndex = 1
-        '
-        'chkFindAndHide
-        '
-        Me.chkFindAndHide.AutoSize = True
-        Me.chkFindAndHide.Dock = System.Windows.Forms.DockStyle.Top
-        Me.chkFindAndHide.Location = New System.Drawing.Point(5, 120)
-        Me.chkFindAndHide.Name = "chkFindAndHide"
-        Me.chkFindAndHide.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
-        Me.chkFindAndHide.Size = New System.Drawing.Size(360, 22)
-        Me.chkFindAndHide.TabIndex = 6
-        Me.chkFindAndHide.Text = "vyhledat a rozbalit nalezené, sbalit ostatní"
-        Me.chkFindAndHide.UseVisualStyleBackColor = True
         '
         'pnColumn
         '
@@ -310,14 +312,15 @@ Public Class FGridSearchText
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnCancel
-        Me.ClientSize = New System.Drawing.Size(390, 242)
+        Me.ClientSize = New System.Drawing.Size(390, 213)
         Me.Controls.Add(Me.pnMain)
         Me.Controls.Add(Me.ButtonPanel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(400, 280)
+        Me.MinimumSize = New System.Drawing.Size(400, 252)
         Me.Name = "FGridSearchText"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
@@ -378,7 +381,6 @@ Public Class FGridSearchText
         CheckBoxRestore(Me.chkRespectAccents)
         CheckBoxRestore(Me.chkSearchFromTop)
         CheckBoxRestore(Me.chkFindInColumn)
-        CheckBoxRestore(Me.chkFindAndHide)
         If TypeOf oOwner Is XC1Flexgrid OrElse oOwner.GetType.IsSubclassOf(GetType(XC1Flexgrid)) Then
             With DirectCast(oOwner, XC1Flexgrid)
                 Sloupec.CreateItem(DirectCast(oOwner, XC1Flexgrid), -1, aoSloupce)
@@ -759,7 +761,9 @@ Public Class FGridSearchText
             Dim sColumn As String = ""
             Dim bColumn As Boolean = False
             If oFg.Row < oFg.Rows.Fixed Then oFg.Row = oFg.Rows.Fixed
-            If NoDialog OrElse ShowDialog() = DialogResult.OK Then
+            Dim oResult As DialogResult = DialogResult.None
+            If Not NoDialog Then oResult = ShowDialog()
+            If NoDialog OrElse oResult = DialogResult.OK OrElse oResult = DialogResult.Yes Then
                 Dim sValue As String = txtValue.Text
                 If Not chkRespectAccents.Checked Then sValue = XControls.CutDiacritic(sValue)
                 Dim aiCols As New List(Of Integer)
@@ -771,7 +775,7 @@ Public Class FGridSearchText
                 Next
                 If Me.chkSearchFromTop.Checked Then oFg.Row = oFg.Rows.Fixed
                 Dim iOff As Integer = If(NoDialog, 1, 0)
-                If chkFindAndHide.Checked Then
+                If oResult = DialogResult.Yes Then
                     'rezim vyber a skryj ostatni
                     Dim aiShowRows As New List(Of Integer) 'ktere radky zobrazim
                     Dim iSel As Integer = -1
@@ -794,10 +798,19 @@ Public Class FGridSearchText
                         oFg.BeginInit()
                         ' ted nastavim viditelnost radku
                         For iRow As Integer = oFg.Row1 To oFg.RowN
+                            oFg.SetStyleToRow(iRow, oFg.ForeColor.ToArgb, oFg.BackColor.ToArgb)
                             If oFg.Rows(iRow).IsNode Then oFg.Rows(iRow).Node.Expanded = False
                             'oFg.Rows(iRow).Visible = aiShowRows.Contains(iRow)
                         Next
                         For Each iRow As Integer In aiShowRows
+                            'If TypeOf (oFg.Rows(iRow).UserData) Is AData.AFaktPol Then
+                            '    Dim oPol As AData.AFaktPol
+                            'ElseIf TypeOf (oFg.Rows(iRow).UserData) Is AData.AObjNabPol Then
+
+                            'End If
+                            'oFg.SetStyleToRow(iRow, oFg.BackColor.ToArgb, oFg.ForeColor.ToArgb)
+                            oFg.SetStyleToRow(iRow, SystemColors.HighlightText.ToArgb, SystemColors.Highlight.ToArgb)
+                            oFg.SetStyleToCell(iRow, 0, SystemColors.HighlightText.ToArgb, SystemColors.Highlight.ToArgb)
                             If oFg.Rows(iRow).IsNode Then
                                 oFg.Rows(iRow).Node.Expanded = True
                                 If oFg.Rows(iRow).Node.Parent IsNot Nothing Then
@@ -848,7 +861,7 @@ Public Class FGridSearchText
                 End If
             End If
         End If
-        Return bRet
+            Return bRet
     End Function
 
     Public Function SearchText(oRtb As RichTextBox, Optional NoDialog As Boolean = False, Optional ShowNotFind As Boolean = True) As Boolean
@@ -897,7 +910,6 @@ Public Class FGridSearchText
         CheckBoxSave(Me.chkCaseSensitive)
         CheckBoxSave(Me.chkSearchFromTop)
         CheckBoxSave(Me.chkFindInColumn)
-        CheckBoxSave(Me.chkFindAndHide)
         ComboBoxSave(Me.cmbColumn)
     End Sub
 
@@ -909,4 +921,9 @@ Public Class FGridSearchText
         If Not bLoading Then Me.chkSearchFromTop.Checked = True
     End Sub
 
+    Private Sub FGridSearchText_KeyUp(sender As Object, e As KeyEventArgs) Handles Me.KeyUp
+        If e.KeyCode = Keys.F3 Then
+            DialogResult = DialogResult.Yes
+        End If
+    End Sub
 End Class

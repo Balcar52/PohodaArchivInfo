@@ -7,7 +7,7 @@ Imports System.IO
 
 Public Class AData
 
-    Public Const ValidFileVersion As String = "29. 8. 2023"
+    Public Const ValidFileVersion As String = "29.8.2023"
 
     Public Shared CurrentFile As String = ""
     Public Shared CurrentPsw As String = txDefaultPassword
@@ -40,7 +40,10 @@ Public Class AData
     Public Const txLoadBadFormat As String = "Soubor archivu ""{0}"" má vadný formát, nebo je poškozen"
     Public Const txLoadBadVersion As String = "Verze existujícího souboru archivu ""{0}"" ({1}) není kompatibilní s požadovanou aktuální verzí této aplikace ({2})"
 
-    Public Shared Function LoadXMLData(RequiredFileversion As String) As Boolean
+    <XmlIgnore>
+    Public aoFileDic As Dictionary(Of Integer, AFile) = Nothing
+
+    Public Shared Function LoadXMLData(RequiredFileversion As String, Optional ByRef sCurrentFile As String = "") As Boolean
         sError = ""
         oAdata = Nothing
         Try
@@ -53,6 +56,7 @@ Public Class AData
                 ElseIf oAdata.FileVersion <> RequiredFileversion Then
                     Throw New Exception(String.Format(txLoadBadVersion, AData.CurrentFile, oAdata.FileVersion, RequiredFileversion))
                 End If
+                sCurrentFile = AData.CurrentFile
                 Return True
             End If
         Catch ex As Exception
@@ -79,7 +83,7 @@ Public Class AData
         Return oData
     End Function
 
-    Public Shared Function LoadMdbData(sMdbFileName As String, sPassword As String, ByRef sXMLFileName As String, ByRef iRemoved As Integer, ByRef iAdded As Integer) As AData
+    Public Shared Function LoadMdbData(sMdbFileName As String, sPassword As String, ByRef sXMLFileName As String, ByRef iRemoved As Integer, ByRef iAdded As Integer, ByRef bCancel As Boolean) As AData
 
         sError = ""
         iRemoved = 0
@@ -95,6 +99,7 @@ Public Class AData
             End If
         End If
         Dim iNewID As Integer = 1
+        Dim bUpd As Boolean = False
         If oData Is Nothing Then
             oData = New AData
         Else
@@ -301,6 +306,7 @@ Public Class AData
             Return oData
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.Critical)
+            bCancel = True
         Finally
             If oConn.State = ConnectionState.Open Then oConn.Close()
         End Try
@@ -311,8 +317,10 @@ Public Class AData
         Return If(oRdr.IsDBNull(i), Nothing, oRdr.GetValue(i))
     End Function
 
-    Private Shared Function GetStr(i As Integer, Optional DefaultValue As String = "") As String
-        Return If(oRdr.IsDBNull(i), DefaultValue, CStr(oRdr.GetValue(i)))
+    Private Shared Function GetStr(i As Integer, Optional DefaultValue As String = "", Optional bTrimStr As Boolean = True) As String
+        Dim sRet As String = If(oRdr.IsDBNull(i), DefaultValue, CStr(oRdr.GetValue(i)))
+        If bTrimStr Then sRet = Trim(sRet)
+        Return sRet
     End Function
 
     Private Shared Function GetInt(i As Integer, Optional DefaultValue As Integer = 0) As Integer
@@ -372,6 +380,12 @@ Public Class AData
             Dim oStringReader As New StringReader(XMLText)
             Dim oReader As New XmlTextReader(oStringReader)
             Dim oRes As AData = DirectCast(oSer.Deserialize(oReader), AData)
+            With oRes
+                .aoFileDic = New Dictionary(Of Integer, AFile)
+                For Each o In .aoFiles
+                    .aoFileDic(o.Id) = o
+                Next
+            End With
             If SetDisplayNames Then
                 For i As Integer = 0 To oRes.aoFirmyObjPrij.Count - 1
                     oRes.aoFirmyObjPrij(i).SetDisplayName()

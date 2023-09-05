@@ -39,10 +39,14 @@ Partial Class FOptions
         Me.txtMdbFile = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Panel10 = New System.Windows.Forms.Panel()
+        Me.pnFg = New System.Windows.Forms.Panel()
         Me.FgF = New XForms.XC1Flexgrid()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.Panel15 = New System.Windows.Forms.Panel()
+        Me.btnUpdateAll = New System.Windows.Forms.Button()
+        Me.Panel19 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.pnFile = New System.Windows.Forms.Panel()
         Me.txtCurrentFile = New System.Windows.Forms.TextBox()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.btnOpenA = New System.Windows.Forms.Button()
@@ -84,13 +88,15 @@ Partial Class FOptions
         Me.pnData = New System.Windows.Forms.Panel()
         Me.Panel13 = New System.Windows.Forms.Panel()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
+        Me.chkUNC = New System.Windows.Forms.CheckBox()
         Me.gbImport.SuspendLayout()
         Me.Panel9.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
-        Me.Panel10.SuspendLayout()
+        Me.pnFg.SuspendLayout()
         CType(Me.FgF, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel2.SuspendLayout()
+        Me.Panel15.SuspendLayout()
+        Me.pnFile.SuspendLayout()
         Me.ButtonPanel1.SuspendLayout()
         Me.tbcMain.SuspendLayout()
         Me.pgVolby.SuspendLayout()
@@ -255,9 +261,11 @@ Partial Class FOptions
         'GroupBox1
         '
         Me.GroupBox1.BackColor = System.Drawing.SystemColors.Control
-        Me.GroupBox1.Controls.Add(Me.Panel10)
+        Me.GroupBox1.Controls.Add(Me.pnFg)
         Me.GroupBox1.Controls.Add(Me.Label3)
+        Me.GroupBox1.Controls.Add(Me.Panel15)
         Me.GroupBox1.Controls.Add(Me.Panel2)
+        Me.GroupBox1.Controls.Add(Me.pnFile)
         Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox1.MinimumSize = New System.Drawing.Size(0, 150)
@@ -267,26 +275,27 @@ Partial Class FOptions
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Data k prohlížení"
         '
-        'Panel10
+        'pnFg
         '
-        Me.Panel10.Controls.Add(Me.FgF)
-        Me.Panel10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel10.Location = New System.Drawing.Point(3, 74)
-        Me.Panel10.Name = "Panel10"
-        Me.Panel10.Size = New System.Drawing.Size(794, 149)
-        Me.Panel10.TabIndex = 3
+        Me.pnFg.Controls.Add(Me.FgF)
+        Me.pnFg.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnFg.Location = New System.Drawing.Point(3, 94)
+        Me.pnFg.Name = "pnFg"
+        Me.pnFg.Size = New System.Drawing.Size(794, 129)
+        Me.pnFg.TabIndex = 3
         '
         'FgF
         '
         Me.FgF.AllowEditing = False
         Me.FgF.ColumnInfo = "10,1,0,0,0,100,Columns:"
+        Me.FgF.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FgF.FillStandardContextMenu = False
         Me.FgF.Font = New System.Drawing.Font("Tahoma", 8.25!)
         Me.FgF.Location = New System.Drawing.Point(0, 0)
         Me.FgF.MinimumSize = New System.Drawing.Size(250, 4)
         Me.FgF.Name = "FgF"
         Me.FgF.Rows.DefaultSize = 20
-        Me.FgF.Size = New System.Drawing.Size(794, 149)
+        Me.FgF.Size = New System.Drawing.Size(794, 129)
         Me.FgF.StyleInfo = resources.GetString("FgF.StyleInfo")
         Me.FgF.TabIndex = 0
         Me.FgF.UseCompatibleTextRendering = False
@@ -295,42 +304,83 @@ Partial Class FOptions
         'Label3
         '
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Label3.Location = New System.Drawing.Point(3, 38)
+        Me.Label3.Location = New System.Drawing.Point(3, 64)
         Me.Label3.Name = "Label3"
-        Me.Label3.Padding = New System.Windows.Forms.Padding(5, 15, 5, 5)
-        Me.Label3.Size = New System.Drawing.Size(794, 36)
+        Me.Label3.Padding = New System.Windows.Forms.Padding(5, 10, 5, 5)
+        Me.Label3.Size = New System.Drawing.Size(794, 30)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "seznam databází, která archiv aktuálně obsahuje:"
         '
+        'Panel15
+        '
+        Me.Panel15.Controls.Add(Me.btnUpdateAll)
+        Me.Panel15.Controls.Add(Me.Panel19)
+        Me.Panel15.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel15.Location = New System.Drawing.Point(3, 43)
+        Me.Panel15.Name = "Panel15"
+        Me.Panel15.Padding = New System.Windows.Forms.Padding(0, 0, 3, 0)
+        Me.Panel15.Size = New System.Drawing.Size(794, 21)
+        Me.Panel15.TabIndex = 4
+        '
+        'btnUpdateAll
+        '
+        Me.btnUpdateAll.Dock = System.Windows.Forms.DockStyle.Right
+        Me.btnUpdateAll.Enabled = False
+        Me.btnUpdateAll.Location = New System.Drawing.Point(610, 0)
+        Me.btnUpdateAll.Name = "btnUpdateAll"
+        Me.btnUpdateAll.Size = New System.Drawing.Size(129, 21)
+        Me.btnUpdateAll.TabIndex = 5
+        Me.btnUpdateAll.Text = "Aktualizovat vše"
+        Me.ToolTip1.SetToolTip(Me.btnUpdateAll, "Vytvoření nového souboru archivu, resp. vymazání obsahu souboru archivu")
+        Me.btnUpdateAll.UseVisualStyleBackColor = True
+        '
+        'Panel19
+        '
+        Me.Panel19.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel19.Location = New System.Drawing.Point(739, 0)
+        Me.Panel19.Name = "Panel19"
+        Me.Panel19.Size = New System.Drawing.Size(52, 21)
+        Me.Panel19.TabIndex = 11
+        '
         'Panel2
         '
-        Me.Panel2.Controls.Add(Me.txtCurrentFile)
-        Me.Panel2.Controls.Add(Me.Panel7)
-        Me.Panel2.Controls.Add(Me.btnOpenA)
-        Me.Panel2.Controls.Add(Me.Panel3)
-        Me.Panel2.Controls.Add(Me.btnCreateA)
-        Me.Panel2.Controls.Add(Me.Label1)
-        Me.Panel2.Controls.Add(Me.Panel1)
-        Me.Panel2.Controls.Add(Me.btnView)
-        Me.Panel2.Controls.Add(Me.Panel12)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel2.Location = New System.Drawing.Point(3, 17)
+        Me.Panel2.Location = New System.Drawing.Point(3, 38)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(794, 21)
-        Me.Panel2.TabIndex = 1
+        Me.Panel2.Padding = New System.Windows.Forms.Padding(0, 0, 3, 0)
+        Me.Panel2.Size = New System.Drawing.Size(794, 5)
+        Me.Panel2.TabIndex = 5
+        '
+        'pnFile
+        '
+        Me.pnFile.Controls.Add(Me.txtCurrentFile)
+        Me.pnFile.Controls.Add(Me.Panel7)
+        Me.pnFile.Controls.Add(Me.btnOpenA)
+        Me.pnFile.Controls.Add(Me.Panel3)
+        Me.pnFile.Controls.Add(Me.btnCreateA)
+        Me.pnFile.Controls.Add(Me.Label1)
+        Me.pnFile.Controls.Add(Me.Panel1)
+        Me.pnFile.Controls.Add(Me.btnView)
+        Me.pnFile.Controls.Add(Me.Panel12)
+        Me.pnFile.Dock = System.Windows.Forms.DockStyle.Top
+        Me.pnFile.Location = New System.Drawing.Point(3, 17)
+        Me.pnFile.Name = "pnFile"
+        Me.pnFile.Padding = New System.Windows.Forms.Padding(0, 0, 3, 0)
+        Me.pnFile.Size = New System.Drawing.Size(794, 21)
+        Me.pnFile.TabIndex = 1
         '
         'txtCurrentFile
         '
         Me.txtCurrentFile.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txtCurrentFile.Location = New System.Drawing.Point(179, 0)
         Me.txtCurrentFile.Name = "txtCurrentFile"
-        Me.txtCurrentFile.Size = New System.Drawing.Size(381, 21)
+        Me.txtCurrentFile.Size = New System.Drawing.Size(378, 21)
         Me.txtCurrentFile.TabIndex = 1
         '
         'Panel7
         '
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel7.Location = New System.Drawing.Point(560, 0)
+        Me.Panel7.Location = New System.Drawing.Point(557, 0)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(10, 21)
         Me.Panel7.TabIndex = 2
@@ -338,7 +388,7 @@ Partial Class FOptions
         'btnOpenA
         '
         Me.btnOpenA.Dock = System.Windows.Forms.DockStyle.Right
-        Me.btnOpenA.Location = New System.Drawing.Point(570, 0)
+        Me.btnOpenA.Location = New System.Drawing.Point(567, 0)
         Me.btnOpenA.Name = "btnOpenA"
         Me.btnOpenA.Size = New System.Drawing.Size(34, 21)
         Me.btnOpenA.TabIndex = 3
@@ -349,7 +399,7 @@ Partial Class FOptions
         'Panel3
         '
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel3.Location = New System.Drawing.Point(604, 0)
+        Me.Panel3.Location = New System.Drawing.Point(601, 0)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(9, 21)
         Me.Panel3.TabIndex = 4
@@ -358,7 +408,7 @@ Partial Class FOptions
         '
         Me.btnCreateA.Dock = System.Windows.Forms.DockStyle.Right
         Me.btnCreateA.Enabled = False
-        Me.btnCreateA.Location = New System.Drawing.Point(613, 0)
+        Me.btnCreateA.Location = New System.Drawing.Point(610, 0)
         Me.btnCreateA.Name = "btnCreateA"
         Me.btnCreateA.Size = New System.Drawing.Size(129, 21)
         Me.btnCreateA.TabIndex = 5
@@ -380,7 +430,7 @@ Partial Class FOptions
         'Panel1
         '
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel1.Location = New System.Drawing.Point(742, 0)
+        Me.Panel1.Location = New System.Drawing.Point(739, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(9, 21)
         Me.Panel1.TabIndex = 6
@@ -389,7 +439,7 @@ Partial Class FOptions
         '
         Me.btnView.Dock = System.Windows.Forms.DockStyle.Right
         Me.btnView.Image = Global.PohodaArchivInfo.My.Resources.Resources._026_doc_preview
-        Me.btnView.Location = New System.Drawing.Point(751, 0)
+        Me.btnView.Location = New System.Drawing.Point(748, 0)
         Me.btnView.Name = "btnView"
         Me.btnView.Size = New System.Drawing.Size(34, 21)
         Me.btnView.TabIndex = 10
@@ -399,7 +449,7 @@ Partial Class FOptions
         'Panel12
         '
         Me.Panel12.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel12.Location = New System.Drawing.Point(785, 0)
+        Me.Panel12.Location = New System.Drawing.Point(782, 0)
         Me.Panel12.Name = "Panel12"
         Me.Panel12.Size = New System.Drawing.Size(9, 21)
         Me.Panel12.TabIndex = 11
@@ -407,6 +457,7 @@ Partial Class FOptions
         'ButtonPanel1
         '
         Me.ButtonPanel1.AutoButtonSpaceControl = Me.ButtonPanel1
+        Me.ButtonPanel1.Controls.Add(Me.chkUNC)
         Me.ButtonPanel1.Controls.Add(Me.btnOK)
         Me.ButtonPanel1.Controls.Add(Me.btnClose)
         Me.ButtonPanel1.Dock = System.Windows.Forms.DockStyle.Bottom
@@ -445,9 +496,9 @@ Partial Class FOptions
         Me.chkAllowImport.Dock = System.Windows.Forms.DockStyle.Left
         Me.chkAllowImport.Location = New System.Drawing.Point(10, 3)
         Me.chkAllowImport.Name = "chkAllowImport"
-        Me.chkAllowImport.Size = New System.Drawing.Size(328, 24)
+        Me.chkAllowImport.Size = New System.Drawing.Size(368, 24)
         Me.chkAllowImport.TabIndex = 0
-        Me.chkAllowImport.Text = "Povolit vytvoření, výmaz a import roční databáze do archivu"
+        Me.chkAllowImport.Text = "Povolit vytvoření, výmaz, aktualizaci, import roční databáze do archivu"
         Me.chkAllowImport.UseVisualStyleBackColor = True
         '
         'opnDlgXml
@@ -756,6 +807,19 @@ Partial Class FOptions
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
         Me.ImageList1.Images.SetKeyName(0, "202-delete.gif")
         '
+        'chkUNC
+        '
+        Me.chkUNC.Checked = True
+        Me.chkUNC.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkUNC.Dock = System.Windows.Forms.DockStyle.Left
+        Me.chkUNC.Location = New System.Drawing.Point(9, 8)
+        Me.chkUNC.Name = "chkUNC"
+        Me.chkUNC.Size = New System.Drawing.Size(223, 23)
+        Me.chkUNC.TabIndex = 2
+        Me.chkUNC.Text = "Síťová umístění převádět na UNC notaci"
+        Me.ToolTip1.SetToolTip(Me.chkUNC, "Pokud je otvíraný soubor v síti, převede se jeho specifikace na tzv. UNC tvar")
+        Me.chkUNC.UseVisualStyleBackColor = True
+        '
         'FOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -778,10 +842,11 @@ Partial Class FOptions
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
-        Me.Panel10.ResumeLayout(False)
+        Me.pnFg.ResumeLayout(False)
         CType(Me.FgF, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
+        Me.Panel15.ResumeLayout(False)
+        Me.pnFile.ResumeLayout(False)
+        Me.pnFile.PerformLayout()
         Me.ButtonPanel1.ResumeLayout(False)
         Me.tbcMain.ResumeLayout(False)
         Me.pgVolby.ResumeLayout(False)
@@ -814,10 +879,10 @@ Partial Class FOptions
     Friend WithEvents txtMdbFile As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents Panel10 As Panel
+    Friend WithEvents pnFg As Panel
     Friend WithEvents FgF As XC1Flexgrid
     Friend WithEvents Label3 As Label
-    Friend WithEvents Panel2 As Panel
+    Friend WithEvents pnFile As Panel
     Friend WithEvents btnCreateA As Button
     Friend WithEvents Panel7 As Panel
     Friend WithEvents btnOpenA As Button
@@ -859,4 +924,9 @@ Partial Class FOptions
     Friend WithEvents ImageList1 As ImageList
     Friend WithEvents clrFgOV As ColorSettingBox
     Friend WithEvents chkUseExcel As CheckBox
+    Friend WithEvents Panel15 As Panel
+    Friend WithEvents btnUpdateAll As Button
+    Friend WithEvents Panel19 As Panel
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents chkUNC As CheckBox
 End Class

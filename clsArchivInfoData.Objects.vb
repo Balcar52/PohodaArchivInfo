@@ -18,17 +18,19 @@ Partial Public Class AData
         Return Replace(Replace(sMena, "EUR", "€"), "USD", "$")
     End Function
 
-    Public Sub AddMdbFile(sMdbFilename As String, sPassword As String, iNewFileID As Integer, Optional ByRef iRemoved As Integer = 0)
+    Public Sub AddMdbFile(sMdbFilename As String, sPassword As String, iNewFileID As Integer, Optional ByRef iRemoved As Integer = 0, Optional ByRef bAutoUpd As Integer = 0)
         Dim oFile As New AFile(sMdbFilename, sPassword, iNewFileID)
-        RemoveDataMdbFile(sMdbFilename, iRemoved)
+        RemoveDataMdbFile(sMdbFilename, iRemoved, bAutoUpd)
+        If bAutoUpd Then oFile.Attr = oFile.Attr Or AFile.Attributes.AutoUpdate
         aoFiles.Add(oFile)
     End Sub
 
-    Public Sub RemoveDataMdbFile(sMdbFilename As String, Optional ByRef iRemoved As Integer = 0)
+    Public Sub RemoveDataMdbFile(sMdbFilename As String, Optional ByRef iRemoved As Integer = 0, Optional ByRef bAutoUpd As Boolean = False)
         Dim oFile As New AFile(sMdbFilename)
         iRemoved = 0
         For i As Integer = aoFiles.Count - 1 To 0 Step -1
             If String.Compare(aoFiles(i).PureFileName, oFile.PureFileName, True) = 0 Then
+                bAutoUpd = (aoFiles(i).Attr And AFile.Attributes.AutoUpdate) <> 0
                 For i2 As Integer = aoFirmyObjPrij.Count - 1 To 0 Step -1
                     For i3 As Integer = aoFirmyObjPrij(i2).aoDoc.Count - 1 To 0 Step -1
                         If aoFirmyObjPrij(i2).aoDoc(i3).FileID = aoFiles(i).Id Then
@@ -160,7 +162,7 @@ Partial Public Class AData
             MyBase.New
             UsedFileName = sFilename
             PureFileName = LCase(IO.Path.GetFileName(sFilename))
-            Pw = sPassword
+            Pw = PwCode(sPassword)
             FileDate = IO.File.GetLastWriteTime(sFilename)
             DateImported = Now
             Id = iId
@@ -182,6 +184,12 @@ Partial Public Class AData
         Public DateImported As New Date
         <XmlAttribute("dt")>
         Public FileDate As New Date
+        <XmlAttribute("at"), DefaultValue(0)>
+        Public Attr As Integer = 0
+
+        Public Enum Attributes As Integer
+            AutoUpdate = 1
+        End Enum
     End Class
 
     ''' <summary> Firma v prijatych objednavkach a nabidkach </summary>
@@ -402,6 +410,8 @@ Partial Public Class AData
         Public Mnoz As Decimal = -1
         <XmlAttribute("p"), DefaultValue(GetType(Decimal), "0.0000")>
         Public Kc As Decimal = -1
+        <XmlIgnore>
+        Public Found As Boolean = False
 
         Public ReadOnly Property JeMnozstvi As Boolean
             Get
@@ -497,9 +507,9 @@ Partial Public Class AData
         <XmlAttribute("d")>
         Public Datum As String = ""
         <XmlAttribute("p"), DefaultValue(GetType(Decimal), "0.0000")>
-        Public Kc As Decimal = -1
+        Public Kc As Decimal = 0
         <XmlAttribute("k"), DefaultValue(GetType(Decimal), "0.0000")>
-        Public Kurs As Decimal = -1
+        Public Kurs As Decimal = 0
         <XmlAttribute("m"), DefaultValue("")>
         Public Mena As String = ""
         Public ReadOnly Property JeCena As Boolean
@@ -568,6 +578,9 @@ Partial Public Class AData
         Public Mnoz As Decimal = -1
         <XmlAttribute("p"), DefaultValue(GetType(Decimal), "0.0000")>
         Public Kc As Decimal = -1
+        <XmlIgnore>
+        Public Found As Boolean = False
+
         Public ReadOnly Property JeMnozstvi As Boolean
             Get
                 Return Mnoz > 0

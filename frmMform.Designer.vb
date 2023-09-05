@@ -53,6 +53,8 @@ Partial Class MForm3
         Me.ToolStripButton9 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton8 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton11 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton12 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton13 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
@@ -79,6 +81,7 @@ Partial Class MForm3
         Me.m_delimiter3 = New ActionListLib.Menu(Me.components)
         Me.m_najit_vlevo = New ActionListLib.Menu(Me.components)
         Me.m_najit_vpravo = New ActionListLib.Menu(Me.components)
+        Me.m_prejit_na_dalsi_nalezeby_radek = New ActionListLib.Menu(Me.components)
         Me.m_delimiter4 = New ActionListLib.Menu(Me.components)
         Me.m_cols = New ActionListLib.Menu(Me.components)
         Me.m_colwidths = New ActionListLib.Menu(Me.components)
@@ -103,6 +106,11 @@ Partial Class MForm3
         Me.a_o_aplikaci = New ActionListLib.Action(Me.components)
         Me.m_statistika_polozek_v_databazi = New ActionListLib.Menu(Me.components)
         Me.a_statistika_polozek_v_databazi = New ActionListLib.Action(Me.components)
+        Me.m_automaticky_upravovat_sirku_sloupce_textu = New ActionListLib.Menu(Me.components)
+        Me.a_automaticky_upravovat_sirku_sloupce_textu = New ActionListLib.Action(Me.components)
+        Me.a_prejit_na_dalsi_nalezeby_radek = New ActionListLib.Action(Me.components)
+        Me.a_prejit_na_predchozi_nalezeny_radek = New ActionListLib.Action(Me.components)
+        Me.m_prejit_na_predchozi_nalezeny_radek = New ActionListLib.Menu(Me.components)
         Me.ActionListConn = New ActionListLib.ActionListConn(Me.components)
         Me.m_main = New ActionListLib.Menu(Me.components)
         Me.m_file = New ActionListLib.Menu(Me.components)
@@ -113,8 +121,6 @@ Partial Class MForm3
         Me.m_window = New ActionListLib.Menu(Me.components)
         Me.m_help = New ActionListLib.Menu(Me.components)
         Me.a_nastaveni = New ActionListLib.Action(Me.components)
-        Me.m_automaticky_upravovat_sirku_sloupce_textu = New ActionListLib.Menu(Me.components)
-        Me.a_automaticky_upravovat_sirku_sloupce_textu = New ActionListLib.Action(Me.components)
         Me.tbcMain.SuspendLayout()
         Me.pgNab.SuspendLayout()
         Me.pnNab.SuspendLayout()
@@ -425,11 +431,11 @@ Partial Class MForm3
         '
         Me.ToolStrip2.AutoSize = False
         Me.ToolStrip2.Dock = System.Windows.Forms.DockStyle.Left
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripButton6, Me.ToolStripButton5, Me.ToolStripButton7, Me.ToolStripButton10, Me.ToolStripButton9, Me.ToolStripButton8, Me.ToolStripButton11})
+        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripButton6, Me.ToolStripButton5, Me.ToolStripButton12, Me.ToolStripButton13, Me.ToolStripButton7, Me.ToolStripButton10, Me.ToolStripButton9, Me.ToolStripButton8, Me.ToolStripButton11})
         Me.ToolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip2.Location = New System.Drawing.Point(191, 0)
         Me.ToolStrip2.Name = "ToolStrip2"
-        Me.ToolStrip2.Size = New System.Drawing.Size(458, 41)
+        Me.ToolStrip2.Size = New System.Drawing.Size(624, 41)
         Me.ToolStrip2.TabIndex = 3
         Me.ToolStrip2.Text = "ToolStrip1"
         '
@@ -527,10 +533,32 @@ Partial Class MForm3
         Me.ToolStripButton11.Image = CType(resources.GetObject("ToolStripButton11.Image"), System.Drawing.Image)
         Me.ToolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton11.Name = "ToolStripButton11"
-        Me.ToolStripButton11.Size = New System.Drawing.Size(71, 35)
+        Me.ToolStripButton11.Size = New System.Drawing.Size(71, 38)
         Me.ToolStripButton11.Text = "Sb./r. řádek"
         Me.ToolStripButton11.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.ToolStripButton11.ToolTipText = "Sbalit/rozbalit položku na aktuálním řádku"
+        '
+        'ToolStripButton12
+        '
+        Me.ActionList0.SetAction(Me.ToolStripButton12, Me.a_prejit_na_dalsi_nalezeby_radek)
+        Me.ToolStripButton12.Image = CType(resources.GetObject("ToolStripButton12.Image"), System.Drawing.Image)
+        Me.ToolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton12.Name = "ToolStripButton12"
+        Me.ToolStripButton12.Size = New System.Drawing.Size(36, 38)
+        Me.ToolStripButton12.Text = "Další"
+        Me.ToolStripButton12.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ToolStripButton12.ToolTipText = "Přejít na následující řádek, nalezený pomocí hromadného vyhledávání"
+        '
+        'ToolStripButton13
+        '
+        Me.ActionList0.SetAction(Me.ToolStripButton13, Me.a_prejit_na_predchozi_nalezeny_radek)
+        Me.ToolStripButton13.Image = CType(resources.GetObject("ToolStripButton13.Image"), System.Drawing.Image)
+        Me.ToolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton13.Name = "ToolStripButton13"
+        Me.ToolStripButton13.Size = New System.Drawing.Size(63, 38)
+        Me.ToolStripButton13.Text = "Předchozí"
+        Me.ToolStripButton13.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ToolStripButton13.ToolTipText = "Přejít na předchozí řádek, nalezený pomocí hromadného vyhledávání"
         '
         'ToolStrip1
         '
@@ -666,6 +694,7 @@ Partial Class MForm3
         Me.m_popup1.MenuList.Add(Me.m_delimiter3)
         Me.m_popup1.MenuList.Add(Me.m_najit_vlevo)
         Me.m_popup1.MenuList.Add(Me.m_najit_vpravo)
+        Me.m_popup1.MenuList.Add(Me.m_prejit_na_dalsi_nalezeby_radek)
         Me.m_popup1.MenuList.Add(Me.m_delimiter4)
         Me.m_popup1.MenuList.Add(Me.m_cols)
         Me.m_popup1.MenuList.Add(Me.m_colwidths)
@@ -755,6 +784,13 @@ Partial Class MForm3
         Me.m_najit_vpravo.Name = "m_najit_vpravo"
         Me.m_najit_vpravo.Parent = Me.ActionList0
         Me.m_najit_vpravo.Text = Nothing
+        '
+        'm_prejit_na_dalsi_nalezeby_radek
+        '
+        Me.ActionList0.SetAction(Me.m_prejit_na_dalsi_nalezeby_radek, Me.a_prejit_na_dalsi_nalezeby_radek)
+        Me.m_prejit_na_dalsi_nalezeby_radek.Name = "m_prejit_na_dalsi_nalezeby_radek"
+        Me.m_prejit_na_dalsi_nalezeby_radek.Parent = Me.ActionList0
+        Me.m_prejit_na_dalsi_nalezeby_radek.Text = Nothing
         '
         'm_delimiter4
         '
@@ -947,6 +983,47 @@ Partial Class MForm3
         Me.a_statistika_polozek_v_databazi.Parent = Me.ActionList0
         Me.a_statistika_polozek_v_databazi.Text = "Statistika položek v databázi"
         '
+        'm_automaticky_upravovat_sirku_sloupce_textu
+        '
+        Me.ActionList0.SetAction(Me.m_automaticky_upravovat_sirku_sloupce_textu, Me.a_automaticky_upravovat_sirku_sloupce_textu)
+        Me.m_automaticky_upravovat_sirku_sloupce_textu.Name = "m_automaticky_upravovat_sirku_sloupce_textu"
+        Me.m_automaticky_upravovat_sirku_sloupce_textu.Parent = Me.ActionList0
+        Me.m_automaticky_upravovat_sirku_sloupce_textu.Text = Nothing
+        '
+        'a_automaticky_upravovat_sirku_sloupce_textu
+        '
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.AltText = "Autom. uprav. šířku sloup. textu"
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.AutoCheck = True
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.Checked = True
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.Name = "a_automaticky_upravovat_sirku_sloupce_textu"
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.Parent = Me.ActionList0
+        Me.a_automaticky_upravovat_sirku_sloupce_textu.Text = "Automaticky upravovat šířku sloupce textu"
+        '
+        'a_prejit_na_dalsi_nalezeby_radek
+        '
+        Me.a_prejit_na_dalsi_nalezeby_radek.AltText = "Další"
+        Me.a_prejit_na_dalsi_nalezeby_radek.Image = CType(resources.GetObject("a_prejit_na_dalsi_nalezeby_radek.Image"), System.Drawing.Image)
+        Me.a_prejit_na_dalsi_nalezeby_radek.Name = "a_prejit_na_dalsi_nalezeby_radek"
+        Me.a_prejit_na_dalsi_nalezeby_radek.Parent = Me.ActionList0
+        Me.a_prejit_na_dalsi_nalezeby_radek.Text = "Přejít na další nalezený řádek"
+        Me.a_prejit_na_dalsi_nalezeby_radek.TipText = "Přejít na následující řádek, nalezený pomocí hromadného vyhledávání"
+        '
+        'a_prejit_na_predchozi_nalezeny_radek
+        '
+        Me.a_prejit_na_predchozi_nalezeny_radek.AltText = "Předchozí"
+        Me.a_prejit_na_predchozi_nalezeny_radek.Image = CType(resources.GetObject("a_prejit_na_predchozi_nalezeny_radek.Image"), System.Drawing.Image)
+        Me.a_prejit_na_predchozi_nalezeny_radek.Name = "a_prejit_na_predchozi_nalezeny_radek"
+        Me.a_prejit_na_predchozi_nalezeny_radek.Parent = Me.ActionList0
+        Me.a_prejit_na_predchozi_nalezeny_radek.Text = "Přejít na předchozí nalezený řádek"
+        Me.a_prejit_na_predchozi_nalezeny_radek.TipText = "Přejít na předchozí řádek, nalezený pomocí hromadného vyhledávání"
+        '
+        'm_prejit_na_predchozi_nalezeny_radek
+        '
+        Me.ActionList0.SetAction(Me.m_prejit_na_predchozi_nalezeny_radek, Me.a_prejit_na_predchozi_nalezeny_radek)
+        Me.m_prejit_na_predchozi_nalezeny_radek.Name = "m_prejit_na_predchozi_nalezeny_radek"
+        Me.m_prejit_na_predchozi_nalezeny_radek.Parent = Me.ActionList0
+        Me.m_prejit_na_predchozi_nalezeny_radek.Text = Nothing
+        '
         'ActionListConn
         '
         Me.ActionListConn.ActionList = Me.ActionList0
@@ -996,6 +1073,8 @@ Partial Class MForm3
         Me.m_view.MenuList.Add(Me.m_delimiter2)
         Me.m_view.MenuList.Add(Me.m_najit_vpravo)
         Me.m_view.MenuList.Add(Me.m_najit_vlevo)
+        Me.m_view.MenuList.Add(Me.m_prejit_na_dalsi_nalezeby_radek)
+        Me.m_view.MenuList.Add(Me.m_prejit_na_predchozi_nalezeny_radek)
         Me.m_view.MenuList.Add(Me.m_automaticky_upravovat_sirku_sloupce_textu)
         Me.m_view.MergeNode = 300
         Me.m_view.Name = "m_view"
@@ -1040,22 +1119,6 @@ Partial Class MForm3
         Me.a_nastaveni.Name = "a_nastaveni"
         Me.a_nastaveni.Parent = Me.ActionList0
         Me.a_nastaveni.Text = "Nastavení"
-        '
-        'm_automaticky_upravovat_sirku_sloupce_textu
-        '
-        Me.ActionList0.SetAction(Me.m_automaticky_upravovat_sirku_sloupce_textu, Me.a_automaticky_upravovat_sirku_sloupce_textu)
-        Me.m_automaticky_upravovat_sirku_sloupce_textu.Name = "m_automaticky_upravovat_sirku_sloupce_textu"
-        Me.m_automaticky_upravovat_sirku_sloupce_textu.Parent = Me.ActionList0
-        Me.m_automaticky_upravovat_sirku_sloupce_textu.Text = Nothing
-        '
-        'a_automaticky_upravovat_sirku_sloupce_textu
-        '
-        Me.a_automaticky_upravovat_sirku_sloupce_textu.AltText = "Autom. uprav. šířku sloup. textu"
-        Me.a_automaticky_upravovat_sirku_sloupce_textu.AutoCheck = True
-        Me.a_automaticky_upravovat_sirku_sloupce_textu.Checked = True
-        Me.a_automaticky_upravovat_sirku_sloupce_textu.Name = "a_automaticky_upravovat_sirku_sloupce_textu"
-        Me.a_automaticky_upravovat_sirku_sloupce_textu.Parent = Me.ActionList0
-        Me.a_automaticky_upravovat_sirku_sloupce_textu.Text = "Automaticky upravovat šířku sloupce textu"
         '
         'MForm3
         '
@@ -1193,4 +1256,10 @@ Partial Class MForm3
     Friend WithEvents FgOV As XC1Flexgrid
     Friend WithEvents m_automaticky_upravovat_sirku_sloupce_textu As ActionListLib.Menu
     Friend WithEvents a_automaticky_upravovat_sirku_sloupce_textu As ActionListLib.Action
+    Friend WithEvents m_prejit_na_dalsi_nalezeby_radek As ActionListLib.Menu
+    Friend WithEvents a_prejit_na_dalsi_nalezeby_radek As ActionListLib.Action
+    Friend WithEvents ToolStripButton12 As ToolStripButton
+    Friend WithEvents ToolStripButton13 As ToolStripButton
+    Friend WithEvents a_prejit_na_predchozi_nalezeny_radek As ActionListLib.Action
+    Friend WithEvents m_prejit_na_predchozi_nalezeny_radek As ActionListLib.Menu
 End Class

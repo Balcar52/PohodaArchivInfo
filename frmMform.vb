@@ -40,6 +40,8 @@ Public Class MForm3
     Public sExcelExpDir As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), IO.Path.GetFileNameWithoutExtension(Application.ExecutablePath))
     Public bUseExcel As Boolean = True
 
+    Public bAutoUpdate As Boolean = True
+
     ' deklarace promennych cisel sloupcu gridu 
 
     Dim iColFg0 As Integer ' [g:0]
@@ -50,13 +52,14 @@ Public Class MForm3
     Dim iColFgCislo As Integer ' [g:4]
     Dim iColFgNazevFirmy As Integer ' [g:5]
     Dim iColFgText As Integer ' [g:6]
-    Dim iColFgPozn As Integer ' [g:7]
     Dim iColFgMnozstvi As Integer ' [g:8]
-    Dim iColFgCena As Integer ' [g:8]
-    Dim iColFgCena2 As Integer ' [g:8]
-    Dim iColFgPocO As Integer ' [g:8]
-    Dim iColFgPocP As Integer ' [g:8]
-    Dim iColFgTree As Integer ' [g:8]
+    Dim iColFgCena As Integer ' 
+    Dim iColFgCena2 As Integer '
+    Dim iColFgPocO As Integer ' 
+    Dim iColFgPocP As Integer ' 
+    Dim iColFgPozn As Integer ' 
+    Dim iColFgZdroj As Integer ' 
+    Dim iColFgTree As Integer ' 
 
     Public Sub InitGrid(Fg As XC1Flexgrid, oColor As ColorPair, Optional bSetColors As Boolean = True)
         Fg.Styles.Clear()
@@ -70,7 +73,7 @@ Public Class MForm3
         InitGrid(Fg, oColor, bSetColors)
         FlexgridSet(Fg) '' [CorrectForm 17.4.2019 22:43]' [CorrectForm 21.6.2023 23:48]
         iColFg0 = FlexgridSetCol(">")
-        iColFgFirma = FlexgridSetCol("firma,250,RSM<")
+        iColFgFirma = FlexgridSetCol("firma,250,RFM<")
         iColFgICO = FlexgridSetCol("IČ,40,RM>")
         iColFgKlic = FlexgridSetCol("klíč,100,R<")
         iColFgTree = FlexgridSetCol(",30,R,")
@@ -83,6 +86,7 @@ Public Class MForm3
         iColFgMnozstvi = FlexgridSetCol("množ.,80,RID>,#####0", "*")
         iColFgCena = FlexgridSetCol("cena Kč,80,RID>,### ##0,00", "*")
         iColFgCena2 = FlexgridSetCol("cena,80,R>", "*")
+        iColFgZdroj = FlexgridSetCol("mdb,80,R<")
         iColFgPozn = FlexgridSetCol("pozn.,80,R<")
         FlexgridSetExec() ' [CorrectForm 21.6.2023 23:48]
 
@@ -97,6 +101,7 @@ Public Class MForm3
         Fg.Cols(iColFgKlic).Visible = False
         Fg.Cols(iColFgICO).Visible = False
         Fg.Cols(iColFgNazevFirmy).Visible = False
+        Fg.Cols(iColFgZdroj).Visible = False
 
         Fg.Tree.Column = iColFgTree
 
@@ -125,8 +130,12 @@ Public Class MForm3
         FgFP.ClearDataRows(True, True)
         Application.DoEvents()
 
-        Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Načítám data z archivu """ & AData.CurrentFile & """")
-            If AData.LoadXMLData(AData.ValidFileVersion) Then
+LoadIt: Using clck As New cLockForm(CType(Me, Control), XFormBase.SurfaceSplashMode.ShowSplashLabel, "Načítám data z archivu """ & AData.CurrentFile & """")
+            Dim sCurrentFile As String = ""
+            If AData.LoadXMLData(AData.ValidFileVersion, sCurrentFile) Then
+                If AutoUpdateMdbData(sCurrentFile, clck) Then
+                    GoTo Reload
+                End If
                 RefreshStb()
                 With AData.oAdata
                     LoadObjList(FgN, .aoFirmyNab)
@@ -169,6 +178,7 @@ Public Class MForm3
                 Return False
             End If
         End Using
+Reload: GoTo LoadIt
     End Function
 
     Public Sub LoadObjList(Fg As XC1Flexgrid, List As List(Of AData.AFirma), Optional SelectGrid As Boolean = False)
@@ -289,15 +299,12 @@ Public Class MForm3
                     Fg(iRow, iColFgCena2) = oObj.CiziMena
                 End If
             End If
+            Fg(iRow, iColFgZdroj) = AData.oAdata.aoFileDic(oObj.FileID).PureFileName
             Fg.Rows(iRow).IsNode = True
             Fg.Rows(iRow).Node.Level = 1
             Fg.Rows(iRow).UserData = oObj
         End If
         If oObjP IsNot Nothing Then
-            If oFrm.GetDisplayName.Contains("Ease Camp") Then
-                Debug.WriteLine("tady")
-            End If
-            'iRow = Fg.Rows.Add.Index
             Fg(iRow, iColFgText) = Trim(oObjP.Text)
             Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Bold)
             Fg(iRow, iColFgPozn) = Trim(oObjP.Pozn)
@@ -315,6 +322,7 @@ Public Class MForm3
                 Fg.SetStyleToCell(iRow, iColFgPozn,,, FontStyle.Italic)
                 Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Regular)
             End If
+            Fg(iRow, iColFgZdroj) = AData.oAdata.aoFileDic(oObj.FileID).PureFileName
             Fg.Rows(iRow).IsNode = True
             Fg.Rows(iRow).Node.Level = 2
             Fg.Rows(iRow).UserData = oObjP
@@ -447,7 +455,8 @@ Public Class MForm3
             lblArchiveFile.Text = AData.CurrentFile
             lblArchiveFileTimeSize.Text = IO.File.GetLastWriteTime(AData.CurrentFile).ToString(" (d.M.yyyy H:mm, ") & New IO.FileInfo(AData.CurrentFile).Length.ToString("## ### ##0 B)")
         Else
-            lblArchiveFile.Text = "není definován aktuální soubor archivu. Nastav, nebo vytvoř aktuální soubor archivu."
+            'lblArchiveFile.Text = "není definován aktuální soubor archivu. Nastav, nebo vytvoř aktuální soubor archivu."
+            lblArchiveFile.Text = ""
             lblArchiveFileTimeSize.Text = ""
         End If
     End Sub
@@ -1053,4 +1062,53 @@ endexcel:
         Next
         FgA.EnsureVisibleSelectedRow()
     End Sub
+
+    Private Sub a_prejit_na_dalsi_nalezeby_radek_Execute(sender As Object, e As EventArgs) Handles a_prejit_na_dalsi_nalezeby_radek.Execute
+        For iRow As Integer = FgA.Row + 1 To FgA.RowN
+            If FgA.GetCellStyle(iRow, 0) IsNot Nothing Then ' AndAlso FgA.GetCellStyle(iRow, 0).BackColor.ToArgb = SystemColors.HighlightText.ToArgb Then
+                FgA.Row = iRow
+                FgA.EnsureVisibleSelectedRow()
+                Exit For
+            End If
+        Next
+    End Sub
+
+    Private Sub a_prejit_na_predchozi_nalezeny_radek_Execute(sender As Object, e As EventArgs) Handles a_prejit_na_predchozi_nalezeny_radek.Execute
+        For iRow As Integer = FgA.Row - 1 To FgA.Row1 Step -1
+            If FgA.GetCellStyle(iRow, 0) IsNot Nothing Then ' AndAlso FgA.GetCellStyle(iRow, 0).BackColor.ToArgb = SystemColors.HighlightText.ToArgb Then
+                FgA.Row = iRow
+                FgA.EnsureVisibleSelectedRow()
+                Exit For
+            End If
+        Next
+    End Sub
+
+    Private Function AutoUpdateMdbData(sCurrentFile As String, cLck As cLockForm) As Boolean
+        Dim bRet As Boolean = False
+        If AData.oAdata IsNot Nothing AndAlso bAutoUpdate Then
+            Dim maoFiles As New List(Of AData.AFile)
+            Dim bUpd As Boolean = False
+            maoFiles.AddRange(AData.oAdata.aoFiles)
+            For Each o In maoFiles
+                If (o.Attr And AData.AFile.Attributes.AutoUpdate) <> 0 AndAlso DriveInfo.CheckAccessibility(o.UsedFileName) AndAlso IO.File.Exists(o.UsedFileName) Then
+                    If IO.File.GetLastWriteTime(o.UsedFileName) <> o.FileDate AndAlso IO.File.GetLastWriteTime(o.UsedFileName).Date < Now.Date Then
+                        If MessageBox.Show(Me, String.Format("Data v databázi:{1}{0} byla změněna.{1}{1}Chceš nyní archiv aktualizovat?", o.UsedFileName, vbCrLf), txtAppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                            cLck.SetProgressText("Nyní probíhá aktualizace archivu Pohoda (může trvat několik vteřin)..")
+                            Application.DoEvents()
+                            Dim iRemoved As Integer = 0
+                            Dim iAdded As Integer = 0
+                            Dim bCancel As Boolean = False
+                            AData.oAdata = AData.LoadMdbData(o.UsedFileName, PwDecode(o.Pw), sCurrentFile, iRemoved, iAdded, bCancel)
+                            AData.oAdata.FileVersion = AData.ValidFileVersion
+                            IO.File.WriteAllText(sCurrentFile, AData.oAdata.ToXml)
+                            bRet = True
+                        Else
+                            bAutoUpdate = False
+                        End If
+                    End If
+                End If
+            Next
+        End If
+        Return bRet
+    End Function
 End Class
