@@ -1091,7 +1091,7 @@ endexcel:
             maoFiles.AddRange(AData.oAdata.aoFiles)
             For Each o In maoFiles
                 If (o.Attr And AData.AFile.Attributes.AutoUpdate) <> 0 AndAlso DriveInfo.CheckAccessibility(o.UsedFileName) AndAlso IO.File.Exists(o.UsedFileName) Then
-                    If IO.File.GetLastWriteTime(o.UsedFileName) <> o.FileDate AndAlso IO.File.GetLastWriteTime(o.UsedFileName).Date < Now.Date Then
+                    If IO.File.GetLastWriteTime(o.UsedFileName) <> o.FileDate AndAlso o.DateImported.Date < Now.Date Then
                         If MessageBox.Show(Me, String.Format("Data v databázi:{1}{0} byla změněna.{1}{1}Chceš nyní archiv aktualizovat?", o.UsedFileName, vbCrLf), txtAppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                             cLck.SetProgressText("Nyní probíhá aktualizace archivu Pohoda (může trvat několik vteřin)..")
                             Application.DoEvents()
