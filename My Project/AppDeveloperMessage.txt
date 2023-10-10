@@ -1,0 +1,2 @@
+10.10.2023
+- Úprava vyhledávání - doplnìno vyhledávání textu v rámci firmy (nový checkbox ve formuláøi pro vyhledávání). Pozor, funkce je ve zkušebním režimu!

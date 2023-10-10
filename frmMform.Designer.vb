@@ -48,13 +48,13 @@ Partial Class MForm3
         Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton12 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton13 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton7 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton10 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton9 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton8 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton11 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton12 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton13 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
@@ -93,6 +93,8 @@ Partial Class MForm3
         Me.a_sbalit_vse = New ActionListLib.Action(Me.components)
         Me.a_sbalitrozbalit_polozku_na_radku = New ActionListLib.Action(Me.components)
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_ = New ActionListLib.Action(Me.components)
+        Me.a_prejit_na_dalsi_nalezeby_radek = New ActionListLib.Action(Me.components)
+        Me.a_prejit_na_predchozi_nalezeny_radek = New ActionListLib.Action(Me.components)
         Me.a_znovunacist_data = New ActionListLib.Action(Me.components)
         Me.a_excel = New ActionListLib.Action(Me.components)
         Me.a_close = New ActionListLib.Action(Me.components)
@@ -108,8 +110,6 @@ Partial Class MForm3
         Me.a_statistika_polozek_v_databazi = New ActionListLib.Action(Me.components)
         Me.m_automaticky_upravovat_sirku_sloupce_textu = New ActionListLib.Menu(Me.components)
         Me.a_automaticky_upravovat_sirku_sloupce_textu = New ActionListLib.Action(Me.components)
-        Me.a_prejit_na_dalsi_nalezeby_radek = New ActionListLib.Action(Me.components)
-        Me.a_prejit_na_predchozi_nalezeny_radek = New ActionListLib.Action(Me.components)
         Me.m_prejit_na_predchozi_nalezeny_radek = New ActionListLib.Menu(Me.components)
         Me.ActionListConn = New ActionListLib.ActionListConn(Me.components)
         Me.m_main = New ActionListLib.Menu(Me.components)
@@ -121,6 +121,8 @@ Partial Class MForm3
         Me.m_window = New ActionListLib.Menu(Me.components)
         Me.m_help = New ActionListLib.Menu(Me.components)
         Me.a_nastaveni = New ActionListLib.Action(Me.components)
+        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ = New ActionListLib.Menu(Me.components)
+        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ = New ActionListLib.Action(Me.components)
         Me.tbcMain.SuspendLayout()
         Me.pgNab.SuspendLayout()
         Me.pnNab.SuspendLayout()
@@ -483,6 +485,28 @@ Partial Class MForm3
         Me.ToolStripButton5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.ToolStripButton5.ToolTipText = "Najít firmu na záložce vlevo"
         '
+        'ToolStripButton12
+        '
+        Me.ActionList0.SetAction(Me.ToolStripButton12, Me.a_prejit_na_dalsi_nalezeby_radek)
+        Me.ToolStripButton12.Image = CType(resources.GetObject("ToolStripButton12.Image"), System.Drawing.Image)
+        Me.ToolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton12.Name = "ToolStripButton12"
+        Me.ToolStripButton12.Size = New System.Drawing.Size(36, 38)
+        Me.ToolStripButton12.Text = "Další"
+        Me.ToolStripButton12.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ToolStripButton12.ToolTipText = "Přejít na následující řádek, nalezený pomocí hromadného vyhledávání"
+        '
+        'ToolStripButton13
+        '
+        Me.ActionList0.SetAction(Me.ToolStripButton13, Me.a_prejit_na_predchozi_nalezeny_radek)
+        Me.ToolStripButton13.Image = CType(resources.GetObject("ToolStripButton13.Image"), System.Drawing.Image)
+        Me.ToolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton13.Name = "ToolStripButton13"
+        Me.ToolStripButton13.Size = New System.Drawing.Size(63, 38)
+        Me.ToolStripButton13.Text = "Předchozí"
+        Me.ToolStripButton13.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ToolStripButton13.ToolTipText = "Přejít na předchozí řádek, nalezený pomocí hromadného vyhledávání"
+        '
         'ToolStripButton7
         '
         Me.ActionList0.SetAction(Me.ToolStripButton7, Me.a_rozbalit_vse)
@@ -537,28 +561,6 @@ Partial Class MForm3
         Me.ToolStripButton11.Text = "Sb./r. řádek"
         Me.ToolStripButton11.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.ToolStripButton11.ToolTipText = "Sbalit/rozbalit položku na aktuálním řádku"
-        '
-        'ToolStripButton12
-        '
-        Me.ActionList0.SetAction(Me.ToolStripButton12, Me.a_prejit_na_dalsi_nalezeby_radek)
-        Me.ToolStripButton12.Image = CType(resources.GetObject("ToolStripButton12.Image"), System.Drawing.Image)
-        Me.ToolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton12.Name = "ToolStripButton12"
-        Me.ToolStripButton12.Size = New System.Drawing.Size(36, 38)
-        Me.ToolStripButton12.Text = "Další"
-        Me.ToolStripButton12.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ToolStripButton12.ToolTipText = "Přejít na následující řádek, nalezený pomocí hromadného vyhledávání"
-        '
-        'ToolStripButton13
-        '
-        Me.ActionList0.SetAction(Me.ToolStripButton13, Me.a_prejit_na_predchozi_nalezeny_radek)
-        Me.ToolStripButton13.Image = CType(resources.GetObject("ToolStripButton13.Image"), System.Drawing.Image)
-        Me.ToolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton13.Name = "ToolStripButton13"
-        Me.ToolStripButton13.Size = New System.Drawing.Size(63, 38)
-        Me.ToolStripButton13.Text = "Předchozí"
-        Me.ToolStripButton13.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ToolStripButton13.ToolTipText = "Přejít na předchozí řádek, nalezený pomocí hromadného vyhledávání"
         '
         'ToolStrip1
         '
@@ -884,6 +886,24 @@ Partial Class MForm3
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Text = "Sbalit/rozbalit všechny položky firmy (Shift+Enter)"
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.TipText = "Sbalit/rozbalit všechny položky firmy na aktuálním řádku"
         '
+        'a_prejit_na_dalsi_nalezeby_radek
+        '
+        Me.a_prejit_na_dalsi_nalezeby_radek.AltText = "Další"
+        Me.a_prejit_na_dalsi_nalezeby_radek.Image = CType(resources.GetObject("a_prejit_na_dalsi_nalezeby_radek.Image"), System.Drawing.Image)
+        Me.a_prejit_na_dalsi_nalezeby_radek.Name = "a_prejit_na_dalsi_nalezeby_radek"
+        Me.a_prejit_na_dalsi_nalezeby_radek.Parent = Me.ActionList0
+        Me.a_prejit_na_dalsi_nalezeby_radek.Text = "Přejít na další nalezený řádek"
+        Me.a_prejit_na_dalsi_nalezeby_radek.TipText = "Přejít na následující řádek, nalezený pomocí hromadného vyhledávání"
+        '
+        'a_prejit_na_predchozi_nalezeny_radek
+        '
+        Me.a_prejit_na_predchozi_nalezeny_radek.AltText = "Předchozí"
+        Me.a_prejit_na_predchozi_nalezeny_radek.Image = CType(resources.GetObject("a_prejit_na_predchozi_nalezeny_radek.Image"), System.Drawing.Image)
+        Me.a_prejit_na_predchozi_nalezeny_radek.Name = "a_prejit_na_predchozi_nalezeny_radek"
+        Me.a_prejit_na_predchozi_nalezeny_radek.Parent = Me.ActionList0
+        Me.a_prejit_na_predchozi_nalezeny_radek.Text = "Přejít na předchozí nalezený řádek"
+        Me.a_prejit_na_predchozi_nalezeny_radek.TipText = "Přejít na předchozí řádek, nalezený pomocí hromadného vyhledávání"
+        '
         'a_znovunacist_data
         '
         Me.a_znovunacist_data.AltText = "Obnovit"
@@ -999,24 +1019,6 @@ Partial Class MForm3
         Me.a_automaticky_upravovat_sirku_sloupce_textu.Parent = Me.ActionList0
         Me.a_automaticky_upravovat_sirku_sloupce_textu.Text = "Automaticky upravovat šířku sloupce textu"
         '
-        'a_prejit_na_dalsi_nalezeby_radek
-        '
-        Me.a_prejit_na_dalsi_nalezeby_radek.AltText = "Další"
-        Me.a_prejit_na_dalsi_nalezeby_radek.Image = CType(resources.GetObject("a_prejit_na_dalsi_nalezeby_radek.Image"), System.Drawing.Image)
-        Me.a_prejit_na_dalsi_nalezeby_radek.Name = "a_prejit_na_dalsi_nalezeby_radek"
-        Me.a_prejit_na_dalsi_nalezeby_radek.Parent = Me.ActionList0
-        Me.a_prejit_na_dalsi_nalezeby_radek.Text = "Přejít na další nalezený řádek"
-        Me.a_prejit_na_dalsi_nalezeby_radek.TipText = "Přejít na následující řádek, nalezený pomocí hromadného vyhledávání"
-        '
-        'a_prejit_na_predchozi_nalezeny_radek
-        '
-        Me.a_prejit_na_predchozi_nalezeny_radek.AltText = "Předchozí"
-        Me.a_prejit_na_predchozi_nalezeny_radek.Image = CType(resources.GetObject("a_prejit_na_predchozi_nalezeny_radek.Image"), System.Drawing.Image)
-        Me.a_prejit_na_predchozi_nalezeny_radek.Name = "a_prejit_na_predchozi_nalezeny_radek"
-        Me.a_prejit_na_predchozi_nalezeny_radek.Parent = Me.ActionList0
-        Me.a_prejit_na_predchozi_nalezeny_radek.Text = "Přejít na předchozí nalezený řádek"
-        Me.a_prejit_na_predchozi_nalezeny_radek.TipText = "Přejít na předchozí řádek, nalezený pomocí hromadného vyhledávání"
-        '
         'm_prejit_na_predchozi_nalezeny_radek
         '
         Me.ActionList0.SetAction(Me.m_prejit_na_predchozi_nalezeny_radek, Me.a_prejit_na_predchozi_nalezeny_radek)
@@ -1107,6 +1109,7 @@ Partial Class MForm3
         '
         'm_help
         '
+        Me.m_help.MenuList.Add(Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_)
         Me.m_help.MenuList.Add(Me.m_o_aplikaci)
         Me.m_help.MergeNode = 900
         Me.m_help.Name = "m_help"
@@ -1119,6 +1122,20 @@ Partial Class MForm3
         Me.a_nastaveni.Name = "a_nastaveni"
         Me.a_nastaveni.Parent = Me.ActionList0
         Me.a_nastaveni.Text = "Nastavení"
+        '
+        'm_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_
+        '
+        Me.ActionList0.SetAction(Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_, Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_)
+        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Name = "m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_"
+        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Parent = Me.ActionList0
+        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Text = Nothing
+        '
+        'a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_
+        '
+        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.AltText = "Zpráva vývoj. (soup. změn a úprav této aplik."
+        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Name = "a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_"
+        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Parent = Me.ActionList0
+        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Text = "Zpráva vývojáře (soupis změn a úprav této aplikace)"
         '
         'MForm3
         '
@@ -1262,4 +1279,6 @@ Partial Class MForm3
     Friend WithEvents ToolStripButton13 As ToolStripButton
     Friend WithEvents a_prejit_na_predchozi_nalezeny_radek As ActionListLib.Action
     Friend WithEvents m_prejit_na_predchozi_nalezeny_radek As ActionListLib.Menu
+    Friend WithEvents m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ As ActionListLib.Menu
+    Friend WithEvents a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ As ActionListLib.Action
 End Class

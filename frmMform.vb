@@ -397,6 +397,9 @@ Reload: GoTo LoadIt
     End Sub
 
     Private Sub MForm_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+
+        FDevMsg.InitDevMsg(Me)
+
         If Not FormVersionChanged(Me, FormVersion, False) Then
             WindowRestore(Me)
             FlexgridRestore(FgOP,,,, False)
@@ -446,7 +449,14 @@ Reload: GoTo LoadIt
         InitGrid(FgFV, "vydané faktury", clrFgFV, bSetTabColors)
         InitGrid(FgOV, "objednávky", clrFgOV, bSetTabColors)
         InitGrid(FgFP, "přijaté faktury", clrFgFP, bSetTabColors)
+
         FGridSearchText.RegisterForAllGrids(Me, a_searchtext, a_searchtextnext)
+        FGridSearchText.gaoGridFirmaColList.Add(FgFP, iColFgFirma)
+        FGridSearchText.gaoGridFirmaColList.Add(FgFV, iColFgFirma)
+        FGridSearchText.gaoGridFirmaColList.Add(FgN, iColFgFirma)
+        FGridSearchText.gaoGridFirmaColList.Add(FgOP, iColFgFirma)
+        FGridSearchText.gaoGridFirmaColList.Add(FgOV, iColFgFirma)
+
         lblVer.Text = GetAssemblyVersion(Assembly.GetExecutingAssembly, "") & IO.File.GetLastWriteTime(Application.ExecutablePath).ToString(" (d.M.yyyy H:mm)")
     End Sub
 
@@ -1111,4 +1121,8 @@ endexcel:
         End If
         Return bRet
     End Function
+
+    Private Sub a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace__Execute(sender As Object, e As EventArgs) Handles a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Execute
+        FDevMsg.ShowForm(Me)
+    End Sub
 End Class

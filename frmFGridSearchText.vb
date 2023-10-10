@@ -42,6 +42,9 @@ Public Class FGridSearchText
     Friend WithEvents PřizpůsobitŠířkySloupcůToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents btnSearchAll As Button
     Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents pnFirma As Panel
+    Friend WithEvents cmbFirma As ComboBox
+    Friend WithEvents chkRangeFirma As CheckBox
 
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
@@ -62,6 +65,9 @@ Public Class FGridSearchText
         Me.pnColumn = New System.Windows.Forms.Panel()
         Me.cmbColumn = New System.Windows.Forms.ComboBox()
         Me.chkFindInColumn = New System.Windows.Forms.CheckBox()
+        Me.pnFirma = New System.Windows.Forms.Panel()
+        Me.cmbFirma = New System.Windows.Forms.ComboBox()
+        Me.chkRangeFirma = New System.Windows.Forms.CheckBox()
         Me.chkRespectAccents = New System.Windows.Forms.CheckBox()
         Me.chkCaseSensitive = New System.Windows.Forms.CheckBox()
         Me.chkBackward = New System.Windows.Forms.CheckBox()
@@ -80,6 +86,7 @@ Public Class FGridSearchText
         Me.pnMain.SuspendLayout()
         Me.pnBoxes.SuspendLayout()
         Me.pnColumn.SuspendLayout()
+        Me.pnFirma.SuspendLayout()
         Me.pnText.SuspendLayout()
         Me.searchMenuStrip.SuspendLayout()
         Me.SuspendLayout()
@@ -91,7 +98,7 @@ Public Class FGridSearchText
         Me.ButtonPanel1.Controls.Add(Me.btnOK)
         Me.ButtonPanel1.Controls.Add(Me.btnCancel)
         Me.ButtonPanel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ButtonPanel1.Location = New System.Drawing.Point(0, 169)
+        Me.ButtonPanel1.Location = New System.Drawing.Point(0, 199)
         Me.ButtonPanel1.Name = "ButtonPanel1"
         Me.ButtonPanel1.Padding = New System.Windows.Forms.Padding(9, 8, 9, 13)
         Me.ButtonPanel1.PaddingAutomaticCoef = New System.Drawing.SizeF(0.2!, 0.08!)
@@ -140,12 +147,13 @@ Public Class FGridSearchText
         Me.pnMain.Location = New System.Drawing.Point(0, 0)
         Me.pnMain.Name = "pnMain"
         Me.pnMain.Padding = New System.Windows.Forms.Padding(10, 10, 10, 5)
-        Me.pnMain.Size = New System.Drawing.Size(390, 169)
+        Me.pnMain.Size = New System.Drawing.Size(390, 199)
         Me.pnMain.TabIndex = 0
         '
         'pnBoxes
         '
         Me.pnBoxes.Controls.Add(Me.pnColumn)
+        Me.pnBoxes.Controls.Add(Me.pnFirma)
         Me.pnBoxes.Controls.Add(Me.chkRespectAccents)
         Me.pnBoxes.Controls.Add(Me.chkCaseSensitive)
         Me.pnBoxes.Controls.Add(Me.chkBackward)
@@ -154,7 +162,7 @@ Public Class FGridSearchText
         Me.pnBoxes.Location = New System.Drawing.Point(10, 41)
         Me.pnBoxes.Name = "pnBoxes"
         Me.pnBoxes.Padding = New System.Windows.Forms.Padding(5)
-        Me.pnBoxes.Size = New System.Drawing.Size(370, 123)
+        Me.pnBoxes.Size = New System.Drawing.Size(370, 153)
         Me.pnBoxes.TabIndex = 1
         '
         'pnColumn
@@ -162,76 +170,101 @@ Public Class FGridSearchText
         Me.pnColumn.Controls.Add(Me.cmbColumn)
         Me.pnColumn.Controls.Add(Me.chkFindInColumn)
         Me.pnColumn.Dock = System.Windows.Forms.DockStyle.Top
-        Me.pnColumn.Location = New System.Drawing.Point(5, 93)
+        Me.pnColumn.Location = New System.Drawing.Point(5, 128)
         Me.pnColumn.Name = "pnColumn"
-        Me.pnColumn.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
+        Me.pnColumn.Padding = New System.Windows.Forms.Padding(0, 5, 2, 0)
         Me.pnColumn.Size = New System.Drawing.Size(360, 27)
-        Me.pnColumn.TabIndex = 4
+        Me.pnColumn.TabIndex = 5
         '
         'cmbColumn
         '
         Me.cmbColumn.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cmbColumn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmbColumn.Location = New System.Drawing.Point(106, 5)
+        Me.cmbColumn.Location = New System.Drawing.Point(135, 5)
         Me.cmbColumn.Name = "cmbColumn"
-        Me.cmbColumn.Size = New System.Drawing.Size(254, 21)
-        Me.cmbColumn.TabIndex = 4
+        Me.cmbColumn.Size = New System.Drawing.Size(223, 21)
+        Me.cmbColumn.TabIndex = 1
         '
         'chkFindInColumn
         '
-        Me.chkFindInColumn.AutoSize = True
         Me.chkFindInColumn.Dock = System.Windows.Forms.DockStyle.Left
         Me.chkFindInColumn.Location = New System.Drawing.Point(0, 5)
         Me.chkFindInColumn.Name = "chkFindInColumn"
-        Me.chkFindInColumn.Size = New System.Drawing.Size(106, 22)
-        Me.chkFindInColumn.TabIndex = 3
+        Me.chkFindInColumn.Size = New System.Drawing.Size(135, 22)
+        Me.chkFindInColumn.TabIndex = 0
         Me.chkFindInColumn.Text = "hledat ve &sloupci"
         Me.chkFindInColumn.UseVisualStyleBackColor = True
         '
+        'pnFirma
+        '
+        Me.pnFirma.Controls.Add(Me.cmbFirma)
+        Me.pnFirma.Controls.Add(Me.chkRangeFirma)
+        Me.pnFirma.Dock = System.Windows.Forms.DockStyle.Top
+        Me.pnFirma.Location = New System.Drawing.Point(5, 101)
+        Me.pnFirma.Name = "pnFirma"
+        Me.pnFirma.Padding = New System.Windows.Forms.Padding(0, 5, 2, 0)
+        Me.pnFirma.Size = New System.Drawing.Size(360, 27)
+        Me.pnFirma.TabIndex = 4
+        '
+        'cmbFirma
+        '
+        Me.cmbFirma.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cmbFirma.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbFirma.Location = New System.Drawing.Point(135, 5)
+        Me.cmbFirma.Name = "cmbFirma"
+        Me.cmbFirma.Size = New System.Drawing.Size(223, 21)
+        Me.cmbFirma.TabIndex = 1
+        '
+        'chkRangeFirma
+        '
+        Me.chkRangeFirma.Dock = System.Windows.Forms.DockStyle.Left
+        Me.chkRangeFirma.Location = New System.Drawing.Point(0, 5)
+        Me.chkRangeFirma.Name = "chkRangeFirma"
+        Me.chkRangeFirma.Size = New System.Drawing.Size(135, 22)
+        Me.chkRangeFirma.TabIndex = 0
+        Me.chkRangeFirma.Text = "hledat v rámci &firmy"
+        Me.chkRangeFirma.UseVisualStyleBackColor = True
+        '
         'chkRespectAccents
         '
-        Me.chkRespectAccents.AutoSize = True
         Me.chkRespectAccents.Dock = System.Windows.Forms.DockStyle.Top
-        Me.chkRespectAccents.Location = New System.Drawing.Point(5, 71)
+        Me.chkRespectAccents.Location = New System.Drawing.Point(5, 77)
         Me.chkRespectAccents.Name = "chkRespectAccents"
         Me.chkRespectAccents.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
-        Me.chkRespectAccents.Size = New System.Drawing.Size(360, 22)
-        Me.chkRespectAccents.TabIndex = 5
+        Me.chkRespectAccents.Size = New System.Drawing.Size(360, 24)
+        Me.chkRespectAccents.TabIndex = 3
         Me.chkRespectAccents.Text = "rozlišovat znaky s diakritikou"
         Me.chkRespectAccents.UseVisualStyleBackColor = True
         '
         'chkCaseSensitive
         '
-        Me.chkCaseSensitive.AutoSize = True
         Me.chkCaseSensitive.Dock = System.Windows.Forms.DockStyle.Top
-        Me.chkCaseSensitive.Location = New System.Drawing.Point(5, 49)
+        Me.chkCaseSensitive.Location = New System.Drawing.Point(5, 53)
         Me.chkCaseSensitive.Name = "chkCaseSensitive"
         Me.chkCaseSensitive.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
-        Me.chkCaseSensitive.Size = New System.Drawing.Size(360, 22)
-        Me.chkCaseSensitive.TabIndex = 1
+        Me.chkCaseSensitive.Size = New System.Drawing.Size(360, 24)
+        Me.chkCaseSensitive.TabIndex = 2
         Me.chkCaseSensitive.Text = "rozlišovat &velká/malá písmena"
         Me.chkCaseSensitive.UseVisualStyleBackColor = True
         '
         'chkBackward
         '
-        Me.chkBackward.AutoSize = True
         Me.chkBackward.Dock = System.Windows.Forms.DockStyle.Top
-        Me.chkBackward.Location = New System.Drawing.Point(5, 27)
+        Me.chkBackward.Location = New System.Drawing.Point(5, 29)
         Me.chkBackward.Name = "chkBackward"
         Me.chkBackward.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
-        Me.chkBackward.Size = New System.Drawing.Size(360, 22)
-        Me.chkBackward.TabIndex = 2
+        Me.chkBackward.Size = New System.Drawing.Size(360, 24)
+        Me.chkBackward.TabIndex = 1
         Me.chkBackward.Text = "hledat směrem z&pět"
         Me.chkBackward.UseVisualStyleBackColor = True
         '
         'chkSearchFromTop
         '
-        Me.chkSearchFromTop.AutoSize = True
         Me.chkSearchFromTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.chkSearchFromTop.Location = New System.Drawing.Point(5, 5)
         Me.chkSearchFromTop.Name = "chkSearchFromTop"
         Me.chkSearchFromTop.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
-        Me.chkSearchFromTop.Size = New System.Drawing.Size(360, 22)
+        Me.chkSearchFromTop.Size = New System.Drawing.Size(360, 24)
         Me.chkSearchFromTop.TabIndex = 0
         Me.chkSearchFromTop.Text = "hledat od &začátku"
         Me.chkSearchFromTop.UseVisualStyleBackColor = True
@@ -312,7 +345,7 @@ Public Class FGridSearchText
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnCancel
-        Me.ClientSize = New System.Drawing.Size(390, 213)
+        Me.ClientSize = New System.Drawing.Size(390, 243)
         Me.Controls.Add(Me.pnMain)
         Me.Controls.Add(Me.ButtonPanel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
@@ -320,7 +353,7 @@ Public Class FGridSearchText
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(400, 252)
+        Me.MinimumSize = New System.Drawing.Size(400, 282)
         Me.Name = "FGridSearchText"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
@@ -328,9 +361,8 @@ Public Class FGridSearchText
         Me.ButtonPanel1.ResumeLayout(False)
         Me.pnMain.ResumeLayout(False)
         Me.pnBoxes.ResumeLayout(False)
-        Me.pnBoxes.PerformLayout()
         Me.pnColumn.ResumeLayout(False)
-        Me.pnColumn.PerformLayout()
+        Me.pnFirma.ResumeLayout(False)
         Me.pnText.ResumeLayout(False)
         Me.pnText.PerformLayout()
         Me.searchMenuStrip.ResumeLayout(False)
@@ -366,8 +398,46 @@ Public Class FGridSearchText
     Private bLoading As Boolean = True
     Friend aoSloupce As New List(Of Object)
     Friend oOwnerCtl As Control
+    Friend iColFirma As Integer = -1
 
     Private Shared gaoConnectorList As New List(Of Connector)
+
+    Friend Shared gaoGridFirmaColList As New Dictionary(Of Control, Integer)
+
+    Public Class Member
+        Public Sub New(ByRef InpText As String)
+            Text = InpText
+            If Trim(Text & " ").StartsWith("&") Then
+                AndExpr = True
+                Text = Trim((Text & " ").Substring(Text.IndexOf("&") + 1))
+            ElseIf Trim(Text & " ").StartsWith("|") Then
+                AndExpr = False
+                Text = Trim((Text & " ").Substring(Text.IndexOf("|") + 1))
+            Else
+                AndExpr = False
+                Text = Trim(Text)
+            End If
+
+            If (Text & " ").Contains("&") Then
+                Text = Trim((Text & " ").Substring(0, Text.IndexOf("&")))
+            ElseIf (Text & " ").Contains("|") Then
+                Text = Trim((Text & " ").Substring(0, Text.IndexOf("|")))
+            Else
+                Text = Trim(Text)
+            End If
+
+            If (InpText & " ").Contains("&") Then
+                InpText = (InpText & " ").Substring(InpText.IndexOf("&"))
+            ElseIf (Text & " ").Contains("|") Then
+                InpText = (InpText & " ").Substring(InpText.IndexOf("|"))
+            Else
+                InpText = ""
+            End If
+            InpText = Trim(InpText)
+        End Sub
+        Public AndExpr As Boolean = False
+        Public Text As String = ""
+    End Class
 
     Private Sub Init(oOwner As Control)
         'Me.Owner = oOwner
@@ -382,34 +452,58 @@ Public Class FGridSearchText
         CheckBoxRestore(Me.chkSearchFromTop)
         CheckBoxRestore(Me.chkFindInColumn)
         If TypeOf oOwner Is XC1Flexgrid OrElse oOwner.GetType.IsSubclassOf(GetType(XC1Flexgrid)) Then
-            With DirectCast(oOwner, XC1Flexgrid)
+            Dim oFg As XC1Flexgrid = DirectCast(oOwner, XC1Flexgrid)
+            With oFg
                 Sloupec.CreateItem(DirectCast(oOwner, XC1Flexgrid), -1, aoSloupce)
-                For icol As Integer = 0 To .Cols.Count - 1
-                    Sloupec.CreateItem(DirectCast(oOwner, XC1Flexgrid), icol, aoSloupce)
+                For iCol As Integer = 0 To .Cols.Count - 1
+                    Sloupec.CreateItem(DirectCast(oOwner, XC1Flexgrid), iCol, aoSloupce)
                 Next
+                If aoSloupce IsNot Nothing Then Me.cmbColumn.Items.AddRange(aoSloupce.ToArray)
+                ComboBoxRestore(Me.cmbColumn)
+                If Me.cmbColumn.SelectedIndex < 0 Then Me.cmbColumn.SelectedIndex = 0
+                If gaoGridFirmaColList.ContainsKey(oFg) Then
+                    iColFirma = gaoGridFirmaColList(oFg)
+                    Dim asFirmalist As New List(Of String)
+                    Dim sFirma As String = ""
+                    For iRow As Integer = .Row1 To .RowN
+                        sFirma = CStr(oFg(iRow, iColFirma))
+                        If Not asFirmalist.Contains(sFirma) Then asFirmalist.Add(sFirma)
+                    Next
+                    asFirmalist.Sort()
+                    sFirma = CStr(oFg(oFg.Row, iColFirma))
+                    For Each s In asFirmalist
+                        cmbFirma.Items.Add(s)
+                        If String.Compare(s, sFirma, True) = 0 Then
+                            cmbFirma.SelectedIndex = cmbFirma.Items.Count - 1
+                        End If
+                    Next
+                    iColFirma = gaoGridFirmaColList(oFg)
+                    CheckBoxRestore(Me.chkRangeFirma)
+                Else
+                    pnFirma.Parent = Nothing
+                End If
             End With
-            If aoSloupce IsNot Nothing Then Me.cmbColumn.Items.AddRange(aoSloupce.ToArray)
-            ComboBoxRestore(Me.cmbColumn)
-            If Me.cmbColumn.SelectedIndex < 0 Then Me.cmbColumn.SelectedIndex = 0
         Else
             pnColumn.Parent = Nothing
             chkRespectAccents.Parent = Nothing
         End If
         bLoading = False
         chkFindInColumn_CheckedChanged(Nothing, Nothing)
+        chkRangeFirma_CheckedChanged(Nothing, Nothing)
     End Sub
 
     ''' <summary> trida pro pripojeni hledani ve vsech gridech formulare </summary>
     Public Class Connector
         Implements IDisposable
 
-        Public Sub New(oForm As Form, oAction As ActionListLib.Action, oActionNext As ActionListLib.Action)
+        Public Sub New(oForm As Form, oAction As ActionListLib.Action, oActionNext As ActionListLib.Action, Optional iFirmaColumnIndex As Integer = -1)
             MyBase.New()
             Me.oForm = oForm
             Me.oActionSearch = oAction
             Me.oActionSearchNext = oActionNext
             oActionSearchNext.Enabled = False
             oActionSearchNext.Tag = False
+            iFirmaColumn = iFirmaColumnIndex
         End Sub
 
         Public Sub New(oForm As Form, oControl As Control, oControlNext As Control)
@@ -445,6 +539,7 @@ Public Class FGridSearchText
         Friend aoGridList As New List(Of Control)
         Friend bOptimize As Boolean = False  ' pokud je jen jeden grid, tak se pripoji, a uz se nebude odpojovat
         Friend bOptimized As Boolean = False ' je pripojen, tak s tim uz nebudeme hybat
+        Friend iFirmaColumn As Integer = -1
 
         Public ReadOnly Property IsEmpty
             Get
@@ -595,13 +690,15 @@ Public Class FGridSearchText
     ''' <param name="oActionSearch"></param>
     ''' <param name="oActionSearchNext"></param>
     ''' <param name="ExcludeGridList"></param>
-    Public Shared Sub RegisterForAllGrids(oOwner As Form, oActionSearch As ActionListLib.Action, oActionSearchNext As ActionListLib.Action, Optional ExcludeGridList() As Object = Nothing, Optional bOptimizeActivation As Boolean = True)
+    Public Shared Sub RegisterForAllGrids(oOwner As Form, oActionSearch As ActionListLib.Action, oActionSearchNext As ActionListLib.Action, Optional ExcludeGridList() As Object = Nothing,
+                                          Optional bOptimizeActivation As Boolean = True, Optional iColumnFirmaIndex As Integer = -1)
         Dim oConn As New Connector(oOwner, oActionSearch, oActionSearchNext)
         For Each oCtl As Object In XControls.GetAllControls(oOwner)
             If (TypeOf oCtl Is XC1Flexgrid OrElse oCtl.GetType.IsSubclassOf(GetType(XC1Flexgrid))) AndAlso Not (ExcludeGridList IsNot Nothing AndAlso Array.IndexOf(ExcludeGridList, oCtl) >= 0) Then
                 oConn.AddGrid(oCtl)
             End If
         Next
+        oConn.iFirmaColumn = iColumnFirmaIndex
         oConn.OptimizeActivation = bOptimizeActivation AndAlso oConn.aoGridList.Count = 1 'povolim jen pokud je jen jeden grid
         oConn.Activate()
     End Sub
@@ -762,9 +859,15 @@ Public Class FGridSearchText
             Dim bColumn As Boolean = False
             If oFg.Row < oFg.Rows.Fixed Then oFg.Row = oFg.Rows.Fixed
             Dim oResult As DialogResult = DialogResult.None
+            Dim aoMembers As New List(Of Member)
             If Not NoDialog Then oResult = ShowDialog()
             If NoDialog OrElse oResult = DialogResult.OK OrElse oResult = DialogResult.Yes Then
+
                 Dim sValue As String = txtValue.Text
+                While Not String.IsNullOrEmpty(sValue)
+                    aoMembers.Add(New Member(sValue))
+                End While
+
                 If Not chkRespectAccents.Checked Then sValue = XControls.CutDiacritic(sValue)
                 Dim aiCols As New List(Of Integer)
                 For iCol As Integer = If(oFg.ShowCursor, 1, 0) To oFg.Cols.Count - 1
@@ -785,11 +888,17 @@ Public Class FGridSearchText
                             If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
                             If (Not oFg(iRow, iCol) Is Nothing) Then
                                 If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
-                                    'nalezeno
+                                    ' nalezeno
+                                    ' ted jeste vyhodnotim, jestli je to v ramci hledane firmy
+                                    If chkRangeFirma.Checked AndAlso iColFirma > 0 Then
+                                        ' hledam jen v ramci firmy
+                                        Dim sFirma As String = CStr(oFg(iRow, iColFirma))
+                                        If TypeOf (cmbFirma.SelectedItem) Is String AndAlso String.Compare(CStr(cmbFirma.SelectedItem), sFirma, True) <> 0 Then GoTo nomatch
+                                    End If
                                     bRet = True
                                     If iSel < 0 Then iSel = iRow
                                     If Not aiShowRows.Contains(iRow) Then aiShowRows.Add(iRow)
-                                End If
+nomatch:                        End If
                             End If
                         Next
                     Next
@@ -842,13 +951,19 @@ Public Class FGridSearchText
                                 If (Not oFg(iRow, iCol) Is Nothing) Then
                                     If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
                                         'nalezeno
+                                        ' ted jeste vyhodnotim, jestli je to v ramci hledane firmy
+                                        If chkRangeFirma.Checked AndAlso iColFirma > 0 Then
+                                            ' hledam jen v ramci firmy
+                                            Dim sFirma As String = CStr(oFg(iRow, iColFirma))
+                                            If TypeOf (cmbFirma.SelectedItem) Is String AndAlso String.Compare(CStr(cmbFirma.SelectedItem), sFirma, True) <> 0 Then GoTo nomatch2
+                                        End If
                                         FlexgridSelectAndShowRow(oFg, iRow)
                                         oFg.Select(iRow, iCol, True)
                                         chkSearchFromTop.Checked = False
                                         oFg.EnsureVisibleSelectedRow()
                                         bRet = True
                                         Exit For
-                                    End If
+nomatch2:                           End If
                                 End If
                             Next
                         End If
@@ -861,7 +976,7 @@ Public Class FGridSearchText
                 End If
             End If
         End If
-            Return bRet
+        Return bRet
     End Function
 
     Public Function SearchText(oRtb As RichTextBox, Optional NoDialog As Boolean = False, Optional ShowNotFind As Boolean = True) As Boolean
@@ -911,11 +1026,17 @@ Public Class FGridSearchText
         CheckBoxSave(Me.chkSearchFromTop)
         CheckBoxSave(Me.chkFindInColumn)
         ComboBoxSave(Me.cmbColumn)
+        If iColFirma > 0 Then CheckBoxSave(Me.chkRangeFirma)
     End Sub
 
     Private Sub chkFindInColumn_CheckedChanged(sender As Object, e As EventArgs) Handles chkFindInColumn.CheckedChanged
         If Not bLoading Then Me.cmbColumn.Enabled = chkFindInColumn.Checked
     End Sub
+
+    Private Sub chkRangeFirma_CheckedChanged(sender As Object, e As EventArgs) Handles chkRangeFirma.CheckedChanged
+        If Not bLoading Then Me.cmbFirma.Enabled = chkRangeFirma.Checked AndAlso iColFirma > 0
+    End Sub
+
 
     Private Sub txtValue_TextChanged(sender As Object, e As System.EventArgs) Handles txtValue.TextChanged
         If Not bLoading Then Me.chkSearchFromTop.Checked = True
@@ -926,4 +1047,5 @@ Public Class FGridSearchText
             DialogResult = DialogResult.Yes
         End If
     End Sub
+
 End Class

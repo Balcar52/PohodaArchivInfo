@@ -148,6 +148,9 @@
     <Compile Include="frmFAbout.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmFDevMsg.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmFGridSearchText.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -164,6 +167,7 @@
       <DependentUpon>frmMform.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="modCmdLin.vb" />
     <Compile Include="modFormUtil.XControls.vb" />
     <Compile Include="modMisc.vb" />
     <Compile Include="modSecCodes.vb" />
@@ -186,6 +190,9 @@
   <ItemGroup>
     <EmbeddedResource Include="frmFAbout.resx">
       <DependentUpon>frmFAbout.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFDevMsg.resx">
+      <DependentUpon>frmFDevMsg.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmFOptions.resx">
       <DependentUpon>frmFOptions.vb</DependentUpon>
@@ -217,6 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="729-win_details.ico" />
+    <EmbeddedResource Include="My Project\AppDeveloperMessage.txt" />
     <None Include="Resources\026-doc_preview.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
