@@ -1,2 +1,3 @@
 10.10.2023
-- Úprava vyhledávání - doplnìno vyhledávání textu v rámci firmy (nový checkbox ve formuláøi pro vyhledávání). Pozor, funkce je ve zkušebním režimu!
+- V dialogu, který právì vidíte Vám budou sdìlovány informace o úpravách a nových funkcích této aplikace.
+- Úprava vyhledávání - doplnìno vyhledávání textu v rámci firmy (nový checkbox ve formuláøi pro vyhledávání). Pozor, funkce je t.è. ve zkušebním režimu!

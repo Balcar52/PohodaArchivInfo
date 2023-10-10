@@ -859,14 +859,14 @@ Public Class FGridSearchText
             Dim bColumn As Boolean = False
             If oFg.Row < oFg.Rows.Fixed Then oFg.Row = oFg.Rows.Fixed
             Dim oResult As DialogResult = DialogResult.None
-            Dim aoMembers As New List(Of Member)
+            Dim aoMembers As New List(Of Member) ' seznam vyrazu pro vyhledavani
             If Not NoDialog Then oResult = ShowDialog()
             If NoDialog OrElse oResult = DialogResult.OK OrElse oResult = DialogResult.Yes Then
 
                 Dim sValue As String = txtValue.Text
-                While Not String.IsNullOrEmpty(sValue)
-                    aoMembers.Add(New Member(sValue))
-                End While
+                'While Not String.IsNullOrEmpty(sValue)
+                '    aoMembers.Add(New Member(sValue))
+                'End While
 
                 If Not chkRespectAccents.Checked Then sValue = XControls.CutDiacritic(sValue)
                 Dim aiCols As New List(Of Integer)
