@@ -1,3 +1,5 @@
+11.10.2023
+- Úprava vyhledávání - je možné zadat více øetìzcù, oddìlených znaky &(logické a) nebo |(logické nebo). Sdružování více øetìzcù pomocí závorek není implementováno. Pozor, funkce je t.è. ve zkušebním režimu!
 10.10.2023
 - V dialogu, který právì vidíte Vám budou sdìlovány informace o úpravách a nových funkcích této aplikace.
 - Úprava vyhledávání - doplnìno vyhledávání textu v rámci firmy (nový checkbox ve formuláøi pro vyhledávání). Pozor, funkce je t.è. ve zkušebním režimu!

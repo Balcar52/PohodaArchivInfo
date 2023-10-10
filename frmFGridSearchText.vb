@@ -405,35 +405,49 @@ Public Class FGridSearchText
     Friend Shared gaoGridFirmaColList As New Dictionary(Of Control, Integer)
 
     Public Class Member
-        Public Sub New(ByRef InpText As String)
-            Text = InpText
-            If Trim(Text & " ").StartsWith("&") Then
+        Public Shared Function GetMembers(InpText As String, CaseSensitive As Boolean, CutDiactitics As Boolean) As List(Of Member)
+            Dim sText As String = Replace(Replace(InpText, "|", vbTab & "|"), "&", vbTab & "&")
+            If CutDiactitics Then sText = XControls.CutDiacritic(sText)
+            If Not CaseSensitive Then sText = UCase(sText)
+            Dim oRes As New List(Of Member)
+            For Each s In Split(sText, vbTab)
+                s = Trim(s)
+                If Not String.IsNullOrWhiteSpace(s) Then
+                    oRes.Add(New Member(s))
+                End If
+            Next
+            Return oRes
+        End Function
+        Public Shared Function FoundInExpression(sText As String, Expression As List(Of Member)) As Boolean
+            Dim bRes As Boolean = False
+            Dim bFst As Boolean = True
+            For Each oMember In Expression
+                Dim bFound As Boolean = sText.Contains(oMember.Text)
+                If bFst Then
+                    bRes = bFound
+                Else
+                    If oMember.AndExpr Then
+                        bRes = bRes AndAlso bFound
+                    Else
+                        If bFound Then bRes = True
+                    End If
+                End If
+                bFst = False
+            Next
+            Return bRes
+        End Function
+        Public Sub New(ByRef sText As String)
+            sText = Trim(sText)
+            If Trim(sText & " ").StartsWith("&") Then
                 AndExpr = True
-                Text = Trim((Text & " ").Substring(Text.IndexOf("&") + 1))
-            ElseIf Trim(Text & " ").StartsWith("|") Then
+                Text = Trim((sText & " ").Substring(sText.IndexOf("&") + 1))
+            ElseIf Trim(sText & " ").StartsWith("|") Then
                 AndExpr = False
-                Text = Trim((Text & " ").Substring(Text.IndexOf("|") + 1))
+                Text = Trim((sText & " ").Substring(sText.IndexOf("|") + 1))
             Else
                 AndExpr = False
-                Text = Trim(Text)
+                Text = Trim(sText)
             End If
-
-            If (Text & " ").Contains("&") Then
-                Text = Trim((Text & " ").Substring(0, Text.IndexOf("&")))
-            ElseIf (Text & " ").Contains("|") Then
-                Text = Trim((Text & " ").Substring(0, Text.IndexOf("|")))
-            Else
-                Text = Trim(Text)
-            End If
-
-            If (InpText & " ").Contains("&") Then
-                InpText = (InpText & " ").Substring(InpText.IndexOf("&"))
-            ElseIf (Text & " ").Contains("|") Then
-                InpText = (InpText & " ").Substring(InpText.IndexOf("|"))
-            Else
-                InpText = ""
-            End If
-            InpText = Trim(InpText)
         End Sub
         Public AndExpr As Boolean = False
         Public Text As String = ""
@@ -859,16 +873,11 @@ Public Class FGridSearchText
             Dim bColumn As Boolean = False
             If oFg.Row < oFg.Rows.Fixed Then oFg.Row = oFg.Rows.Fixed
             Dim oResult As DialogResult = DialogResult.None
-            Dim aoMembers As New List(Of Member) ' seznam vyrazu pro vyhledavani
             If Not NoDialog Then oResult = ShowDialog()
+            Dim sValue As String = txtValue.Text
+            If Not chkRespectAccents.Checked Then sValue = XControls.CutDiacritic(sValue)
+            Dim aoMembers As List(Of Member) = Member.GetMembers(sValue, chkCaseSensitive.Checked, chkRespectAccents.Checked) ' seznam vyrazu pro vyhledavani
             If NoDialog OrElse oResult = DialogResult.OK OrElse oResult = DialogResult.Yes Then
-
-                Dim sValue As String = txtValue.Text
-                'While Not String.IsNullOrEmpty(sValue)
-                '    aoMembers.Add(New Member(sValue))
-                'End While
-
-                If Not chkRespectAccents.Checked Then sValue = XControls.CutDiacritic(sValue)
                 Dim aiCols As New List(Of Integer)
                 For iCol As Integer = If(oFg.ShowCursor, 1, 0) To oFg.Cols.Count - 1
                     Select Case GetComboValue.Column
@@ -885,9 +894,10 @@ Public Class FGridSearchText
                     For iRow As Integer = If(chkBackward.Checked, oFg.Row - iOff, oFg.Row + iOff) To If(chkBackward.Checked, oFg.Rows.Fixed, oFg.Rows.Count - 1) Step If(chkBackward.Checked, -1, 1)
                         For Each iCol As Integer In aiCols
                             Dim sFgValue As String = CStr(oFg(iRow, iCol))
-                            If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
-                            If (Not oFg(iRow, iCol) Is Nothing) Then
-                                If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
+                            If Not String.IsNullOrWhiteSpace(sFgValue) Then
+                                If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
+                                If Not chkCaseSensitive.Checked Then sFgValue = UCase(sFgValue)
+                                If Member.FoundInExpression(sFgValue, aoMembers) Then
                                     ' nalezeno
                                     ' ted jeste vyhodnotim, jestli je to v ramci hledane firmy
                                     If chkRangeFirma.Checked AndAlso iColFirma > 0 Then
@@ -900,6 +910,21 @@ Public Class FGridSearchText
                                     If Not aiShowRows.Contains(iRow) Then aiShowRows.Add(iRow)
 nomatch:                        End If
                             End If
+                            '                            If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
+                            '                            If (Not oFg(iRow, iCol) Is Nothing) Then
+                            '                                If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
+                            '                                    ' nalezeno
+                            '                                    ' ted jeste vyhodnotim, jestli je to v ramci hledane firmy
+                            '                                    If chkRangeFirma.Checked AndAlso iColFirma > 0 Then
+                            '                                        ' hledam jen v ramci firmy
+                            '                                        Dim sFirma As String = CStr(oFg(iRow, iColFirma))
+                            '                                        If TypeOf (cmbFirma.SelectedItem) Is String AndAlso String.Compare(CStr(cmbFirma.SelectedItem), sFirma, True) <> 0 Then GoTo nomatch
+                            '                                    End If
+                            '                                    bRet = True
+                            '                                    If iSel < 0 Then iSel = iRow
+                            '                                    If Not aiShowRows.Contains(iRow) Then aiShowRows.Add(iRow)
+                            'nomatch:                        End If
+                            '                            End If
                         Next
                     Next
                     If bRet Then
@@ -947,9 +972,11 @@ nomatch:                        End If
                         If oFg.Rows(iRow).Visible Then
                             For Each iCol As Integer In aiCols
                                 Dim sFgValue As String = CStr(oFg(iRow, iCol))
-                                If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
-                                If (Not oFg(iRow, iCol) Is Nothing) Then
-                                    If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
+                                If Not String.IsNullOrWhiteSpace(sFgValue) Then
+                                    If Not chkRespectAccents.Checked Then sFgValue = XControls.CutDiacritic(sFgValue)
+                                    If Not chkCaseSensitive.Checked Then sFgValue = UCase(sFgValue)
+                                    If Member.FoundInExpression(sFgValue, aoMembers) Then
+                                        'If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
                                         'nalezeno
                                         ' ted jeste vyhodnotim, jestli je to v ramci hledane firmy
                                         If chkRangeFirma.Checked AndAlso iColFirma > 0 Then
@@ -965,6 +992,23 @@ nomatch:                        End If
                                         Exit For
 nomatch2:                           End If
                                 End If
+                                '                                End If'                                If (Not oFg(iRow, iCol) Is Nothing) Then
+                                '                                    If sFgValue.IndexOf(Trim(sValue), If(Me.chkCaseSensitive.Checked, StringComparison.CurrentCulture, StringComparison.CurrentCultureIgnoreCase)) >= 0 Then
+                                '                                        'nalezeno
+                                '                                        ' ted jeste vyhodnotim, jestli je to v ramci hledane firmy
+                                '                                        If chkRangeFirma.Checked AndAlso iColFirma > 0 Then
+                                '                                            ' hledam jen v ramci firmy
+                                '                                            Dim sFirma As String = CStr(oFg(iRow, iColFirma))
+                                '                                            If TypeOf (cmbFirma.SelectedItem) Is String AndAlso String.Compare(CStr(cmbFirma.SelectedItem), sFirma, True) <> 0 Then GoTo nomatch2
+                                '                                        End If
+                                '                                        FlexgridSelectAndShowRow(oFg, iRow)
+                                '                                        oFg.Select(iRow, iCol, True)
+                                '                                        chkSearchFromTop.Checked = False
+                                '                                        oFg.EnsureVisibleSelectedRow()
+                                '                                        bRet = True
+                                '                                        Exit For
+                                'nomatch2:                           End If
+                                '                                End If
                             Next
                         End If
                         If bRet Then Exit For
