@@ -89,12 +89,12 @@ Partial Class MForm3
         Me.a_searchtextnext = New ActionListLib.Action(Me.components)
         Me.a_najit_vlevo = New ActionListLib.Action(Me.components)
         Me.a_najit_vpravo = New ActionListLib.Action(Me.components)
+        Me.a_prejit_na_dalsi_nalezeby_radek = New ActionListLib.Action(Me.components)
+        Me.a_prejit_na_predchozi_nalezeny_radek = New ActionListLib.Action(Me.components)
         Me.a_rozbalit_vse = New ActionListLib.Action(Me.components)
         Me.a_sbalit_vse = New ActionListLib.Action(Me.components)
         Me.a_sbalitrozbalit_polozku_na_radku = New ActionListLib.Action(Me.components)
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_ = New ActionListLib.Action(Me.components)
-        Me.a_prejit_na_dalsi_nalezeby_radek = New ActionListLib.Action(Me.components)
-        Me.a_prejit_na_predchozi_nalezeny_radek = New ActionListLib.Action(Me.components)
         Me.a_znovunacist_data = New ActionListLib.Action(Me.components)
         Me.a_excel = New ActionListLib.Action(Me.components)
         Me.a_close = New ActionListLib.Action(Me.components)
@@ -111,6 +111,8 @@ Partial Class MForm3
         Me.m_automaticky_upravovat_sirku_sloupce_textu = New ActionListLib.Menu(Me.components)
         Me.a_automaticky_upravovat_sirku_sloupce_textu = New ActionListLib.Action(Me.components)
         Me.m_prejit_na_predchozi_nalezeny_radek = New ActionListLib.Menu(Me.components)
+        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ = New ActionListLib.Menu(Me.components)
+        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ = New ActionListLib.Action(Me.components)
         Me.ActionListConn = New ActionListLib.ActionListConn(Me.components)
         Me.m_main = New ActionListLib.Menu(Me.components)
         Me.m_file = New ActionListLib.Menu(Me.components)
@@ -121,8 +123,8 @@ Partial Class MForm3
         Me.m_window = New ActionListLib.Menu(Me.components)
         Me.m_help = New ActionListLib.Menu(Me.components)
         Me.a_nastaveni = New ActionListLib.Action(Me.components)
-        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ = New ActionListLib.Menu(Me.components)
-        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ = New ActionListLib.Action(Me.components)
+        Me.m_logika_vyhledavani_v_tabulce = New ActionListLib.Menu(Me.components)
+        Me.a_logika_vyhledavani_v_tabulce = New ActionListLib.Action(Me.components)
         Me.tbcMain.SuspendLayout()
         Me.pgNab.SuspendLayout()
         Me.pnNab.SuspendLayout()
@@ -850,6 +852,24 @@ Partial Class MForm3
         Me.a_najit_vpravo.Text = "Najít vpravo"
         Me.a_najit_vpravo.TipText = "Najít firmu na záložce vlevo"
         '
+        'a_prejit_na_dalsi_nalezeby_radek
+        '
+        Me.a_prejit_na_dalsi_nalezeby_radek.AltText = "Další"
+        Me.a_prejit_na_dalsi_nalezeby_radek.Image = CType(resources.GetObject("a_prejit_na_dalsi_nalezeby_radek.Image"), System.Drawing.Image)
+        Me.a_prejit_na_dalsi_nalezeby_radek.Name = "a_prejit_na_dalsi_nalezeby_radek"
+        Me.a_prejit_na_dalsi_nalezeby_radek.Parent = Me.ActionList0
+        Me.a_prejit_na_dalsi_nalezeby_radek.Text = "Přejít na další nalezený řádek"
+        Me.a_prejit_na_dalsi_nalezeby_radek.TipText = "Přejít na následující řádek, nalezený pomocí hromadného vyhledávání"
+        '
+        'a_prejit_na_predchozi_nalezeny_radek
+        '
+        Me.a_prejit_na_predchozi_nalezeny_radek.AltText = "Předchozí"
+        Me.a_prejit_na_predchozi_nalezeny_radek.Image = CType(resources.GetObject("a_prejit_na_predchozi_nalezeny_radek.Image"), System.Drawing.Image)
+        Me.a_prejit_na_predchozi_nalezeny_radek.Name = "a_prejit_na_predchozi_nalezeny_radek"
+        Me.a_prejit_na_predchozi_nalezeny_radek.Parent = Me.ActionList0
+        Me.a_prejit_na_predchozi_nalezeny_radek.Text = "Přejít na předchozí nalezený řádek"
+        Me.a_prejit_na_predchozi_nalezeny_radek.TipText = "Přejít na předchozí řádek, nalezený pomocí hromadného vyhledávání"
+        '
         'a_rozbalit_vse
         '
         Me.a_rozbalit_vse.AltText = "Rozbalit"
@@ -885,24 +905,6 @@ Partial Class MForm3
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Parent = Me.ActionList0
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.Text = "Sbalit/rozbalit všechny položky firmy (Shift+Enter)"
         Me.a_sbalitrozbalit_vsechny_polozky_firmy_shift_enter_.TipText = "Sbalit/rozbalit všechny položky firmy na aktuálním řádku"
-        '
-        'a_prejit_na_dalsi_nalezeby_radek
-        '
-        Me.a_prejit_na_dalsi_nalezeby_radek.AltText = "Další"
-        Me.a_prejit_na_dalsi_nalezeby_radek.Image = CType(resources.GetObject("a_prejit_na_dalsi_nalezeby_radek.Image"), System.Drawing.Image)
-        Me.a_prejit_na_dalsi_nalezeby_radek.Name = "a_prejit_na_dalsi_nalezeby_radek"
-        Me.a_prejit_na_dalsi_nalezeby_radek.Parent = Me.ActionList0
-        Me.a_prejit_na_dalsi_nalezeby_radek.Text = "Přejít na další nalezený řádek"
-        Me.a_prejit_na_dalsi_nalezeby_radek.TipText = "Přejít na následující řádek, nalezený pomocí hromadného vyhledávání"
-        '
-        'a_prejit_na_predchozi_nalezeny_radek
-        '
-        Me.a_prejit_na_predchozi_nalezeny_radek.AltText = "Předchozí"
-        Me.a_prejit_na_predchozi_nalezeny_radek.Image = CType(resources.GetObject("a_prejit_na_predchozi_nalezeny_radek.Image"), System.Drawing.Image)
-        Me.a_prejit_na_predchozi_nalezeny_radek.Name = "a_prejit_na_predchozi_nalezeny_radek"
-        Me.a_prejit_na_predchozi_nalezeny_radek.Parent = Me.ActionList0
-        Me.a_prejit_na_predchozi_nalezeny_radek.Text = "Přejít na předchozí nalezený řádek"
-        Me.a_prejit_na_predchozi_nalezeny_radek.TipText = "Přejít na předchozí řádek, nalezený pomocí hromadného vyhledávání"
         '
         'a_znovunacist_data
         '
@@ -1026,6 +1028,20 @@ Partial Class MForm3
         Me.m_prejit_na_predchozi_nalezeny_radek.Parent = Me.ActionList0
         Me.m_prejit_na_predchozi_nalezeny_radek.Text = Nothing
         '
+        'm_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_
+        '
+        Me.ActionList0.SetAction(Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_, Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_)
+        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Name = "m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_"
+        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Parent = Me.ActionList0
+        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Text = Nothing
+        '
+        'a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_
+        '
+        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.AltText = "Zpráva vývoj. (soup. změn a úprav této aplik."
+        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Name = "a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_"
+        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Parent = Me.ActionList0
+        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Text = "Zpráva vývojáře (soupis změn a úprav této aplikace)"
+        '
         'ActionListConn
         '
         Me.ActionListConn.ActionList = Me.ActionList0
@@ -1109,6 +1125,7 @@ Partial Class MForm3
         '
         'm_help
         '
+        Me.m_help.MenuList.Add(Me.m_logika_vyhledavani_v_tabulce)
         Me.m_help.MenuList.Add(Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_)
         Me.m_help.MenuList.Add(Me.m_o_aplikaci)
         Me.m_help.MergeNode = 900
@@ -1123,19 +1140,19 @@ Partial Class MForm3
         Me.a_nastaveni.Parent = Me.ActionList0
         Me.a_nastaveni.Text = "Nastavení"
         '
-        'm_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_
+        'm_logika_vyhledavani_v_tabulce
         '
-        Me.ActionList0.SetAction(Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_, Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_)
-        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Name = "m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_"
-        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Parent = Me.ActionList0
-        Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Text = Nothing
+        Me.ActionList0.SetAction(Me.m_logika_vyhledavani_v_tabulce, Me.a_logika_vyhledavani_v_tabulce)
+        Me.m_logika_vyhledavani_v_tabulce.Name = "m_logika_vyhledavani_v_tabulce"
+        Me.m_logika_vyhledavani_v_tabulce.Parent = Me.ActionList0
+        Me.m_logika_vyhledavani_v_tabulce.Text = Nothing
         '
-        'a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_
+        'a_logika_vyhledavani_v_tabulce
         '
-        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.AltText = "Zpráva vývoj. (soup. změn a úprav této aplik."
-        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Name = "a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_"
-        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Parent = Me.ActionList0
-        Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Text = "Zpráva vývojáře (soupis změn a úprav této aplikace)"
+        Me.a_logika_vyhledavani_v_tabulce.AltText = "Návod na vyhledávání"
+        Me.a_logika_vyhledavani_v_tabulce.Name = "a_logika_vyhledavani_v_tabulce"
+        Me.a_logika_vyhledavani_v_tabulce.Parent = Me.ActionList0
+        Me.a_logika_vyhledavani_v_tabulce.Text = "Návod na vyhledávání ve formulářích"
         '
         'MForm3
         '
@@ -1281,4 +1298,6 @@ Partial Class MForm3
     Friend WithEvents m_prejit_na_predchozi_nalezeny_radek As ActionListLib.Menu
     Friend WithEvents m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ As ActionListLib.Menu
     Friend WithEvents a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ As ActionListLib.Action
+    Friend WithEvents m_logika_vyhledavani_v_tabulce As ActionListLib.Menu
+    Friend WithEvents a_logika_vyhledavani_v_tabulce As ActionListLib.Action
 End Class

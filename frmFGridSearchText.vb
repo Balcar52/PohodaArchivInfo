@@ -427,9 +427,13 @@ Public Class FGridSearchText
                     bRes = bFound
                 Else
                     If oMember.AndExpr Then
+                        '§ and clause
                         bRes = bRes AndAlso bFound
                     Else
-                        If bFound Then bRes = True
+                        '§ or clause
+                        If bRes Then Exit For
+                        'If bFound Then bRes = True Else bRes = False
+                        bRes = bFound
                     End If
                 End If
                 bFst = False

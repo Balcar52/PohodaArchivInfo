@@ -1,4 +1,5 @@
 ﻿' text upraven 21.06.2023 23:48:11 jiri/JIRIBARTUSEK
+' text upraven 21.06.2023 23:48:11 jiri/JIRIBARTUSEK
 ' CorrectForm 22.12.2021; 1.2.0.37; ©2016-19 Ing. Jiri Bartusek
 ' 
 ' Deklarace cisel sloupcu pro Flexgrid - pocet uprav: 1. 21.06.2023 23:48:05
@@ -73,14 +74,14 @@ Public Class MForm3
         InitGrid(Fg, oColor, bSetColors)
         FlexgridSet(Fg) '' [CorrectForm 17.4.2019 22:43]' [CorrectForm 21.6.2023 23:48]
         iColFg0 = FlexgridSetCol(">")
-        iColFgFirma = FlexgridSetCol("firma,250,RFM<")
+        iColFgFirma = FlexgridSetCol("firma,250,RM<")
         iColFgICO = FlexgridSetCol("IČ,40,RM>")
         iColFgKlic = FlexgridSetCol("klíč,100,R<")
         iColFgTree = FlexgridSetCol(",30,R,")
         iColFgPocO = FlexgridSetCol("poč.,40,RI^", Nazev1)
         iColFgDatum = FlexgridSetCol("datum,80,RMd>", "*")
         iColFgCislo = FlexgridSetCol("číslo,80,R>", "*")
-        iColFgNazevFirmy = FlexgridSetCol("název firmy,80,R<", "*")
+        iColFgNazevFirmy = FlexgridSetCol("název firmy,80,RF<", "*")
         iColFgPocP = FlexgridSetCol("poč.,40,RI^", "položky")
         iColFgText = FlexgridSetCol("text,80,R<", "*")
         iColFgMnozstvi = FlexgridSetCol("množ.,80,RID>,#####0", "*")
@@ -94,6 +95,10 @@ Public Class MForm3
         AddFlexGridStyle(2, FontStyle.Italic, C1.Win.C1FlexGrid.TextAlignEnum.LeftCenter)
         SetFlexGridStyleToCols(1, iColFgFirma)
         SetFlexGridStyleToCols(2, iColFgNazevFirmy)
+        SetFlexGridStyleToCols(1, iColFgTree)
+        SetFlexGridStyleToCols(1, iColFgPocO)
+        SetFlexGridStyleToCols(1, iColFgDatum)
+        SetFlexGridStyleToCols(1, iColFgCislo)
         Fg.Styles.Highlight.BackColor = Fg.Styles.Normal.BackColor
         Fg.Styles.Highlight.ForeColor = Fg.Styles.Normal.ForeColor
 
@@ -1124,5 +1129,9 @@ endexcel:
 
     Private Sub a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace__Execute(sender As Object, e As EventArgs) Handles a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Execute
         FDevMsg.ShowForm(Me)
+    End Sub
+
+    Private Sub a_logika_vyhledavani_v_tabulce_Execute(sender As Object, e As EventArgs) Handles a_logika_vyhledavani_v_tabulce.Execute
+        FInfo.Run(Me, "LogikaVyhledavani.rtf",, a_logika_vyhledavani_v_tabulce.Text)
     End Sub
 End Class

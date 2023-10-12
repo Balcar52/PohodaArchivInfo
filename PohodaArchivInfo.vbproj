@@ -154,6 +154,9 @@
     <Compile Include="frmFGridSearchText.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmFInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmFOptions.Designer.vb">
       <DependentUpon>frmFOptions.vb</DependentUpon>
     </Compile>
@@ -170,6 +173,7 @@
     <Compile Include="modCmdLin.vb" />
     <Compile Include="modFormUtil.XControls.vb" />
     <Compile Include="modMisc.vb" />
+    <Compile Include="modResourceFiles.vb" />
     <Compile Include="modSecCodes.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -194,6 +198,9 @@
     <EmbeddedResource Include="frmFDevMsg.resx">
       <DependentUpon>frmFDevMsg.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmFInfo.resx">
+      <DependentUpon>frmFInfo.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmFOptions.resx">
       <DependentUpon>frmFOptions.vb</DependentUpon>
     </EmbeddedResource>
@@ -212,6 +219,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="LogikaVyhledavani.rtf" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
