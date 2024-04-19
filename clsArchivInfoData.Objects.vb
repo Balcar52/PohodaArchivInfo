@@ -442,11 +442,29 @@ Partial Public Class AData
                 Return sRet
             End Get
         End Property
+        Public ReadOnly Property CiziMenaJ(oRoot As AObjNab) As String
+            Get
+                Dim sRet As String = ""
+                If JeCiziMena(oRoot) AndAlso JeCena Then
+                    sRet = oRoot.Mena & " " & (Kc / oRoot.Kurs).ToString("0.00")
+                End If
+                Return sRet
+            End Get
+        End Property
         Public ReadOnly Property Cena() As String
             Get
                 Dim sRet As String = ""
                 If JeCenaMnozstvi Then
                     sRet = (Kc * Mnoz).ToString("0.00")
+                End If
+                Return sRet
+            End Get
+        End Property
+        Public ReadOnly Property CenaJ() As String
+            Get
+                Dim sRet As String = ""
+                If JeCena Then
+                    sRet = Kc.ToString("0.00")
                 End If
                 Return sRet
             End Get
@@ -610,11 +628,29 @@ Partial Public Class AData
                 Return sRet
             End Get
         End Property
+        Public ReadOnly Property CiziMenaJ(oRoot As AFakt) As String
+            Get
+                Dim sRet As String = ""
+                If JeCiziMena(oRoot) AndAlso JeCena Then
+                    sRet = oRoot.Mena & " " & (Kc / oRoot.Kurs).ToString("0.00")
+                End If
+                Return sRet
+            End Get
+        End Property
         Public ReadOnly Property Cena() As String
             Get
                 Dim sRet As String = ""
                 If JeCenaMnozstvi Then
                     sRet = (Kc * Mnoz).ToString("0.00")
+                End If
+                Return sRet
+            End Get
+        End Property
+        Public ReadOnly Property CenaJ() As String
+            Get
+                Dim sRet As String = ""
+                If JeCena Then
+                    sRet = Kc.ToString("0.00")
                 End If
                 Return sRet
             End Get

@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FOptions
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class FOptions
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FOptions))
@@ -57,6 +57,7 @@ Partial Class FOptions
         Me.btnView = New System.Windows.Forms.Button()
         Me.Panel12 = New System.Windows.Forms.Panel()
         Me.ButtonPanel1 = New XControls.ButtonPanel()
+        Me.chkUNC = New System.Windows.Forms.CheckBox()
         Me.btnOK = New System.Windows.Forms.Button()
         Me.btnClose = New System.Windows.Forms.Button()
         Me.chkAllowImport = New System.Windows.Forms.CheckBox()
@@ -88,7 +89,6 @@ Partial Class FOptions
         Me.pnData = New System.Windows.Forms.Panel()
         Me.Panel13 = New System.Windows.Forms.Panel()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-        Me.chkUNC = New System.Windows.Forms.CheckBox()
         Me.gbImport.SuspendLayout()
         Me.Panel9.SuspendLayout()
         Me.Panel4.SuspendLayout()
@@ -468,6 +468,19 @@ Partial Class FOptions
         Me.ButtonPanel1.Size = New System.Drawing.Size(814, 44)
         Me.ButtonPanel1.TabIndex = 1
         '
+        'chkUNC
+        '
+        Me.chkUNC.Checked = True
+        Me.chkUNC.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkUNC.Dock = System.Windows.Forms.DockStyle.Left
+        Me.chkUNC.Location = New System.Drawing.Point(9, 8)
+        Me.chkUNC.Name = "chkUNC"
+        Me.chkUNC.Size = New System.Drawing.Size(223, 23)
+        Me.chkUNC.TabIndex = 2
+        Me.chkUNC.Text = "Síťová umístění převádět na UNC notaci"
+        Me.ToolTip1.SetToolTip(Me.chkUNC, "Pokud je otvíraný soubor v síti, převede se jeho specifikace na tzv. UNC tvar")
+        Me.chkUNC.UseVisualStyleBackColor = True
+        '
         'btnOK
         '
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -806,19 +819,6 @@ Partial Class FOptions
         Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
         Me.ImageList1.Images.SetKeyName(0, "202-delete.gif")
-        '
-        'chkUNC
-        '
-        Me.chkUNC.Checked = True
-        Me.chkUNC.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkUNC.Dock = System.Windows.Forms.DockStyle.Left
-        Me.chkUNC.Location = New System.Drawing.Point(9, 8)
-        Me.chkUNC.Name = "chkUNC"
-        Me.chkUNC.Size = New System.Drawing.Size(223, 23)
-        Me.chkUNC.TabIndex = 2
-        Me.chkUNC.Text = "Síťová umístění převádět na UNC notaci"
-        Me.ToolTip1.SetToolTip(Me.chkUNC, "Pokud je otvíraný soubor v síti, převede se jeho specifikace na tzv. UNC tvar")
-        Me.chkUNC.UseVisualStyleBackColor = True
         '
         'FOptions
         '

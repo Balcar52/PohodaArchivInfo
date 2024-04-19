@@ -11,10 +11,11 @@ Imports System.Reflection
 
 Public Class MForm3
 
-    Public Const FormVersion As String = "v. 4.8.2023"
+    Public Const FormVersion As String = "v. 18.4.2024"
 
     Public Const nmCurrentFile As String = "CurrentFile"
     Public Const nmbSetTabColors As String = "SetTabColors"
+    Public Const nmbCenaZaJednText As String = "CanaJednText"
     Public Const nmbSimpleExcel As String = "SimpleExcel"
     Public Const nmbUseExcel As String = "UseExcel"
     Public Const nmsExcelExpDir As String = "ExcelDir"
@@ -55,7 +56,9 @@ Public Class MForm3
     Dim iColFgText As Integer ' [g:6]
     Dim iColFgMnozstvi As Integer ' [g:8]
     Dim iColFgCena As Integer ' 
+    Dim iColFgCenaJ As Integer ' 
     Dim iColFgCena2 As Integer '
+    Dim iColFgCena2J As Integer '
     Dim iColFgPocO As Integer ' 
     Dim iColFgPocP As Integer ' 
     Dim iColFgPozn As Integer ' 
@@ -85,8 +88,10 @@ Public Class MForm3
         iColFgPocP = FlexgridSetCol("poč.,40,RI^", "položky")
         iColFgText = FlexgridSetCol("text,80,R<", "*")
         iColFgMnozstvi = FlexgridSetCol("množ.,80,RID>,#####0", "*")
-        iColFgCena = FlexgridSetCol("cena Kč,80,RID>,### ##0,00", "*")
-        iColFgCena2 = FlexgridSetCol("cena,80,R>", "*")
+        iColFgCena = FlexgridSetCol("cena,80,RID>,### ##0,00", "*")
+        iColFgCenaJ = FlexgridSetCol("j.cena,80,RID>,### ##0,00", "*")
+        iColFgCena2 = FlexgridSetCol("[měna]\ncena,80,R>", "*")
+        iColFgCena2J = FlexgridSetCol("[měna]\nj.cena,80,R>", "*")
         iColFgZdroj = FlexgridSetCol("mdb,80,R<")
         iColFgPozn = FlexgridSetCol("pozn.,80,R<")
         FlexgridSetExec() ' [CorrectForm 21.6.2023 23:48]
@@ -316,11 +321,13 @@ Reload: GoTo LoadIt
             If oObjP.JeMnozstvi Then Fg(iRow, iColFgMnozstvi) = oObjP.Mnoz
             If oObjP.JeCenaMnozstvi Then
                 Fg(iRow, iColFgCena) = oObjP.Cena
+                Fg(iRow, iColFgCenaJ) = oObjP.CenaJ
                 Fg.SetStyleToCell(iRow, iColFgCena,,, FontStyle.Bold, TextAlignEnum.RightCenter)
                 Fg.SetStyleToCell(iRow, iColFgMnozstvi,,, FontStyle.Bold, TextAlignEnum.RightCenter)
-                If oObjP.JeCiziMena(oObj) AndAlso oObjP.JeCenaMnozstvi Then
+                If oObjP.JeCiziMena(oObj) Then
                     Fg(iRow, iColFgCena2) = oObjP.CiziMena(oObj)
                     Fg.SetStyleToCell(iRow, iColFgCena2,,, FontStyle.Bold, TextAlignEnum.RightCenter)
+                    Fg(iRow, iColFgCena2J) = oObjP.CiziMenaJ(oObj)
                 End If
             Else
                 If String.IsNullOrWhiteSpace(CStr(Fg(iRow, iColFgPozn))) Then Fg(iRow, iColFgPozn) = Trim(CStr(Fg(iRow, iColFgPozn)) & txText)
@@ -373,20 +380,22 @@ Reload: GoTo LoadIt
         End If
         If oFakP IsNot Nothing Then
             'iRow = Fg.Rows.Add.Index
-            If oFrm.GetDisplayName.Contains("Ease Camp") Then
-                Debug.WriteLine("tady")
-            End If
+            'If oFrm.GetDisplayName.Contains("Ease Camp") Then
+            '    Debug.WriteLine("tady")
+            'End If
             Fg(iRow, iColFgText) = Trim(oFakP.Text)
             Fg.SetStyleToCell(iRow, iColFgText,,, FontStyle.Bold)
             Fg(iRow, iColFgPozn) = Trim(oFakP.Pozn)
             If oFakP.JeMnozstvi Then Fg(iRow, iColFgMnozstvi) = oFakP.Mnoz
             If oFakP.JeCenaMnozstvi Then
                 Fg(iRow, iColFgCena) = oFakP.Cena
+                Fg(iRow, iColFgCenaJ) = oFakP.CenaJ
                 Fg.SetStyleToCell(iRow, iColFgCena,,, FontStyle.Bold, TextAlignEnum.RightCenter)
                 Fg.SetStyleToCell(iRow, iColFgMnozstvi,,, FontStyle.Bold, TextAlignEnum.RightCenter)
                 If oFakP.JeCiziMena(oFakt) Then
                     Fg(iRow, iColFgCena2) = oFakP.CiziMena(oFakt)
                     Fg.SetStyleToCell(iRow, iColFgCena2,,, FontStyle.Bold, TextAlignEnum.RightCenter)
+                    Fg(iRow, iColFgCena2J) = oFakP.CiziMenaJ(oFakt)
                 End If
             Else
                 If String.IsNullOrWhiteSpace(CStr(Fg(iRow, iColFgPozn))) Then Fg(iRow, iColFgPozn) = Trim(CStr(Fg(iRow, iColFgPozn)) & txText)

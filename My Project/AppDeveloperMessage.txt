@@ -1,3 +1,4 @@
+
 12.10.2023
 - DÙLEŽITÉ - Návod na vyhledávání v tabulkách je podrobnì popsán v dokumentu, dostupném ve volbì Nápovìda>Návod na vyhledávání ve formuláøích!
 - Zpøesnìná funkènost vyhledávání. Text pro hledání je vyhodnocován vždy pouze v rámci obsahu jedné buòky! Pozor, funkce je t.è. ve zkušebním režimu!

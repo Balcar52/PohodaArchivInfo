@@ -11,12 +11,12 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle(txtAppName)>
 <Assembly: AssemblyDescription("Prohlížení vybraných dat archivu Pohoda")>
 <Assembly: AssemblyCompany("Ing. Jiří Bartůšek")>
-<Assembly: AssemblyCopyright("Copyright ©2023 Jiří Bartůšek")>
+<Assembly: AssemblyCopyright("Copyright ©2023,2024 Jiří Bartůšek")>
 
 <Assembly: AssemblyTrademark("JBSW")>
 
-<Assembly: AssemblyProduct("PohodaArchivInfo 12.10.2023")>
-<Assembly: AssemblyVersion("1.1.5.5")>
+<Assembly: AssemblyProduct("PohodaArchivInfo 19.4.2024")>
+<Assembly: AssemblyVersion("1.1.5.6")>
 
 <Assembly: ComVisible(False)>
 

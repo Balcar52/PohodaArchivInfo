@@ -333,7 +333,8 @@ Public Class FOptions
 
     Private Sub txtCurrentFile_TextChanged(sender As Object, e As EventArgs) Handles txtCurrentFile.TextChanged, txtMdbFile.TextChanged, txtMdbPassword.TextChanged, txtMSExcelDir.TextChanged,
                                                                                      clrFgOP.ColorChange, clrFgOV.ColorChange, clrFgN.ColorChange, clrFgFP.ColorChange, clrFgFV.ColorChange,
-                                                                                     chkSimpleExcel.CheckedChanged, gbColors.CheckedChanged, chkSimpleExcel.CheckedChanged, chkUseExcel.CheckedChanged
+                                                                                     chkSimpleExcel.CheckedChanged, gbColors.CheckedChanged, chkSimpleExcel.CheckedChanged,
+                                                                                     chkUseExcel.CheckedChanged
         If Not bLoading Then btnOK.Visible = True
         If sender Is chkUseExcel Then SetSimpleExcel()
     End Sub
