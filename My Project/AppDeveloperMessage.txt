@@ -1,3 +1,5 @@
+28.4.2024
+- Úprava logiky vyhledávání - podle požadavku z 28.4.2024 zohlednìn naposledy zadaný filtr podle firmy. JE TØEBA OVÌØIT, ZDA UPRAVENÁ FUNKÈNOST ODPOVÍDÁ POŽADAVKU.
 19.4.2024
 - Doplnìny sloupce jednotkové ceny (jak vpravo od ceny v Kè, tak vpravo od sloupce ceny v cizí mìnì).
 12.10.2023

@@ -497,6 +497,9 @@ Public Class FGridSearchText
                     Next
                     iColFirma = gaoGridFirmaColList(oFg)
                     CheckBoxRestore(Me.chkRangeFirma)
+                    If Me.chkRangeFirma.Checked Then
+                        ComboBoxRestore(cmbFirma)
+                    End If
                 Else
                     pnFirma.Parent = Nothing
                 End If
@@ -1074,6 +1077,7 @@ nomatch2:                           End If
         CheckBoxSave(Me.chkSearchFromTop)
         CheckBoxSave(Me.chkFindInColumn)
         ComboBoxSave(Me.cmbColumn)
+        ComboBoxSave(Me.cmbFirma)
         If iColFirma > 0 Then CheckBoxSave(Me.chkRangeFirma)
     End Sub
 
