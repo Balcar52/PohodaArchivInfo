@@ -15,8 +15,8 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTrademark("JBSW")>
 
-<Assembly: AssemblyProduct("PohodaArchivInfo 28.4.2024")>
-<Assembly: AssemblyVersion("1.1.5.7")>
+<Assembly: AssemblyProduct("PohodaArchivInfo 23.11.2024")>
+<Assembly: AssemblyVersion("1.1.5.9")>
 
 <Assembly: ComVisible(False)>
 

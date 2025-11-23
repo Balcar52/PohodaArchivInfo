@@ -113,6 +113,8 @@ Partial Class MForm3
         Me.m_prejit_na_predchozi_nalezeny_radek = New ActionListLib.Menu(Me.components)
         Me.m_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ = New ActionListLib.Menu(Me.components)
         Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ = New ActionListLib.Action(Me.components)
+        Me.m_logika_vyhledavani_v_tabulce = New ActionListLib.Menu(Me.components)
+        Me.a_logika_vyhledavani_v_tabulce = New ActionListLib.Action(Me.components)
         Me.ActionListConn = New ActionListLib.ActionListConn(Me.components)
         Me.m_main = New ActionListLib.Menu(Me.components)
         Me.m_file = New ActionListLib.Menu(Me.components)
@@ -123,8 +125,11 @@ Partial Class MForm3
         Me.m_window = New ActionListLib.Menu(Me.components)
         Me.m_help = New ActionListLib.Menu(Me.components)
         Me.a_nastaveni = New ActionListLib.Action(Me.components)
-        Me.m_logika_vyhledavani_v_tabulce = New ActionListLib.Menu(Me.components)
-        Me.a_logika_vyhledavani_v_tabulce = New ActionListLib.Action(Me.components)
+        Me.m_delimiter5 = New ActionListLib.Menu(Me.components)
+        Me.m_upravit_sirku_sloupce_text = New ActionListLib.Menu(Me.components)
+        Me.a_upravit_sirku_sloupce_text = New ActionListLib.Action(Me.components)
+        Me.ToolStripButton14 = New System.Windows.Forms.ToolStripButton()
+        Me.m_sloupec_text_umistit_vprovo_pred_poznamku = New ActionListLib.Menu(Me.components)
         Me.tbcMain.SuspendLayout()
         Me.pgNab.SuspendLayout()
         Me.pnNab.SuspendLayout()
@@ -435,11 +440,11 @@ Partial Class MForm3
         '
         Me.ToolStrip2.AutoSize = False
         Me.ToolStrip2.Dock = System.Windows.Forms.DockStyle.Left
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripButton6, Me.ToolStripButton5, Me.ToolStripButton12, Me.ToolStripButton13, Me.ToolStripButton7, Me.ToolStripButton10, Me.ToolStripButton9, Me.ToolStripButton8, Me.ToolStripButton11})
+        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripButton6, Me.ToolStripButton5, Me.ToolStripButton12, Me.ToolStripButton13, Me.ToolStripButton7, Me.ToolStripButton10, Me.ToolStripButton9, Me.ToolStripButton8, Me.ToolStripButton11, Me.ToolStripButton14})
         Me.ToolStrip2.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip2.Location = New System.Drawing.Point(191, 0)
         Me.ToolStrip2.Name = "ToolStrip2"
-        Me.ToolStrip2.Size = New System.Drawing.Size(624, 41)
+        Me.ToolStrip2.Size = New System.Drawing.Size(689, 41)
         Me.ToolStrip2.TabIndex = 3
         Me.ToolStrip2.Text = "ToolStrip1"
         '
@@ -1042,6 +1047,20 @@ Partial Class MForm3
         Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Parent = Me.ActionList0
         Me.a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_.Text = "Zpráva vývojáře (soupis změn a úprav této aplikace)"
         '
+        'm_logika_vyhledavani_v_tabulce
+        '
+        Me.ActionList0.SetAction(Me.m_logika_vyhledavani_v_tabulce, Me.a_logika_vyhledavani_v_tabulce)
+        Me.m_logika_vyhledavani_v_tabulce.Name = "m_logika_vyhledavani_v_tabulce"
+        Me.m_logika_vyhledavani_v_tabulce.Parent = Me.ActionList0
+        Me.m_logika_vyhledavani_v_tabulce.Text = Nothing
+        '
+        'a_logika_vyhledavani_v_tabulce
+        '
+        Me.a_logika_vyhledavani_v_tabulce.AltText = "Návod na vyhledávání"
+        Me.a_logika_vyhledavani_v_tabulce.Name = "a_logika_vyhledavani_v_tabulce"
+        Me.a_logika_vyhledavani_v_tabulce.Parent = Me.ActionList0
+        Me.a_logika_vyhledavani_v_tabulce.Text = "Návod na vyhledávání ve formulářích"
+        '
         'ActionListConn
         '
         Me.ActionListConn.ActionList = Me.ActionList0
@@ -1093,7 +1112,10 @@ Partial Class MForm3
         Me.m_view.MenuList.Add(Me.m_najit_vlevo)
         Me.m_view.MenuList.Add(Me.m_prejit_na_dalsi_nalezeby_radek)
         Me.m_view.MenuList.Add(Me.m_prejit_na_predchozi_nalezeny_radek)
+        Me.m_view.MenuList.Add(Me.m_delimiter5)
+        Me.m_view.MenuList.Add(Me.m_sloupec_text_umistit_vprovo_pred_poznamku)
         Me.m_view.MenuList.Add(Me.m_automaticky_upravovat_sirku_sloupce_textu)
+        Me.m_view.MenuList.Add(Me.m_upravit_sirku_sloupce_text)
         Me.m_view.MergeNode = 300
         Me.m_view.Name = "m_view"
         Me.m_view.Parent = Me.ActionList0
@@ -1140,19 +1162,44 @@ Partial Class MForm3
         Me.a_nastaveni.Parent = Me.ActionList0
         Me.a_nastaveni.Text = "Nastavení"
         '
-        'm_logika_vyhledavani_v_tabulce
+        'm_delimiter5
         '
-        Me.ActionList0.SetAction(Me.m_logika_vyhledavani_v_tabulce, Me.a_logika_vyhledavani_v_tabulce)
-        Me.m_logika_vyhledavani_v_tabulce.Name = "m_logika_vyhledavani_v_tabulce"
-        Me.m_logika_vyhledavani_v_tabulce.Parent = Me.ActionList0
-        Me.m_logika_vyhledavani_v_tabulce.Text = Nothing
+        Me.m_delimiter5.MenuType = ActionListLib.Menu.MenuTypes.Delimiter
+        Me.m_delimiter5.Name = "m_delimiter5"
+        Me.m_delimiter5.Parent = Me.ActionList0
+        Me.m_delimiter5.Text = "  (delimiter)"
         '
-        'a_logika_vyhledavani_v_tabulce
+        'm_upravit_sirku_sloupce_text
         '
-        Me.a_logika_vyhledavani_v_tabulce.AltText = "Návod na vyhledávání"
-        Me.a_logika_vyhledavani_v_tabulce.Name = "a_logika_vyhledavani_v_tabulce"
-        Me.a_logika_vyhledavani_v_tabulce.Parent = Me.ActionList0
-        Me.a_logika_vyhledavani_v_tabulce.Text = "Návod na vyhledávání ve formulářích"
+        Me.ActionList0.SetAction(Me.m_upravit_sirku_sloupce_text, Me.a_upravit_sirku_sloupce_text)
+        Me.m_upravit_sirku_sloupce_text.Name = "m_upravit_sirku_sloupce_text"
+        Me.m_upravit_sirku_sloupce_text.Parent = Me.ActionList0
+        Me.m_upravit_sirku_sloupce_text.Text = Nothing
+        '
+        'a_upravit_sirku_sloupce_text
+        '
+        Me.a_upravit_sirku_sloupce_text.AltText = "Šířka textu"
+        Me.a_upravit_sirku_sloupce_text.Image = CType(resources.GetObject("a_upravit_sirku_sloupce_text.Image"), System.Drawing.Image)
+        Me.a_upravit_sirku_sloupce_text.Name = "a_upravit_sirku_sloupce_text"
+        Me.a_upravit_sirku_sloupce_text.Parent = Me.ActionList0
+        Me.a_upravit_sirku_sloupce_text.Text = "Upravit šířku sloupce textu"
+        '
+        'ToolStripButton14
+        '
+        Me.ActionList0.SetAction(Me.ToolStripButton14, Me.a_upravit_sirku_sloupce_text)
+        Me.ToolStripButton14.Image = CType(resources.GetObject("ToolStripButton14.Image"), System.Drawing.Image)
+        Me.ToolStripButton14.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton14.Name = "ToolStripButton14"
+        Me.ToolStripButton14.Size = New System.Drawing.Size(66, 38)
+        Me.ToolStripButton14.Text = "Šířka textu"
+        Me.ToolStripButton14.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ToolStripButton14.ToolTipText = "Upravit šířku sloupce textu"
+        '
+        'm_sloupec_text_umistit_vprovo_pred_poznamku
+        '
+        Me.m_sloupec_text_umistit_vprovo_pred_poznamku.Name = "m_sloupec_text_umistit_vprovo_pred_poznamku"
+        Me.m_sloupec_text_umistit_vprovo_pred_poznamku.Parent = Me.ActionList0
+        Me.m_sloupec_text_umistit_vprovo_pred_poznamku.Text = Nothing
         '
         'MForm3
         '
@@ -1300,4 +1347,9 @@ Partial Class MForm3
     Friend WithEvents a_zprava_vyvojare_soupis_zmen_a_uprav_teto_aplikace_ As ActionListLib.Action
     Friend WithEvents m_logika_vyhledavani_v_tabulce As ActionListLib.Menu
     Friend WithEvents a_logika_vyhledavani_v_tabulce As ActionListLib.Action
+    Friend WithEvents m_delimiter5 As ActionListLib.Menu
+    Friend WithEvents m_upravit_sirku_sloupce_text As ActionListLib.Menu
+    Friend WithEvents a_upravit_sirku_sloupce_text As ActionListLib.Action
+    Friend WithEvents ToolStripButton14 As ToolStripButton
+    Friend WithEvents m_sloupec_text_umistit_vprovo_pred_poznamku As ActionListLib.Menu
 End Class

@@ -1,5 +1,9 @@
+23.11.2024
+- Oprava/úprava automatického nastavení šíøky sloupce textu. 
+- Upozornìní: automatické nastavování lze vypnout pomocí volby menu "Nastavení>Automaticky upravovat šíøku sloupce textu".
+- Automatické nastavení šíøky sloupce textu je možné provést jednorázovì i pøi vypnutí automatiky kliknutím na volbu menu "Zobrazení>Upravit šíøku textù" nebo na nové tlaèítko "Šíøka textu" v panelu tlaèítek.
 28.4.2024
-- Úprava logiky vyhledávání - podle požadavku z 28.4.2024 zohlednìn naposledy zadaný filtr podle firmy. JE TØEBA OVÌØIT, ZDA UPRAVENÁ FUNKÈNOST ODPOVÍDÁ POŽADAVKU.
+- Úprava logiky vyhledávání - podle požadavku z 28.4.2024 je zohlednìn naposledy zadaný filtr podle firmy. JE TØEBA OVÌØIT, ZDA UPRAVENÁ FUNKÈNOST ODPOVÍDÁ POŽADAVKU.
 19.4.2024
 - Doplnìny sloupce jednotkové ceny (jak vpravo od ceny v Kè, tak vpravo od sloupce ceny v cizí mìnì).
 12.10.2023

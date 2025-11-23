@@ -20,6 +20,7 @@ Public Class MForm3
     Public Const nmbUseExcel As String = "UseExcel"
     Public Const nmsExcelExpDir As String = "ExcelDir"
     Public Const nmsAutoSizeText As String = "AutoSizeText"
+    Public Const nmsTextColRight As String = "TextColRight"
     Public Const nmsColorFgOP As String = "ColorsFgOP"
     Public Const nmsColorFgOV As String = "ColorsFgOV"
     Public Const nmsColorFgN As String = "ColorsFgN"
@@ -43,6 +44,8 @@ Public Class MForm3
     Public bUseExcel As Boolean = True
 
     Public bAutoUpdate As Boolean = True
+
+    Public oCurrentGrid As XC1Flexgrid = Nothing
 
     ' deklarace promennych cisel sloupcu gridu 
 
@@ -768,23 +771,28 @@ Reload: GoTo LoadIt
     Private Sub tbcMain_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tbcMain.SelectedIndexChanged
         Select Case True
             Case tbcMain.SelectedTab Is pgObjPrij
+                oCurrentGrid = FgOP
                 FgOP.Select()
                 a_najit_vlevo.Enabled = True
                 a_najit_vpravo.Enabled = True
             Case tbcMain.SelectedTab Is pgNab
+                oCurrentGrid = FgN
                 FgN.Select()
                 a_najit_vlevo.Enabled = False
                 a_najit_vpravo.Enabled = True
             Case tbcMain.SelectedTab Is pgFaktVyd
+                oCurrentGrid = FgFV
                 FgFV.Select()
                 a_najit_vlevo.Enabled = True
                 a_najit_vpravo.Enabled = False
             Case tbcMain.SelectedTab Is pgObjVyd
+                oCurrentGrid = FgOV
                 FgOV.Select()
                 a_najit_vlevo.Enabled = False
                 a_najit_vpravo.Enabled = True
             Case tbcMain.SelectedTab Is pgFaktPrij
                 FgFP.Select()
+                oCurrentGrid = FgFP
                 a_najit_vlevo.Enabled = True
                 a_najit_vpravo.Enabled = False
         End Select
@@ -1012,16 +1020,31 @@ endexcel:
         End If
     End Sub
 
-    Public Sub AutoSizeText(sender As Object)
-        If TypeOf (sender) Is XC1Flexgrid AndAlso a_automaticky_upravovat_sirku_sloupce_textu.Checked Then
+    Public Sub AutoSizeText(sender As Object, Optional bHardset As Boolean = False)
+        If TypeOf (sender) Is XC1Flexgrid AndAlso (bHardset OrElse a_automaticky_upravovat_sirku_sloupce_textu.Checked) Then
             With CType(sender, XC1Flexgrid)
                 Dim oSize As Size = .ClientSize
+                Debug.WriteLine(String.Format("sz:{0};coln:{1}; coln.Right:{2}; tx.width:{3}; tx.right:{4};", oSize.ToString, .ColN, .Cols(.ColN).Right, .Cols(iColFgText).Width, .Cols(iColFgText).Right))
                 .AutoSizeCol(iColFgText)
+                Debug.WriteLine(String.Format("sz:{0};coln:{1}; coln.Right:{2}; tx.width:{3}; tx.right:{4};", oSize.ToString, .ColN, .Cols(.ColN).Right, .Cols(iColFgText).Width, .Cols(iColFgText).Right))
                 If .Cols(.ColN).Right > .ClientSize.Width Then
-                    Dim iWid = .Cols(iColFgText).Width - (.ClientSize.Width - .Cols(.ColN).Right) - (.Width - .ClientSize.Width)
-                    If iWid > 100 Then .Cols(iColFgText).Width = iWid
+                    'Dim iWid = .Cols(iColFgText).Width - (.ClientSize.Width - .Cols(.ColN).Right) - (.Width - .ClientSize.Width)
+                    Dim iOver As Integer = .Cols(.ColN).Right - .ClientSize.Width ' o kolik presahuje
+                    If iOver > 0 Then
+                        Dim iWidtx As Integer = .Cols(iColFgText).Width - iOver ' nova sirka sloupce text
+                        If iWidtx < 100 Then .Cols(iColFgText).Width = 100 Else .Cols(iColFgText).Width = iWidtx
+                    End If
+                Else
+                    Dim iMiss As Integer = .ClientSize.Width - .Cols(.ColN).Right  ' o kolik presahuje
+                    .Cols(iColFgText).Width += iMiss ' sirka sloupce text
                 End If
             End With
+        End If
+    End Sub
+
+    Private Sub a_upravit_sirku_sloupce_text_Execute(sender As Object, e As EventArgs) Handles a_upravit_sirku_sloupce_text.Execute
+        If oCurrentGrid IsNot Nothing Then
+            AutoSizeText(oCurrentGrid, True)
         End If
     End Sub
 
@@ -1142,5 +1165,9 @@ endexcel:
 
     Private Sub a_logika_vyhledavani_v_tabulce_Execute(sender As Object, e As EventArgs) Handles a_logika_vyhledavani_v_tabulce.Execute
         FInfo.Run(Me, "LogikaVyhledavani.rtf",, a_logika_vyhledavani_v_tabulce.Text)
+    End Sub
+
+    Private Sub a_sloupec_text_umistit_vprovo_pred_poznamku_Execute(sender As Object, e As EventArgs)
+        MessageBox.Show(Me, "Změna umístění sloupce ""text"" bude viditelná až po novém spuštění aplikace", txtAppName, MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 End Class

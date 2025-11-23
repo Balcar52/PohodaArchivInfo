@@ -69,6 +69,8 @@ Public Class FAbout
         Me.l0 = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.pnBott = New System.Windows.Forms.Panel()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.lblAutor = New System.Windows.Forms.Label()
@@ -86,8 +88,6 @@ Public Class FAbout
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.l8 = New System.Windows.Forms.Label()
         Me.pnMid = New System.Windows.Forms.Panel()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.pnBott.SuspendLayout()
         Me.pnTop.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -129,6 +129,26 @@ Public Class FAbout
         Me.pnBott.Name = "pnBott"
         Me.pnBott.Size = New System.Drawing.Size(334, 101)
         Me.pnBott.TabIndex = 13
+        '
+        'Label3
+        '
+        Me.Label3.Font = New System.Drawing.Font("Tahoma", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.Label3.Location = New System.Drawing.Point(58, 62)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(168, 12)
+        Me.Label3.TabIndex = 19
+        Me.Label3.Text = "výhradní licence pro provoz"
+        '
+        'Label4
+        '
+        Me.Label4.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.Label4.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.Label4.Location = New System.Drawing.Point(57, 77)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(252, 14)
+        Me.Label4.TabIndex = 20
+        Me.Label4.Tag = ""
+        Me.Label4.Text = "Metapol spol. s r.o., Polièka"
         '
         'Label2
         '
@@ -313,26 +333,6 @@ Public Class FAbout
         Me.pnMid.Size = New System.Drawing.Size(334, 73)
         Me.pnMid.TabIndex = 17
         '
-        'Label3
-        '
-        Me.Label3.Font = New System.Drawing.Font("Tahoma", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.Label3.Location = New System.Drawing.Point(58, 62)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(168, 12)
-        Me.Label3.TabIndex = 19
-        Me.Label3.Text = "výhradní licence pro provoz"
-        '
-        'Label4
-        '
-        Me.Label4.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Label4.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.Label4.Location = New System.Drawing.Point(57, 77)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(252, 14)
-        Me.Label4.TabIndex = 20
-        Me.Label4.Tag = ""
-        Me.Label4.Text = "Metapol spol. s r.o., Polièka"
-        '
         'FAbout
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 14)
@@ -344,7 +344,6 @@ Public Class FAbout
         Me.Controls.Add(Me.Panel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MaximumSize = New System.Drawing.Size(350, 515)
         Me.MinimizeBox = False
